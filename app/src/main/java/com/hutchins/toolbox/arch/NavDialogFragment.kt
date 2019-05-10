@@ -1,10 +1,11 @@
-package com.hutchins.toolbox.nav.core
+package com.hutchins.toolbox.arch
 
 import android.content.Context
 import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import com.hutchins.toolbox.nav.core.NavigationActivity
 
 abstract class NavDialogFragment : DialogFragment(), BaseFragmentIm {
     internal lateinit var navigationActivity: NavigationActivity

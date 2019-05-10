@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+
 package com.hutchins.toolbox.nav.uicore
 
 import android.animation.ObjectAnimator

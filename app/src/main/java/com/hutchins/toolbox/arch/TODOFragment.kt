@@ -1,10 +1,11 @@
-package com.hutchins.toolbox.nav.core
+package com.hutchins.toolbox.arch
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import com.hutchins.toolbox.nav.core.NavigationActivity
 
-abstract class BaseFragment : Fragment(), BaseFragmentIm {
+abstract class TODOFragment : Fragment(), BaseFragmentIm {
     internal lateinit var navigationActivity: NavigationActivity
     protected val fragmentDelegate: BaseFragmentDelegate by lazy {
         BaseFragmentDelegate(this)

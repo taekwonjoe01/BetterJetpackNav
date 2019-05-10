@@ -4,8 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.hutchins.toolbox.nav.core.NavigationActivity
-import com.hutchins.toolbox.nav.core.ViewDelegate
+import com.hutchins.toolbox.nav.core.*
 import com.hutchins.toolbox.nav.uicore.navigationviews.BottomNavViewDelegate
 import com.hutchins.toolbox.nav.uicore.navigationviews.NavigationViewDelegate
 import com.hutchins.toolbox.nav.uicore.navigationviews.NoNavViewDelegate
@@ -59,17 +58,23 @@ abstract class NavViewActivity : NavigationActivity() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(rootView.windowToken, 0)
 
-        return navigationViewDelegate.onSupportNavigateUp()
+        return if (maybeDoNavigateUpOverride()) false else super.onSupportNavigateUp()
     }
 
     override fun onBackPressed() {
         navigationViewDelegate.onBackPressed()
     }
 
+    internal fun maybeDoNavigateUpOverride(): Boolean {
+        return (currentNavigationConfig as? NavigationViewConfig)?.upButtonOverrideProvider?.onSupportNavigateUp() ?: false
+    }
+
     /**
      * Called during onCreate of BaseActivity.
      */
     override fun instantiateViewDelegate(): ViewDelegate {
+        // TODO: Make this a factory pattern so users of this library can implement their own Navigation Views.
+
         // First, check if the activity is going to use a navigation menu:
         val menuResourceId = navViewConfig.navigationMenuResourceId
         navigationViewDelegate = when (navigationType) {
@@ -85,5 +90,26 @@ abstract class NavViewActivity : NavigationActivity() {
         }
 
         return navigationViewDelegate
+    }
+}
+
+class NavigationViewConfig(backButtonOverrideProvider: BackButtonOverrideProvider, val upButtonOverrideProvider: UpButtonOverrideProvider) : NavigationConfig(backButtonOverrideProvider)
+
+class UpButtonOverrideProvider {
+    private var upButtonOverride: NavigationOverrideClickListener? = null
+
+    /**
+     * Return true if this is going to be overriden, otherwise false.
+     */
+    internal fun onSupportNavigateUp(): Boolean {
+        return if (upButtonOverride != null) {
+            upButtonOverride?.onClick() ?: false
+        } else {
+            false
+        }
+    }
+
+    fun setUpButtonOverride(listener: NavigationOverrideClickListener?) {
+        upButtonOverride = listener
     }
 }

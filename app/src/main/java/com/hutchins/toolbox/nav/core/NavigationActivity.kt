@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package com.hutchins.toolbox.nav.core
 
 import android.os.Bundle
@@ -30,8 +32,8 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
      */
     abstract fun getNavigationGraphResourceId(): Int
 
-    private val pageFragments = ArrayList<WeakReference<ScreenFragment>>()
-    private var currentPageNavigationConfig: NavigationConfig? = null
+    private val baseNavFragments = ArrayList<WeakReference<BaseNavFragment>>()
+    protected var currentNavigationConfig: NavigationConfig? = null
     /**
      * This flag is used to distinguish a hardware back button navigation from the rest. This is needed
      * because hardware back button navigation has a different lifecycle than all others (normal forward
@@ -70,9 +72,9 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
     /**
      * Should ONLY be called by a PageFragment when the view is created.
      */
-    internal fun registerPageFragment(pageFragment: ScreenFragment) {
-        pageFragments.add(WeakReference(pageFragment))
-        Log.i(TAG, "Registering pageFragment. Current size (including this): " + pageFragments.size)
+    internal fun registerBaseNavFragment(baseNavFragment: BaseNavFragment) {
+        baseNavFragments.add(WeakReference(baseNavFragment))
+        Log.i(TAG, "Registering baseNavFragment. Current size (including this): " + baseNavFragments.size)
 
         // Only trim and apply the current Fragment if this is a normal navigation. In a normal navigation,
         // onNavigated would have already been called, and therefore the NavDestination is available now.
@@ -90,18 +92,15 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         // fragment.
         if (!isHardwareBackNavigation) {
             trimFragments()
-            setCurrentPageFragment()
+            setCurrentBaseNavFragment()
         }
     }
 
-    /**
-     * Returns true if any fragments were trimmed.
-     */
     private fun trimFragments() {
-        while (pageFragments.size > 1) {
-            val pageFragment = pageFragments.removeAt(0)
+        while (baseNavFragments.size > 1) {
+            val pageFragment = baseNavFragments.removeAt(0)
             pageFragment.get()?.apply {
-                this.onNotCurrentPage()
+                this.onRemoveAsCurrentNavFragment()
             }
         }
     }
@@ -111,18 +110,14 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
      * this is called empirically, as the design expects these to be non null here, and if that is
      * ever false, we have a big big problem.
      */
-    private fun setCurrentPageFragment() {
-        val current = pageFragments[0].get()!!
-        currentPageNavigationConfig = current.onSetAsCurrentPage(navController.currentDestination!!)
+    private fun setCurrentBaseNavFragment() {
+        val current = baseNavFragments[0].get()!!
+        currentNavigationConfig = current.onSetAsCurrentNavFragment(navController.currentDestination!!)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return if (maybeDoNavigateUpOverride()) false else super.onSupportNavigateUp()
-    }
-
-    fun maybeDoNavigateUpOverride(): Boolean {
-        return currentPageNavigationConfig?.upButtonOverrideProvider?.onSupportNavigateUp() ?: false
-    }
+//    override fun onSupportNavigateUp(): Boolean {
+//        return if (maybeDoNavigateUpOverride()) false else super.onSupportNavigateUp()
+//    }
 
     override fun onBackPressed() {
         if (!maybeDoBackButtonOverride()) {
@@ -132,14 +127,14 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         }
     }
 
-    fun maybeDoBackButtonOverride(): Boolean {
-        return currentPageNavigationConfig?.backButtonOverrideProvider?.onBackPressed() ?: false
+    internal fun maybeDoBackButtonOverride(): Boolean {
+        return currentNavigationConfig?.backButtonOverrideProvider?.onBackPressed() ?: false
     }
 
     /**
      * Details of Navigation Logic:
-     * The lifecycle of navigation is no consistent (at all) with any lifecycle of a Fragment. As a
-     * result, custom code has been written to synchronize navigation lifecycle with a PageFragment's
+     * The lifecycle of navigation is not consistent (at all) with any lifecycle of a Fragment. As a
+     * result, custom code has been written to synchronize navigation lifecycle with a BaseNavFragment's
      * lifecycle. This was done in order to properly manage providing a PageFragment with it's navigation
      * information bundle parameters so it can potentially customize its view, as well as allow for
      * inheritors to define a means to let a PageFragment that it alone is the current destination.
@@ -152,7 +147,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         // wait to synchronize.
         if (isHardwareBackNavigation) {
             trimFragments()
-            setCurrentPageFragment()
+            setCurrentBaseNavFragment()
 
             // Reset the flag
             isHardwareBackNavigation = false
@@ -244,29 +239,10 @@ abstract class ViewDelegate {
     abstract fun initNavigation(navController: NavController)
 }
 
-class NavigationConfig(val upButtonOverrideProvider: UpButtonOverrideProvider, val backButtonOverrideProvider: BackButtonOverrideProvider)
+open class NavigationConfig(val backButtonOverrideProvider: BackButtonOverrideProvider)
 
 interface NavigationOverrideClickListener {
     fun onClick(): Boolean
-}
-
-class UpButtonOverrideProvider {
-    private var upButtonOverride: NavigationOverrideClickListener? = null
-
-    /**
-     * Return true if this is going to be overriden, otherwise false.
-     */
-    internal fun onSupportNavigateUp(): Boolean {
-        return if (upButtonOverride != null) {
-            upButtonOverride?.onClick() ?: false
-        } else {
-            false
-        }
-    }
-
-    fun setUpButtonOverride(listener: NavigationOverrideClickListener?) {
-        upButtonOverride = listener
-    }
 }
 
 class BackButtonOverrideProvider {

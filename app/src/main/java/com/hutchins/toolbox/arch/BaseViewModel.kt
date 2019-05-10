@@ -1,4 +1,4 @@
-package com.hutchins.toolbox.nav.core
+package com.hutchins.toolbox.arch
 
 import androidx.lifecycle.ViewModel
 
