@@ -5,21 +5,16 @@ import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
-import com.hutchins.toolbox.nav.core.NavigationActivity
+import com.hutchins.archcore.fragment.BaseFragmentDelegate
+import com.hutchins.archcore.fragment.BaseFragmentIm
 
 abstract class NavDialogFragment : DialogFragment(), BaseFragmentIm {
-    internal lateinit var navigationActivity: NavigationActivity
     protected val fragmentDelegate: BaseFragmentDelegate by lazy {
         BaseFragmentDelegate(this)
     }
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        if (context is NavigationActivity) {
-            navigationActivity = context
-        } else {
-            throw RuntimeException(context!!.toString() + " must be child class of NavigationActivity!")
-        }
         fragmentDelegate
     }
 
