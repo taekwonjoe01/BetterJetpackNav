@@ -160,7 +160,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         }
     }
 
-    // TODO(jhutchins): We can reflect on whether it's worth it to make this a delegate instead of in
+    // TODO: We can reflect on whether it's worth it to make this a delegate instead of in
     // the inheritance. This forces this behavior on any Edittext for any activity on the gen2 platform.
     // Arguably, this is behavior that should always have existed...
 //    private var startX: Float = START_X_NOT_TRACKING
@@ -223,9 +223,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
 }
 
 /**
- * Abstraction to delegate the Activity's container view. Two potential types of ViewDelegate would
- * be one to handle Side Navigation Drawer views and an ActionBar, or a BottomNavigationView and an
- * ActionBar.
+ * TODO: remove this and make them open funs overriding by the subclass.
  */
 abstract class ViewDelegate {
     /**

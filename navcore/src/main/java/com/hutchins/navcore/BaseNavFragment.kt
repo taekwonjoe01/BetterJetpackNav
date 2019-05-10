@@ -14,6 +14,7 @@ abstract class BaseNavFragment : Fragment() {
     protected val backButtonOverrideProvider = BackButtonOverrideProvider()
     protected val upButtonOverrideProvider = UpButtonOverrideProvider()
 
+    // TODO: Make these open?
     abstract fun onNotCurrentNavFragment()
     abstract fun onCurrentNavFragment(destination: NavDestination)
 
