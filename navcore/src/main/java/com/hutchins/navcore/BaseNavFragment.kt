@@ -34,7 +34,7 @@ abstract class BaseNavFragment : Fragment() {
      */
     internal fun onSetAsCurrentNavFragment(destination: NavDestination): NavigationConfig {
         if (isCurrentNavFragment) {
-            Log.w("BaseNavFragment", "onSetAsCurrentNavFragment called but it looks like this BaseNavFragment was already set as current screen. " +
+            Log.w(NavigationActivity.TAG, "onSetAsCurrentNavFragment called but it looks like this BaseNavFragment was already set as current screen. " +
                     "Perhaps you have a non-BaseNavFragment in the navigation graph which will cause undefined behavior.")
         }
         isCurrentNavFragment = true

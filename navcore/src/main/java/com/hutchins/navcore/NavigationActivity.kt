@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference
 
 abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigatedListener {
     companion object {
-        private const val TAG = "NavigationActivity"
+        const val TAG = "NavCore"
     }
     protected lateinit var viewDelegate: ViewDelegate
     protected lateinit var navController: NavController
@@ -94,6 +94,9 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
     }
 
     private fun trimFragments() {
+        if (baseNavFragments.size < 2) {
+            Log.w(TAG, "trimFragments called when none will be trimmed.")
+        }
         while (baseNavFragments.size > 1) {
             val pageFragment = baseNavFragments.removeAt(0)
             pageFragment.get()?.apply {

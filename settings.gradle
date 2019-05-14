@@ -1,1 +1,1 @@
-include ':app', ':navcore', ':navui', ':archcore', ':navcoresample'
+include ':app', ':navcore', ':navui', ':archcore', ':navcoretest'
