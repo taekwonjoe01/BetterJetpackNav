@@ -2,15 +2,19 @@
 
 package com.hutchins.navui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.view.View
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.Toolbar
 import com.hutchins.navui.viewdelegates.NavigationViewDelegate
 
 /**
  * This class manages the Toolbar and maintaints the state of it with respect to LotusPageFragments.
  * Only ONE LotusPageFragment can use this manager at a time (per activity).
  */
-class ToolbarDelegate(private val navigationViewDelegate: NavigationViewDelegate, private val supportActionBar: ActionBar) {
+class ToolbarDelegate(private val toolbar: Toolbar, private val navigationViewDelegate: NavigationViewDelegate, private val supportActionBar: ActionBar) {
     companion object {
         const val PROGRESS_HAMBURGER = 0.0f
         const val PROGRESS_ARROW = 1.0f
@@ -19,8 +23,8 @@ class ToolbarDelegate(private val navigationViewDelegate: NavigationViewDelegate
     var toolbarState: ToolbarVisibilityState =
         ToolbarVisibilityState.VISIBLE
         private set
-    private val invisibleAnimator = ObjectAnimator.ofFloat(navigationViewDelegate.getToolbar(), "alpha", 0.0F)
-    private val visibleAnimator = ObjectAnimator.ofFloat(navigationViewDelegate.getToolbar(), "alpha", 1.0F)
+    private val invisibleAnimator = ObjectAnimator.ofFloat(toolbar, "alpha", 0.0F)
+    private val visibleAnimator = ObjectAnimator.ofFloat(toolbar, "alpha", 1.0F)
 
     /**
      * GONE - The Toolbar is off the top of the screen and not accessible to a user.
@@ -35,48 +39,46 @@ class ToolbarDelegate(private val navigationViewDelegate: NavigationViewDelegate
      * Immediately cancel any animations and set the toolbar state.
      */
     internal fun setToolbarVisibilityState(desiredState: ToolbarVisibilityState) {
-        navigationViewDelegate.getToolbar().clearAnimation()
+        toolbar.clearAnimation()
         invisibleAnimator.cancel()
         visibleAnimator.cancel()
         when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     supportActionBar.hide()
-                    navigationViewDelegate.getToolbar().translationY = -navigationViewDelegate.getToolbar().height.toFloat()
-                    navigationViewDelegate.getToolbar().alpha = 1.0F
-                    navigationViewDelegate.getToolbar().isEnabled = true
+                    toolbar.translationY = -toolbar.height.toFloat()
+                    toolbar.alpha = 1.0F
                 }
                 else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    navigationViewDelegate.getToolbar().alpha = 0.0F
-                    navigationViewDelegate.getToolbar().isEnabled = false
+                    toolbar.alpha = 0.0F
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().translationY = 0F
+                    toolbar.visibility = View.INVISIBLE
+                    toolbar.translationY = 0F
                 }
             }
             ToolbarVisibilityState.GONE -> {
                 if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    navigationViewDelegate.getToolbar().alpha = 1.0F
-                    navigationViewDelegate.getToolbar().isEnabled = true
+                    toolbar.alpha = 1.0F
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().translationY = 0F
+                    toolbar.translationY = 0F
                 } else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    navigationViewDelegate.getToolbar().alpha = 0.0F
-                    navigationViewDelegate.getToolbar().isEnabled = false
+                    toolbar.alpha = 0.0F
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().translationY = 0F
+                    toolbar.visibility = View.INVISIBLE
+                    toolbar.translationY = 0F
                 }
             }
             ToolbarVisibilityState.INVISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    navigationViewDelegate.getToolbar().isEnabled = true
                     supportActionBar.hide()
-                    navigationViewDelegate.getToolbar().translationY = -navigationViewDelegate.getToolbar().height.toFloat()
-                    navigationViewDelegate.getToolbar().alpha = 1.0F
+                    toolbar.translationY = -toolbar.height.toFloat()
+                    toolbar.visibility = View.VISIBLE
+                    toolbar.alpha = 1.0F
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    navigationViewDelegate.getToolbar().isEnabled = true
-                    navigationViewDelegate.getToolbar().alpha = 1.0F
+                    toolbar.alpha = 1.0F
+                    toolbar.visibility = View.VISIBLE
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().translationY = 0F
+                    toolbar.translationY = 0F
                 }
             }
         }
@@ -90,44 +92,48 @@ class ToolbarDelegate(private val navigationViewDelegate: NavigationViewDelegate
         when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    navigationViewDelegate.getToolbar().animate().setDuration(animationDurationMS).translationY(-navigationViewDelegate.getToolbar().height.toFloat()).withEndAction {
-                        navigationViewDelegate.getToolbar().alpha = 1.0F
-                        navigationViewDelegate.getToolbar().isEnabled = true
+                    toolbar.animate().setDuration(animationDurationMS).translationY(-toolbar.height.toFloat()).withEndAction {
+                        toolbar.alpha = 1.0F
                         supportActionBar.hide()
                     }
                 }
                 else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    navigationViewDelegate.getToolbar().isEnabled = false
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().translationY = 0F
+                    toolbar.translationY = 0F
                     invisibleAnimator.duration = animationDurationMS
+                    invisibleAnimator.addListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            toolbar.visibility = View.INVISIBLE
+                            invisibleAnimator.removeListener(this)
+                        }
+                    })
                     invisibleAnimator.start()
                 }
             }
             ToolbarVisibilityState.GONE -> {
                 if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    navigationViewDelegate.getToolbar().alpha = 1.0F
-                    navigationViewDelegate.getToolbar().isEnabled = true
+                    toolbar.alpha = 1.0F
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().animate().translationY(0F)
+                    toolbar.animate().translationY(0F)
                 } else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    navigationViewDelegate.getToolbar().alpha = 0.0F
-                    navigationViewDelegate.getToolbar().isEnabled = false
+                    toolbar.alpha = 0.0F
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().animate().translationY(0F)
+                    toolbar.visibility = View.INVISIBLE
+                    toolbar.animate().translationY(0F)
                 }
             }
             ToolbarVisibilityState.INVISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    navigationViewDelegate.getToolbar().animate().setDuration(animationDurationMS).translationY(-navigationViewDelegate.getToolbar().height.toFloat()).withEndAction {
-                        navigationViewDelegate.getToolbar().isEnabled = true
-                        navigationViewDelegate.getToolbar().alpha = 1.0F
+                    toolbar.animate().setDuration(animationDurationMS).translationY(-toolbar.height.toFloat()).withEndAction {
+                        toolbar.alpha = 1.0F
+                        toolbar.visibility = View.VISIBLE
                         supportActionBar.hide()
                     }
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    navigationViewDelegate.getToolbar().isEnabled = true
                     supportActionBar.show()
-                    navigationViewDelegate.getToolbar().translationY = 0F
+                    toolbar.translationY = 0F
+                    toolbar.visibility = View.VISIBLE
                     visibleAnimator.duration = animationDurationMS
                     visibleAnimator.start()
                 }

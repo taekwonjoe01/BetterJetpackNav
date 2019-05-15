@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
+import com.hutchins.navui.NavViewActivity
 import com.hutchins.navui.R
 import com.hutchins.navui.databinding.ActivityBottomNavBinding
 
@@ -13,23 +14,24 @@ import com.hutchins.navui.databinding.ActivityBottomNavBinding
  * Created by jhutchins on 5/9/19.
  * Copyright (c) 2019 Engage FT. All rights reserved.
  */
-class BottomNavViewDelegate(
-    navigationActivity: com.hutchins.navcore.NavigationActivity,
-    private val navController: NavController,
-    private val navigationMenuResourceId: Int
-        ) : NavigationViewDelegate(navigationActivity) {
+class BottomNavViewDelegate(navViewActivity: NavViewActivity,
+                            private val navigationMenuResourceId: Int
+) : NavigationViewDelegate(navViewActivity) {
     private lateinit var binding: ActivityBottomNavBinding
+    private lateinit var navController: NavController
 
-    override val navHostId: Int = R.id.navHost
+    override val navHostResourceId: Int = R.id.navHost
     private var showUp: Boolean = false
 
-    override fun setContentView() {
+    override fun onCreateContentView(): View {
         binding = DataBindingUtil.setContentView(navigationActivity, R.layout.activity_bottom_nav)
         binding.bottomNav.menu.clear()
         binding.bottomNav.inflateMenu(navigationMenuResourceId)
+        return binding.root
     }
 
-    override fun initNavigation(navController: NavController) {
+    override fun setupNavViewWithNavController(navController: NavController) {
+        this.navController = navController
         // We are now overriding the default jetpack NavigatedListeners in order to achieve
         // customizable UP navigation.
         //NavigationUI.setupActionBarWithNavController(appCompatActivity, navController)
@@ -63,8 +65,8 @@ class BottomNavViewDelegate(
         return handled
     }
 
-    override fun onBackPressed() {
-        navigationActivity.onBackPressed()
+    override fun onBackPressed(): Boolean {
+        return false
     }
 
     override fun updateUpNavigation(showUp: Boolean) {

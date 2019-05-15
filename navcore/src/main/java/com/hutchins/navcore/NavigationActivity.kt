@@ -14,20 +14,35 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
     companion object {
         const val TAG = "NavCore"
     }
-    protected lateinit var viewDelegate: ViewDelegate
     protected lateinit var navController: NavController
 
     /**
-     * Get the Master view delegate for this activity. This will be called during NavigationActivity's
-     * onCreate method.
+     * Called during onCreate.
      */
-    abstract fun instantiateViewDelegate(): ViewDelegate
+    abstract val navigationHostResourceId: Int
+    /**
+     * Called during onCreate.
+     */
+    abstract val navigationGraphResourceId: Int
+    /**
+     * Called during onCreate.
+     */
+    abstract fun onSetContentView()
+    /**
+     * Called during onCreate.
+     */
+    open fun onNavigationInitialized(navController: NavController) {
+
+    }
+
+    open fun onNavigated(baseNavFragment: BaseNavFragment) {
+
+    }
 
     /**
      * Get the navigation graph for this activity. This will be called during the NavigationActivity's
      * onCreate method.
      */
-    abstract fun getNavigationGraphResourceId(): Int
 
     private val baseNavFragments = ArrayList<WeakReference<BaseNavFragment>>()
     private var currentNavigationConfig: NavigationConfig? = null
@@ -46,21 +61,21 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         // Get a NavHostFragment from a child activity. The child activity will have to create the
         // Fragment and inject it with the navigation graph that that activity controls. Once this call
         // returns, we can put our NavHostFragment into our activity's view hierarchy.
-        val navHostFragment = NavHostFragment.create(getNavigationGraphResourceId())
+        val navHostFragment = NavHostFragment.create(navigationGraphResourceId)
 
         // Get a view Delegate from inheriting activity, most likely LotusActivity.
-        viewDelegate = instantiateViewDelegate()
+
         // Set the layout view into our window.
-        viewDelegate.setContentView()
+        onSetContentView()
         // Immediately and synchronously insert the NavHostFragment into our navHost section of the UI.
         supportFragmentManager.beginTransaction()
-            .replace(viewDelegate.navHostId, navHostFragment)
+            .replace(navigationHostResourceId, navHostFragment)
             .setPrimaryNavigationFragment(navHostFragment) // this is the equivalent to app:defaultNavHost="true"
             .commitNow()
         navController = navHostFragment.navController
         // If the view Delegate wants to connect the Navigation Controller to its view, it can do so
         // in this call. Generally a side nav will want to connect, also an ActionBar.
-        viewDelegate.initNavigation(navController)
+        onNavigationInitialized(navController)
         navController.addOnNavigatedListener(this)
 
 //        threshold = resources.getDimension(R.dimen.motionThresholdForEditTextDismiss)
@@ -114,6 +129,8 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         val current = baseNavFragments[0].get()!!
         val navConfig = current.onSetAsCurrentNavFragment(navController.currentDestination!!)
         currentNavigationConfig = navConfig
+
+        onNavigated(current)
     }
 
 //    override fun onSupportNavigateUp(): Boolean {
@@ -223,27 +240,6 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
 //        }
 //        return super.dispatchTouchEvent(event)
 //    }
-}
-
-/**
- * TODO: remove this and make them open funs overriding by the subclass.
- */
-abstract class ViewDelegate {
-    /**
-     * The layout id where the NavHostFragment will be inserted.
-     */
-    abstract val navHostId: Int
-
-    /**
-     * Set the layout into the activity view activity.setContentView()
-     */
-    abstract fun setContentView()
-
-    /**
-     * This is called once the NavController is extracted from the NavHostFragment. This allows the
-     * viewDelegate to optionally connect its navigation views to the NavigationController.
-     */
-    abstract fun initNavigation(navController: NavController)
 }
 
 open class NavigationConfig(val backButtonOverrideProvider: BackButtonOverrideProvider, val upButtonOverrideProvider: UpButtonOverrideProvider)

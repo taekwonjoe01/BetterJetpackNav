@@ -5,51 +5,21 @@ package com.hutchins.navui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
-import com.hutchins.navui.viewdelegates.BottomNavViewDelegate
+import androidx.navigation.NavController
+import com.hutchins.navcore.BaseNavFragment
+import com.hutchins.navcore.NavigationActivity
 import com.hutchins.navui.viewdelegates.NavigationViewDelegate
-import com.hutchins.navui.viewdelegates.NoNavViewDelegate
-import com.hutchins.navui.viewdelegates.SideNavViewDelegate
 
-abstract class NavViewConfig {
-    /**
-     * The navigation menu's resourceId. If this activity does not use a nevigation view, return 0.
-     * This resource is used to inflate either the Nav Drawer menu or the Bottom Nav Menu.
-     */
-    abstract val navigationMenuResourceId: Int
+abstract class NavViewActivity : NavigationActivity() {
+    abstract val navigationViewDelegate: NavigationViewDelegate
 
-    /**
-     * The navigation graph's resourceId. This is used by the fragment manager to determine navigation.
-     */
-    abstract val navigationGraphResourceId: Int
-}
-abstract class NavViewActivity : com.hutchins.navcore.NavigationActivity() {
-    private lateinit var navViewConfig: NavViewConfig
-    protected lateinit var navigationViewDelegate: NavigationViewDelegate
-    open val navigationType = NavViewType.SIDE
-
-    abstract fun getLotusActivityConfig(): NavViewConfig
-
-    enum class NavViewType {
-        SIDE, BOTTOM, NONE
-    }
-
-    override fun getNavigationGraphResourceId(): Int {
-        return navViewConfig.navigationGraphResourceId
-    }
-
-//    /**
-//     * LotusPageFragment ONLY should reference this.
-//     */
-//    internal fun getToolbarDelegate(): ToolbarDelegate {
-//        return navigationViewDelegate.toolbarDelegate
-//    }
+    override val navigationHostResourceId: Int
+        get() = navigationViewDelegate.navHostResourceId
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // We must do this BEFORE onCreate, because super.onCreate will ask us for the navGraphResourceId,
-        // which we won't know which type we want until we grab it from the Base.
-        navViewConfig = getLotusActivityConfig()
-
+        window.requestFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
     }
 
@@ -59,33 +29,29 @@ abstract class NavViewActivity : com.hutchins.navcore.NavigationActivity() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(rootView.windowToken, 0)
 
-        return super.onSupportNavigateUp()
+        val delegateHandled = navigationViewDelegate.onSupportNavigateUp()
+        return if (!delegateHandled) super.onSupportNavigateUp() else true
+    }
+
+    override fun onSetContentView() {
+        setContentView(navigationViewDelegate.onCreateContentView())
+    }
+
+    override fun onNavigationInitialized(navController: NavController) {
+        super.onNavigationInitialized(navController)
+        navigationViewDelegate.setupNavViewWithNavController(navController)
+    }
+
+    override fun onNavigated(baseNavFragment: BaseNavFragment) {
+        super.onNavigated(baseNavFragment)
+        if (baseNavFragment !is BaseScreenFragment) {
+            throw IllegalStateException("All Fragments used in the nav graph must inherit from BaseScreenFragment")
+        }
     }
 
     override fun onBackPressed() {
-        navigationViewDelegate.onBackPressed()
-    }
-
-    /**
-     * Called during onCreate of BaseActivity.
-     */
-    override fun instantiateViewDelegate(): com.hutchins.navcore.ViewDelegate {
-        // TODO: Make this a factory pattern so users of this library can implement their own Navigation Views.
-
-        // First, check if the activity is going to use a navigation menu:
-        val menuResourceId = navViewConfig.navigationMenuResourceId
-        navigationViewDelegate = when (navigationType) {
-            NavViewType.SIDE -> {
-                SideNavViewDelegate(this, menuResourceId)
-            }
-            NavViewType.BOTTOM -> {
-                BottomNavViewDelegate(this, navController, menuResourceId)
-            }
-            NavViewType.NONE -> {
-                NoNavViewDelegate(this, navController)
-            }
+        if (!navigationViewDelegate.onBackPressed()) {
+            super.onBackPressed()
         }
-
-        return navigationViewDelegate
     }
 }

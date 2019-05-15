@@ -1,0 +1,25 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="BaseNavUiTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Default used to color the actionBar -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- Default used to color the statusBar -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- Default used to color the controls (buttons, etc) -->
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Default used to color view backgrounds -->
+        <!--<item name="android:colorBackground">TODO</item>-->
+        <!--<item name="actionBarStyle">TODO</item>-->
+        <!--<item name="actionMenuTextAppearance">TODO</item>-->
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+        <!--<item name="android:fitsSystemWindows">true</item>-->
+    </style>
+
+</resources>

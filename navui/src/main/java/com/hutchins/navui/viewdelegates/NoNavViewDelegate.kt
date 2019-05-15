@@ -1,25 +1,30 @@
 package com.hutchins.navui.viewdelegates
 
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import com.hutchins.navui.NavViewActivity
 import com.hutchins.navui.R
 import com.hutchins.navui.ToolbarDelegate
 import com.hutchins.navui.databinding.ActivityNoNavBinding
 
-class NoNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationActivity, private val navController: NavController) : NavigationViewDelegate(navigationActivity) {
+class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewDelegate(navViewActivity) {
     private lateinit var binding: ActivityNoNavBinding
+    private lateinit var navController: NavController
 
-    override val navHostId: Int = R.id.navHost
+    override val navHostResourceId: Int = R.id.navHost
 
     private var showUp: Boolean = false
 
-    override fun setContentView() {
+    override fun onCreateContentView(): View {
         binding = DataBindingUtil.setContentView(navigationActivity, R.layout.activity_no_nav)
+        return binding.root
     }
 
-    override fun initNavigation(navController: NavController) {
+    override fun setupNavViewWithNavController(navController: NavController) {
+        this.navController = navController
         // We are now overriding the default jetpack NavigatedListeners in order to achieve
         // customizable UP navigation.
         //NavigationUI.setupActionBarWithNavController(appCompatActivity, navController)
@@ -53,8 +58,8 @@ class NoNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationActiv
         return handled
     }
 
-    override fun onBackPressed() {
-        navigationActivity.onBackPressed()
+    override fun onBackPressed(): Boolean {
+        return false
     }
 
     override fun updateUpNavigation(showUp: Boolean) {

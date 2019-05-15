@@ -2,12 +2,39 @@ package com.hutchins.navui.viewdelegates
 
 import android.graphics.drawable.Drawable
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
+import com.hutchins.navui.NavViewActivity
+import com.hutchins.navui.ToolbarDelegate
 
-abstract class NavigationViewDelegate(protected val navigationActivity: com.hutchins.navcore.NavigationActivity) : com.hutchins.navcore.ViewDelegate() {
+abstract class NavigationViewDelegate(protected val navigationActivity: NavViewActivity) {
+    /**
+     * The library requires knowing what the root view that will hold the NavHostFragment will be.
+     */
+    abstract val navHostResourceId: Int
+
+    /**
+     * Using the delegate pattern, we let this object inflate and create a view that will be the activity's content view.
+     */
+    abstract fun onCreateContentView(): View
+
+    /**
+     * After the navController is instantiated and setup with the navHostFragment, allow the delegate to connect the controller
+     * with any view setup it needs.
+     */
+    abstract fun setupNavViewWithNavController(navController: NavController)
+
+    /**
+     * Handle supportNavigateUp calls that the activity gets.
+     */
     abstract fun onSupportNavigateUp(): Boolean
-    abstract fun onBackPressed()
+
+    /**
+     * Handle back button calls that the activity gets.
+     */
+    abstract fun onBackPressed(): Boolean
 
     abstract fun updateUpNavigation(showUp: Boolean)
     abstract fun updateNavViewVisibility(show: Boolean)
@@ -16,8 +43,8 @@ abstract class NavigationViewDelegate(protected val navigationActivity: com.hutc
 
     abstract fun getToolbar(): Toolbar
 
-    internal val toolbarDelegate: com.hutchins.navui.ToolbarDelegate by lazy {
-        com.hutchins.navui.ToolbarDelegate(this, navigationActivity.supportActionBar!!)
+    internal val toolbarDelegate: ToolbarDelegate by lazy {
+        ToolbarDelegate(getToolbar(), this, navigationActivity.supportActionBar!!)
     }
 
     protected val upDrawable: DrawerArrowDrawable by lazy {

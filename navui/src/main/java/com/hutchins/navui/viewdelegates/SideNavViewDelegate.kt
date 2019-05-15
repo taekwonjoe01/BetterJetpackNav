@@ -3,7 +3,9 @@ package com.hutchins.navui.viewdelegates
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.Menu
+import android.view.View
 import androidx.annotation.StyleRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -11,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
+import com.hutchins.navui.NavViewActivity
 import com.hutchins.navui.R
 import com.hutchins.navui.ToolbarDelegate
 import com.hutchins.navui.databinding.ActivityDrawerNavBinding
@@ -19,10 +22,10 @@ import com.hutchins.navui.databinding.ActivityDrawerNavBinding
  * Created by jhutchins on 5/9/19.
  * Copyright (c) 2019 Engage FT. All rights reserved.
  */
-class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationActivity,
+class SideNavViewDelegate(navViewActivity: NavViewActivity,
                           private val navigationMenuResourceId: Int
-        ) : NavigationViewDelegate(navigationActivity) {
-    private lateinit var binding: ActivityDrawerNavBinding
+        ) : NavigationViewDelegate(navViewActivity) {
+    lateinit var binding: ActivityDrawerNavBinding
     private lateinit var navController: NavController
 
     private var valueAnimator: ValueAnimator? = null
@@ -32,9 +35,10 @@ class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationAct
 
     private var navigationEnabled = true
 
-    override val navHostId: Int = R.id.navHost
+    override val navHostResourceId: Int = R.id.navHost
 
-    override fun setContentView() {
+    override fun onCreateContentView(): View {
+        Log.e("Joey", "onCreateContentView")
         binding = DataBindingUtil.setContentView(navigationActivity,
             R.layout.activity_drawer_nav)
         binding.navigationView.menu.clear()
@@ -45,9 +49,11 @@ class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationAct
 //            ContextCompat.getColor(navigationActivity, R.color.primary),
 //            ContextCompat.getColorStateList(navigationActivity, R.color.side_navigation_text)!!,
 //            resources.getDimension(R.dimen.sideNavigationHorizontalPadding).toInt(), R.style.Body)
+        return binding.root
     }
 
-    override fun initNavigation(navController: NavController) {
+    override fun setupNavViewWithNavController(navController: NavController) {
+        Log.e("Joey", "setupNavViewWithNavController")
         this.navController = navController
 
         // We are now overriding the default jetpack NavigatedListeners in order to achieve
@@ -71,6 +77,7 @@ class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationAct
         /*return NavigationUI.navigateUp(binding.activityContainer,
                 navController)*/
         // Must override default:
+        Log.e("Joey", "onSupportNavigateUp")
         var handled = false
         if (navController.currentDestination!!.id == navController.graph.startDestination) {
             if (showUp) {
@@ -99,13 +106,12 @@ class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationAct
         return handled
     }
 
-    override fun onBackPressed() {
-        if (binding.activityContainer.isDrawerOpen(GravityCompat.START)) {
+    override fun onBackPressed(): Boolean {
+        return if (binding.activityContainer.isDrawerOpen(GravityCompat.START)) {
             binding.activityContainer.closeDrawer(GravityCompat.START)
+            true
         } else {
-            if (!navigationActivity.maybeDoBackButtonOverride()) {
-                navigationActivity.onBackPressed()
-            }
+            false
         }
     }
 
@@ -114,6 +120,7 @@ class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationAct
     }
 
     protected fun setActionBarUpIndicator(showDrawer: Boolean, shouldAnimate: Boolean = true) {
+        Log.e("Joey", "setActionBarUpIndicator showDrawer? $showDrawer")
         val desiredState = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
         val stateChanged = (desiredState != currentState)
 
@@ -139,6 +146,7 @@ class SideNavViewDelegate(navigationActivity: com.hutchins.navcore.NavigationAct
     }
 
     override fun updateNavViewVisibility(show: Boolean) {
+        Log.e("Joey", "updateNavViewVisibility show? $show")
         if (show) {
             setNavigationIcon(upDrawable)
             setActionBarUpIndicator(!showUp)

@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/navcore" />
             <option value="$PROJECT_DIR$/navcoretest" />
             <option value="$PROJECT_DIR$/navui" />
+            <option value="$PROJECT_DIR$/navuitest" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
