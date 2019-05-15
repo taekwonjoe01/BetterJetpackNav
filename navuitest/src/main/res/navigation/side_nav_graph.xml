@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/main_nav_graph"
+            app:startDestination="@id/firstRootFragment">
+
+
+    <fragment android:id="@+id/firstRootFragment" android:name="com.hutchins.navuitest.side.FirstRootFragment"
+              android:label="FirstRootFragment">
+        <action android:id="@+id/action_firstRootFragment_to_firstAFragment" app:destination="@id/firstAFragment"/>
+    </fragment>
+    <fragment android:id="@+id/secondRootFragment" android:name="com.hutchins.navuitest.side.SecondRootFragment"
+              android:label="SecondRootFragment">
+        <action android:id="@+id/action_secondRootFragment_to_secondAFragment" app:destination="@id/secondAFragment"/>
+        <action android:id="@+id/action_secondRootFragment_to_secondBFragment" app:destination="@id/secondBFragment"/>
+    </fragment>
+    <fragment android:id="@+id/thirdRootFragment" android:name="com.hutchins.navuitest.side.ThirdRootFragment"
+              android:label="ThirdRootFragment">
+        <action android:id="@+id/action_thirdRootFragment_to_thirdAFragment" app:destination="@id/thirdAFragment"/>
+    </fragment>
+    <fragment android:id="@+id/fourthRootFragment" android:name="com.hutchins.navuitest.side.FourthRootFragment"
+              android:label="FourthRootFragment">
+        <action android:id="@+id/action_fourthRootFragment_to_thirdFourthAFragment"
+                app:destination="@id/thirdFourthAFragment"/>
+    </fragment>
+    <fragment android:id="@+id/firstAFragment" android:name="com.hutchins.navuitest.side.FirstAFragment"
+              android:label="FirstAFragment">
+        <action android:id="@+id/action_firstAFragment_to_firstBFragment" app:destination="@id/firstBFragment"/>
+    </fragment>
+    <fragment android:id="@+id/firstBFragment" android:name="com.hutchins.navuitest.side.FirstBFragment"
+              android:label="FirstBFragment"/>
+    <fragment android:id="@+id/secondAFragment" android:name="com.hutchins.navuitest.side.SecondAFragment"
+              android:label="SecondAFragment"/>
+    <fragment android:id="@+id/secondBFragment" android:name="com.hutchins.navuitest.side.SecondBFragment"
+              android:label="SecondBFragment">
+        <action android:id="@+id/action_secondBFragment_to_secondCFragment" app:destination="@id/secondCFragment"/>
+    </fragment>
+    <fragment android:id="@+id/secondCFragment" android:name="com.hutchins.navuitest.side.SecondCFragment"
+              android:label="SecondCFragment"/>
+    <fragment android:id="@+id/thirdAFragment" android:name="com.hutchins.navuitest.side.ThirdAFragment"
+              android:label="ThirdAFragment">
+        <action android:id="@+id/action_thirdAFragment_to_thirdBFragment" app:destination="@id/thirdBFragment"/>
+    </fragment>
+    <fragment android:id="@+id/thirdBFragment" android:name="com.hutchins.navuitest.side.ThirdBFragment"
+              android:label="ThirdBFragment">
+        <action android:id="@+id/action_thirdBFragment_to_thirdFourthAFragment"
+                app:destination="@id/thirdFourthAFragment"/>
+    </fragment>
+    <fragment android:id="@+id/thirdFourthAFragment" android:name="com.hutchins.navuitest.side.ThirdFourthAFragment"
+              android:label="ThirdFourthAFragment">
+        <action android:id="@+id/action_thirdFourthAFragment_to_thirdFourthBFragment"
+                app:destination="@id/thirdFourthBFragment"/>
+    </fragment>
+    <fragment android:id="@+id/thirdFourthBFragment" android:name="com.hutchins.navuitest.side.ThirdFourthBFragment"
+              android:label="ThirdFourthBFragment">
+        <action android:id="@+id/action_thirdFourthBFragment_to_thirdFourthCFragment"
+                app:destination="@id/thirdFourthCFragment"/>
+        <action android:id="@+id/action_thirdFourthBFragment_to_thirdFourthDFragment"
+                app:destination="@id/thirdFourthDFragment"/>
+    </fragment>
+    <fragment android:id="@+id/thirdFourthCFragment" android:name="com.hutchins.navuitest.side.ThirdFourthCFragment"
+              android:label="ThirdFourthCFragment"/>
+    <fragment android:id="@+id/thirdFourthDFragment" android:name="com.hutchins.navuitest.side.ThirdFourthDFragment"
+              android:label="ThirdFourthDFragment">
+        <action android:id="@+id/action_thirdFourthDFragment_to_thirdFourthEFragment"
+                app:destination="@id/thirdFourthEFragment"/>
+    </fragment>
+    <fragment android:id="@+id/thirdFourthEFragment" android:name="com.hutchins.navuitest.side.ThirdFourthEFragment"
+              android:label="ThirdFourthEFragment"/>
+</navigation>

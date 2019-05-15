@@ -18,18 +18,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/testInstructionsFragment"
-        android:title="Option 1"/>
+        android:id="@+id/firstRootFragment"
+        android:title="First Root"/>
 
     <item
-        android:id="@+id/pillButtonsFragment"
-        android:title="Option 2"/>
+        android:id="@+id/secondRootFragment"
+        android:title="Second Root"/>
 
     <item
-        android:id="@+id/inputWithLabelFragment"
-        android:title="Input With Label"/>
+        android:id="@+id/thirdRootFragment"
+        android:title="Third Root"/>
 
     <item
-        android:id="@+id/cardViewFragment"
-        android:title="Card View"/>
+        android:id="@+id/fourthRootFragment"
+        android:title="Fourth Root"/>
 </menu>

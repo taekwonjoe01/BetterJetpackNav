@@ -8,12 +8,32 @@
                  android:supportsRtl="true"
                  android:theme="@style/BaseNavUiTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".side.SideNavActivity"
+                  android:label="Side Nav Activity"
+                  android:taskAffinity=".side.SideNavActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".bottom.BottomNavActivity"
+                  android:label="Bottom Nav Activity"
+                  android:taskAffinity=".bottom.BottomNavActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".nonav.NoNavActivity"
+                  android:label="No Nav Activity"
+                  android:taskAffinity=".nonav.NoNavActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
