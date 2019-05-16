@@ -3,6 +3,7 @@ package com.hutchins.navui.viewdelegates
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import com.hutchins.navui.NavViewActivity
@@ -62,7 +63,7 @@ class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewDelega
         return false
     }
 
-    override fun updateUpNavigation(showUp: Boolean) {
+    override fun setUpNavigationVisible(showUp: Boolean) {
         this.showUp = showUp
         if (showUp) {
             setNavigationIcon(upDrawable)
@@ -71,20 +72,16 @@ class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewDelega
         }
     }
 
-    override fun updateNavViewVisibility(show: Boolean) {
+    override fun setNavViewVisible(show: Boolean) {
         // Do nothing because there is no navigation view.
     }
 
-    // TODO for dashboard https://engageft.atlassian.net/browse/SHOW-164
-    override fun updateNavigationEnabled(enabled: Boolean) {
-        // Do nothing because there is no navigation view.
-    }
+    override val toolbar: Toolbar
+        get() = binding.toolbarLayout.toolbar
 
-    override fun getNavigationMenu(): Menu? {
-        return null
-    }
+    override val contentConstraintLayout: ConstraintLayout
+        get() = binding.constraintActivityContentLayout
 
-    override fun getToolbar(): Toolbar {
-        return binding.toolbarLayout.toolbar
-    }
+    override val toolbarLayout: View
+        get() = binding.toolbarLayout.appbar
 }

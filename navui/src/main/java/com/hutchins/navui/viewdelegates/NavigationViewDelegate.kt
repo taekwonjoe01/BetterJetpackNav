@@ -1,10 +1,10 @@
 package com.hutchins.navui.viewdelegates
 
 import android.graphics.drawable.Drawable
-import android.view.Menu
 import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import com.hutchins.navui.NavViewActivity
 import com.hutchins.navui.ToolbarDelegate
@@ -36,15 +36,15 @@ abstract class NavigationViewDelegate(protected val navigationActivity: NavViewA
      */
     abstract fun onBackPressed(): Boolean
 
-    abstract fun updateUpNavigation(showUp: Boolean)
-    abstract fun updateNavViewVisibility(show: Boolean)
-    abstract fun updateNavigationEnabled(enabled: Boolean)
-    abstract fun getNavigationMenu(): Menu?
+    abstract fun setUpNavigationVisible(showUp: Boolean)
+    abstract fun setNavViewVisible(show: Boolean)
 
-    abstract fun getToolbar(): Toolbar
+    abstract val toolbar: Toolbar
+    abstract val contentConstraintLayout: ConstraintLayout
+    abstract val toolbarLayout: View
 
     internal val toolbarDelegate: ToolbarDelegate by lazy {
-        ToolbarDelegate(getToolbar(), this, navigationActivity.supportActionBar!!)
+        ToolbarDelegate(contentConstraintLayout, toolbarLayout, toolbar, this)
     }
 
     protected val upDrawable: DrawerArrowDrawable by lazy {
@@ -59,13 +59,10 @@ abstract class NavigationViewDelegate(protected val navigationActivity: NavViewA
     }
 
     protected fun setNavigationIcon(icon: Drawable?) {
-        val actionBar = navigationActivity.supportActionBar!!
         if (icon == null) {
-            actionBar.setDisplayHomeAsUpEnabled(false)
+            toolbar.setNavigationIcon(null)
         } else {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            val delegate = navigationActivity.drawerToggleDelegate
-            delegate!!.setActionBarUpIndicator(icon, 0)
+            toolbar.setNavigationIcon(icon)
         }
     }
 }

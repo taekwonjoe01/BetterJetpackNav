@@ -2,19 +2,20 @@
 
 package com.hutchins.navui
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.View
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.hutchins.navui.viewdelegates.NavigationViewDelegate
 
 /**
  * This class manages the Toolbar and maintaints the state of it with respect to LotusPageFragments.
  * Only ONE LotusPageFragment can use this manager at a time (per activity).
  */
-class ToolbarDelegate(private val toolbar: Toolbar, private val navigationViewDelegate: NavigationViewDelegate, private val supportActionBar: ActionBar) {
+class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private val toolbarContainer: View, private val toolbar: Toolbar, private val navigationViewDelegate: NavigationViewDelegate/*, private val supportActionBar: ActionBar*/) {
     companion object {
         const val PROGRESS_HAMBURGER = 0.0f
         const val PROGRESS_ARROW = 1.0f
@@ -23,8 +24,29 @@ class ToolbarDelegate(private val toolbar: Toolbar, private val navigationViewDe
     var toolbarState: ToolbarVisibilityState =
         ToolbarVisibilityState.VISIBLE
         private set
-    private val invisibleAnimator = ObjectAnimator.ofFloat(toolbar, "alpha", 0.0F)
-    private val visibleAnimator = ObjectAnimator.ofFloat(toolbar, "alpha", 1.0F)
+    private val invisibleAnimator = ObjectAnimator.ofFloat(toolbarContainer, "alpha", 0.0F)
+    private val visibleAnimator = ObjectAnimator.ofFloat(toolbarContainer, "alpha", 1.0F)
+
+    private val constraintSetToolbarVisible: ConstraintSet = ConstraintSet().apply {
+        clone(constraintLayout)
+        connect(R.id.toolbarLayout, ConstraintSet.TOP, R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
+        connect(R.id.toolbarLayout, ConstraintSet.BOTTOM, R.id.navHost, ConstraintSet.TOP, 0)
+        setVisibility(R.id.toolbarLayout, View.VISIBLE)
+    }
+    private val constraintSetToolbarGone: ConstraintSet = ConstraintSet().apply {
+        clone(constraintLayout)
+        clear(R.id.toolbarLayout, ConstraintSet.TOP)
+        connect(R.id.toolbarLayout, ConstraintSet.BOTTOM, R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
+        // We don't use View.GONE because it has undesirable animations by default. It first sets invisible THEN goes to GONE.
+        // We want this to be a more or less instant transition.
+        //setVisibility(R.id.toolbarLayout, View.GONE)
+    }
+    private val constraintSetToolbarInvisible: ConstraintSet = ConstraintSet().apply {
+        clone(constraintLayout)
+        connect(R.id.toolbarLayout, ConstraintSet.TOP, R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
+        connect(R.id.toolbarLayout, ConstraintSet.BOTTOM, R.id.navHost, ConstraintSet.TOP, 0)
+        setVisibility(R.id.toolbarLayout, View.INVISIBLE)
+    }
 
     /**
      * GONE - The Toolbar is off the top of the screen and not accessible to a user.
@@ -39,46 +61,27 @@ class ToolbarDelegate(private val toolbar: Toolbar, private val navigationViewDe
      * Immediately cancel any animations and set the toolbar state.
      */
     internal fun setToolbarVisibilityState(desiredState: ToolbarVisibilityState) {
-        toolbar.clearAnimation()
-        invisibleAnimator.cancel()
-        visibleAnimator.cancel()
         when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    supportActionBar.hide()
-                    toolbar.translationY = -toolbar.height.toFloat()
-                    toolbar.alpha = 1.0F
+                    animateConstraintSet(0L, constraintSetToolbarGone)
                 }
                 else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    toolbar.alpha = 0.0F
-                    supportActionBar.show()
-                    toolbar.visibility = View.INVISIBLE
-                    toolbar.translationY = 0F
+                    animateConstraintSet(0L, constraintSetToolbarInvisible)
                 }
             }
             ToolbarVisibilityState.GONE -> {
                 if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    toolbar.alpha = 1.0F
-                    supportActionBar.show()
-                    toolbar.translationY = 0F
+                    animateConstraintSet(0L, constraintSetToolbarVisible)
                 } else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    toolbar.alpha = 0.0F
-                    supportActionBar.show()
-                    toolbar.visibility = View.INVISIBLE
-                    toolbar.translationY = 0F
+                    animateConstraintSet(0L, constraintSetToolbarInvisible)
                 }
             }
             ToolbarVisibilityState.INVISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    supportActionBar.hide()
-                    toolbar.translationY = -toolbar.height.toFloat()
-                    toolbar.visibility = View.VISIBLE
-                    toolbar.alpha = 1.0F
+                    animateConstraintSet(0L, constraintSetToolbarGone)
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    toolbar.alpha = 1.0F
-                    toolbar.visibility = View.VISIBLE
-                    supportActionBar.show()
-                    toolbar.translationY = 0F
+                    animateConstraintSet(0L, constraintSetToolbarVisible)
                 }
             }
         }
@@ -92,50 +95,26 @@ class ToolbarDelegate(private val toolbar: Toolbar, private val navigationViewDe
         when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    toolbar.animate().setDuration(animationDurationMS).translationY(-toolbar.height.toFloat()).withEndAction {
-                        toolbar.alpha = 1.0F
-                        supportActionBar.hide()
-                    }
+                    animateConstraintSet(animationDurationMS, constraintSetToolbarGone)
                 }
                 else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    supportActionBar.show()
-                    toolbar.translationY = 0F
-                    invisibleAnimator.duration = animationDurationMS
-                    invisibleAnimator.addListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator?) {
-                            super.onAnimationEnd(animation)
-                            toolbar.visibility = View.INVISIBLE
-                            invisibleAnimator.removeListener(this)
-                        }
-                    })
-                    invisibleAnimator.start()
+                    animateConstraintSet(animationDurationMS, constraintSetToolbarInvisible)
                 }
             }
             ToolbarVisibilityState.GONE -> {
                 if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    toolbar.alpha = 1.0F
-                    supportActionBar.show()
-                    toolbar.animate().translationY(0F)
+                    animateConstraintSet(animationDurationMS, constraintSetToolbarVisible)
                 } else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
-                    toolbar.alpha = 0.0F
-                    supportActionBar.show()
-                    toolbar.visibility = View.INVISIBLE
-                    toolbar.animate().translationY(0F)
+                    // This is a workaround to speed up the animation. The constraint layout wants to do them one at a time.
+                    toolbarContainer.visibility = View.INVISIBLE
+                    animateConstraintSet(animationDurationMS, constraintSetToolbarInvisible)
                 }
             }
             ToolbarVisibilityState.INVISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
-                    toolbar.animate().setDuration(animationDurationMS).translationY(-toolbar.height.toFloat()).withEndAction {
-                        toolbar.alpha = 1.0F
-                        toolbar.visibility = View.VISIBLE
-                        supportActionBar.hide()
-                    }
+                    animateConstraintSet(animationDurationMS, constraintSetToolbarGone)
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    supportActionBar.show()
-                    toolbar.translationY = 0F
-                    toolbar.visibility = View.VISIBLE
-                    visibleAnimator.duration = animationDurationMS
-                    visibleAnimator.start()
+                    animateConstraintSet(animationDurationMS, constraintSetToolbarVisible)
                 }
             }
         }
@@ -143,14 +122,21 @@ class ToolbarDelegate(private val toolbar: Toolbar, private val navigationViewDe
     }
 
     internal fun setToolbarTitle(title: CharSequence) {
-        supportActionBar.title = title
+        toolbar.title = title
     }
 
-    internal fun setOverrideUpNavigationToRoot(overrideUp: Boolean) {
-        navigationViewDelegate.updateUpNavigation(overrideUp)
+    internal fun setUpNavigationVisible(visible: Boolean) {
+        navigationViewDelegate.setUpNavigationVisible(visible)
     }
 
     internal fun updateNavViewVisibility(visible: Boolean) {
-        navigationViewDelegate.updateNavViewVisibility(visible)
+        navigationViewDelegate.setNavViewVisible(visible)
+    }
+
+    private fun animateConstraintSet(durationMs: Long, constraintSet: ConstraintSet) {
+        val transition = AutoTransition()
+        transition.duration = durationMs
+        TransitionManager.beginDelayedTransition(constraintLayout, transition)
+        constraintSet.applyTo(constraintLayout)
     }
 }

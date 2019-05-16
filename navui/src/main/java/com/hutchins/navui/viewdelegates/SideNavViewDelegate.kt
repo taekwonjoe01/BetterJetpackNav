@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.View
 import androidx.annotation.StyleRes
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -38,7 +39,6 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
     override val navHostResourceId: Int = R.id.navHost
 
     override fun onCreateContentView(): View {
-        Log.e("Joey", "onCreateContentView")
         binding = DataBindingUtil.setContentView(navigationActivity,
             R.layout.activity_drawer_nav)
         binding.navigationView.menu.clear()
@@ -53,31 +53,24 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
     }
 
     override fun setupNavViewWithNavController(navController: NavController) {
-        Log.e("Joey", "setupNavViewWithNavController")
         this.navController = navController
 
-        // We are now overriding the default jetpack NavigatedListeners in order to achieve
-        // customizable UP navigation.
-        //NavigationUI.setupActionBarWithNavController(appCompatActivity, navController, binding.drawerLayout)
-
-        // Set up ActionBar
-        navigationActivity.setSupportActionBar(binding.toolbarLayout.toolbar)
-
-        // Set up navigation menu
-        NavigationUI.setupWithNavController(binding.navigationView, navController)
+        NavigationUI.setupWithNavController(binding.toolbarLayout.toolbar, navController, binding.activityContainer)
+        // Immediately override the navigation click listener. We do this because we want to provide overridable functionality
+        // for the up button presses.
+        binding.toolbarLayout.toolbar.setNavigationOnClickListener {
+            navigationActivity.onSupportNavigateUp()
+        }
 
         // Initialize the icon.
         upDrawable.progress = ToolbarDelegate.PROGRESS_HAMBURGER
-        navigationActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val delegate = navigationActivity.drawerToggleDelegate
-        delegate!!.setActionBarUpIndicator(upDrawable, 0)
+        binding.toolbarLayout.toolbar.navigationIcon = upDrawable
     }
 
     override fun onSupportNavigateUp(): Boolean {
         /*return NavigationUI.navigateUp(binding.activityContainer,
                 navController)*/
-        // Must override default:
-        Log.e("Joey", "onSupportNavigateUp")
+        // Must override default so we can have custom press functionality:
         var handled = false
         if (navController.currentDestination!!.id == navController.graph.startDestination) {
             if (showUp) {
@@ -107,6 +100,7 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
     }
 
     override fun onBackPressed(): Boolean {
+        Log.e("Joey", "onBackPressed navEnabled? $navigationEnabled showUp? $showUp")
         return if (binding.activityContainer.isDrawerOpen(GravityCompat.START)) {
             binding.activityContainer.closeDrawer(GravityCompat.START)
             true
@@ -115,12 +109,12 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         }
     }
 
-    override fun updateUpNavigation(showUp: Boolean) {
+    override fun setUpNavigationVisible(showUp: Boolean) {
         this.showUp = showUp
+        setNavViewVisible(this.navigationEnabled)
     }
 
-    protected fun setActionBarUpIndicator(showDrawer: Boolean, shouldAnimate: Boolean = true) {
-        Log.e("Joey", "setActionBarUpIndicator showDrawer? $showDrawer")
+    protected fun setToolbarUpIndicator(showDrawer: Boolean, shouldAnimate: Boolean = true) {
         val desiredState = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
         val stateChanged = (desiredState != currentState)
 
@@ -145,25 +139,23 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         }
     }
 
-    override fun updateNavViewVisibility(show: Boolean) {
-        Log.e("Joey", "updateNavViewVisibility show? $show")
+    override fun setNavViewVisible(show: Boolean) {
         if (show) {
             setNavigationIcon(upDrawable)
-            setActionBarUpIndicator(!showUp)
+            setToolbarUpIndicator(!showUp)
         } else {
             if (!showUp) {
                 setNavigationIcon(null)
             } else {
                 setNavigationIcon(upDrawable)
-                setActionBarUpIndicator(!showUp, false)
+                setToolbarUpIndicator(!showUp, false)
             }
         }
 
         updateNavigationEnabled(show)
     }
 
-    // TODO for dashboard https://engageft.atlassian.net/browse/SHOW-164
-    override fun updateNavigationEnabled(enabled: Boolean) {
+    private fun updateNavigationEnabled(enabled: Boolean) {
         navigationEnabled = enabled
         if (enabled) {
             binding.activityContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -188,11 +180,16 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         }
     }
 
-    override fun getNavigationMenu(): Menu? {
+    fun getNavigationMenu(): Menu? {
         return binding.navigationView.menu
     }
 
-    override fun getToolbar(): Toolbar {
-        return binding.toolbarLayout.toolbar
-    }
+    override val toolbar: Toolbar
+        get() = binding.toolbarLayout.toolbar
+
+    override val contentConstraintLayout: ConstraintLayout
+        get() = binding.constraintActivityContentLayout
+
+    override val toolbarLayout: View
+        get() = binding.toolbarLayout.appbar
 }

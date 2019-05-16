@@ -83,9 +83,9 @@ abstract class BaseScreenFragment : BaseNavFragment() {
                 navViewActivity.getString(R.string.navigation_override_up), false)
             val isStartDestination = (findNavController().graph.startDestination == destination.id)
             if (isStartDestination) {
-                toolbarDelegate.setOverrideUpNavigationToRoot(overrideUp)
+                toolbarDelegate.setUpNavigationVisible(overrideUp)
             } else {
-                toolbarDelegate.setOverrideUpNavigationToRoot(!overrideUp)
+                toolbarDelegate.setUpNavigationVisible(!overrideUp)
             }
 
             val navViewGone = destination.defaultArguments.getBoolean(
@@ -151,9 +151,9 @@ abstract class BaseScreenFragment : BaseNavFragment() {
                                 bundle.putBoolean(navViewActivity.getString(R.string.navigation_override_up), transaction.override)
                                 val isStartDestination = (findNavController().graph.startDestination == dest.id)
                                 if (isStartDestination) {
-                                    tbd.setOverrideUpNavigationToRoot(transaction.override)
+                                    tbd.setUpNavigationVisible(transaction.override)
                                 } else {
-                                    tbd.setOverrideUpNavigationToRoot(!transaction.override)
+                                    tbd.setUpNavigationVisible(!transaction.override)
                                 }
                                 dest.addDefaultArguments(bundle)
                             }

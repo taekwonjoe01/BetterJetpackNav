@@ -17,66 +17,88 @@
             android:orientation="vertical">
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonChangeTitle"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Change toolbar title"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonSetVisible"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Set toolbar visible"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonSetGone"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Set toolbar gone"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonSetInvisible"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Set toolbar invisible"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonAnimateVisible"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Animate toolbar visible"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonAnimateGone"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Animate toolbar gone"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonAnimateInvisible"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Animate toolbar invisible"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonSetOverrideUp"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="set toolbar override up"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonRemoveOverrideUp"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="remove toolbar override up"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonSetNavViewVisibile"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="set navView visible"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonSetNavViewGone"
+                android:minHeight="0dp"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
