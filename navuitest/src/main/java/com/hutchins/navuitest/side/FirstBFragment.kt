@@ -17,7 +17,7 @@ import com.hutchins.navuitest.databinding.FragmentFirstBBinding
 class FirstBFragment : BaseScreenFragment() {
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
-        (childFragment as TweakSettingsFragment).setToolbarController(toolbarController)
+        (childFragment as TweakSettingsFragment).setToolbarController(navUiController)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentFirstBBinding.inflate(inflater, container, false).apply {

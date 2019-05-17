@@ -3,25 +3,17 @@
 package com.hutchins.navui
 
 import android.content.Context
-import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.NavController
 import com.hutchins.navcore.BaseNavFragment
 import com.hutchins.navcore.NavigationActivity
-import com.hutchins.navui.viewdelegates.NavigationViewDelegate
 
 abstract class NavViewActivity : NavigationActivity() {
     abstract val navigationViewDelegate: NavigationViewDelegate
 
     override val navigationHostResourceId: Int
         get() = navigationViewDelegate.navHostResourceId
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        window.requestFeature(Window.FEATURE_NO_TITLE)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         // This is a redundant call just in case something fails to close the keyboard
@@ -34,7 +26,7 @@ abstract class NavViewActivity : NavigationActivity() {
     }
 
     override fun onSetContentView() {
-        setContentView(navigationViewDelegate.onCreateContentView())
+        setContentView(navigationViewDelegate.onCreateContentView(this))
     }
 
     override fun onNavigationInitialized(navController: NavController) {

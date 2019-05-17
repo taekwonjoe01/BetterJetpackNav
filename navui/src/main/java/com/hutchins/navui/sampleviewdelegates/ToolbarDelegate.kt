@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package com.hutchins.navui
+package com.hutchins.navui.sampleviewdelegates
 
 import android.animation.ObjectAnimator
 import android.view.View
@@ -9,7 +9,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
-import com.hutchins.navui.viewdelegates.NavigationViewDelegate
+import com.hutchins.navui.NavigationViewDelegate
+import com.hutchins.navui.R
 
 /**
  * This class manages the Toolbar and maintaints the state of it with respect to LotusPageFragments.
@@ -29,22 +30,32 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
 
     private val constraintSetToolbarVisible: ConstraintSet = ConstraintSet().apply {
         clone(constraintLayout)
-        connect(R.id.toolbarLayout, ConstraintSet.TOP, R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
-        connect(R.id.toolbarLayout, ConstraintSet.BOTTOM, R.id.navHost, ConstraintSet.TOP, 0)
+        connect(
+            R.id.toolbarLayout, ConstraintSet.TOP,
+            R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
+        connect(
+            R.id.toolbarLayout, ConstraintSet.BOTTOM,
+            R.id.navHost, ConstraintSet.TOP, 0)
         setVisibility(R.id.toolbarLayout, View.VISIBLE)
     }
     private val constraintSetToolbarGone: ConstraintSet = ConstraintSet().apply {
         clone(constraintLayout)
         clear(R.id.toolbarLayout, ConstraintSet.TOP)
-        connect(R.id.toolbarLayout, ConstraintSet.BOTTOM, R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
+        connect(
+            R.id.toolbarLayout, ConstraintSet.BOTTOM,
+            R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
         // We don't use View.GONE because it has undesirable animations by default. It first sets invisible THEN goes to GONE.
         // We want this to be a more or less instant transition.
         //setVisibility(R.id.toolbarLayout, View.GONE)
     }
     private val constraintSetToolbarInvisible: ConstraintSet = ConstraintSet().apply {
         clone(constraintLayout)
-        connect(R.id.toolbarLayout, ConstraintSet.TOP, R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
-        connect(R.id.toolbarLayout, ConstraintSet.BOTTOM, R.id.navHost, ConstraintSet.TOP, 0)
+        connect(
+            R.id.toolbarLayout, ConstraintSet.TOP,
+            R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
+        connect(
+            R.id.toolbarLayout, ConstraintSet.BOTTOM,
+            R.id.navHost, ConstraintSet.TOP, 0)
         setVisibility(R.id.toolbarLayout, View.INVISIBLE)
     }
 

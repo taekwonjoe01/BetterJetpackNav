@@ -17,7 +17,7 @@ import com.hutchins.navuitest.databinding.FragmentSecondABinding
 class SecondAFragment : BaseScreenFragment() {
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
-        (childFragment as TweakSettingsFragment).setToolbarController(toolbarController)
+        (childFragment as TweakSettingsFragment).setToolbarController(navUiController)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentSecondABinding.inflate(inflater, container, false).apply {

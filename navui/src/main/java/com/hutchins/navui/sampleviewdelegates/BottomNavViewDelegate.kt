@@ -1,13 +1,15 @@
-package com.hutchins.navui.viewdelegates
+package com.hutchins.navui.sampleviewdelegates
 
+import android.graphics.drawable.Drawable
 import android.view.Menu
 import android.view.View
-import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
+import com.hutchins.navui.BaseNavUIController
 import com.hutchins.navui.NavViewActivity
+import com.hutchins.navui.NavigationViewDelegate
 import com.hutchins.navui.R
 import com.hutchins.navui.databinding.ActivityBottomNavBinding
 
@@ -15,17 +17,45 @@ import com.hutchins.navui.databinding.ActivityBottomNavBinding
  * Created by jhutchins on 5/9/19.
  * Copyright (c) 2019 Engage FT. All rights reserved.
  */
-class BottomNavViewDelegate(navViewActivity: NavViewActivity,
-                            private val navigationMenuResourceId: Int
-) : NavigationViewDelegate(navViewActivity) {
+class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+    lateinit var navViewActivity: NavViewActivity
     private lateinit var binding: ActivityBottomNavBinding
     private lateinit var navController: NavController
 
     override val navHostResourceId: Int = R.id.navHost
     private var showUp: Boolean = false
 
-    override fun onCreateContentView(): View {
-        binding = DataBindingUtil.setContentView(navigationActivity, R.layout.activity_bottom_nav)
+    internal val toolbarDelegate: ToolbarDelegate by lazy {
+        ToolbarDelegate(
+            binding.constraintActivityContentLayout,
+            binding.toolbarLayout.appbar,
+            binding.toolbarLayout.toolbar,
+            this
+        )
+    }
+
+    val upDrawable: DrawerArrowDrawable by lazy {
+        val arrow = DrawerArrowDrawable(navViewActivity)
+//        arrow.arrowHeadLength = resources.getDimension(R.dimen.toolbarUpArrowHeadLength)
+//        arrow.arrowShaftLength = resources.getDimension(R.dimen.toolbarUpArrowShaftLength)
+//        arrow.barThickness = resources.getDimension(R.dimen.toolbarUpArrowThickness)
+//        arrow.barLength = resources.getDimension(R.dimen.toolbarHamburgerBarLength)
+//        arrow.gapSize = resources.getDimension(R.dimen.toolbarHamburgerGapSize)
+//        arrow.color = ContextCompat.getColor(this@LotusActivity, R.color.structure6)
+        arrow
+    }
+
+    override fun getNavUiToolbarDelegate(): ToolbarDelegate {
+        return toolbarDelegate
+    }
+
+    override fun getNavigationController(): NavController {
+        return navController
+    }
+
+    override fun onCreateContentView(navViewActivity: NavViewActivity): View {
+        this.navViewActivity = navViewActivity
+        binding = DataBindingUtil.setContentView(navViewActivity, R.layout.activity_bottom_nav)
         binding.bottomNav.menu.clear()
         binding.bottomNav.inflateMenu(navigationMenuResourceId)
         return binding.root
@@ -37,28 +67,28 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity,
         // customizable UP navigation.
         //NavigationUI.setupActionBarWithNavController(appCompatActivity, navController)
 
-        navigationActivity.setSupportActionBar(binding.toolbarLayout.toolbar)
+        navViewActivity.setSupportActionBar(binding.toolbarLayout.toolbar)
 
         NavigationUI.setupWithNavController(binding.bottomNav, navController)
 
         // To keep UI's similar, we are using drawable provided by Material Design Library that
         // animates an arrow to/from a hamburger icon. This view doesn't need the hamburger part
         // so we set it to be the arrow only, and never alter it.
-        upDrawable.progress = com.hutchins.navui.ToolbarDelegate.PROGRESS_ARROW
+        upDrawable.progress = ToolbarDelegate.PROGRESS_ARROW
     }
 
     override fun onSupportNavigateUp(): Boolean {
         var handled = false
         if (navController.currentDestination!!.id == navController.graph.startDestination) {
             if (showUp) {
-                handled = navigationActivity.maybeDoNavigateUpOverride()
+                handled = navViewActivity.maybeDoNavigateUpOverride()
                 if (!handled) {
-                    navigationActivity.finish()
+                    navViewActivity.finish()
                     handled = true
                 }
             }
         } else {
-            handled = navigationActivity.maybeDoNavigateUpOverride()
+            handled = navViewActivity.maybeDoNavigateUpOverride()
             if (!handled) {
                 handled = navController.navigateUp()
             }
@@ -87,16 +117,19 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity,
         }
     }
 
+    override fun newInstanceNavUiController(): BaseNavUIController {
+        return SampleNavUIController(context = navViewActivity)
+    }
+
     fun getNavigationMenu(): Menu {
         return binding.bottomNav.menu
     }
 
-    override val toolbar: Toolbar
-        get() = binding.toolbarLayout.toolbar
-
-    override val contentConstraintLayout: ConstraintLayout
-        get() = binding.constraintActivityContentLayout
-
-    override val toolbarLayout: View
-        get() = binding.toolbarLayout.appbar
+    private fun setNavigationIcon(icon: Drawable?) {
+        if (icon == null) {
+            binding.toolbarLayout.toolbar.setNavigationIcon(null)
+        } else {
+            binding.toolbarLayout.toolbar.setNavigationIcon(icon)
+        }
+    }
 }

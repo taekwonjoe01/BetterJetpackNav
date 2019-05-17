@@ -16,7 +16,7 @@ import com.hutchins.navuitest.databinding.FragmentFourthRootBinding
 class FourthRootFragment: BaseScreenFragment() {
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
-        (childFragment as TweakSettingsFragment).setToolbarController(toolbarController)
+        (childFragment as TweakSettingsFragment).setToolbarController(navUiController)
     }
 
     override fun onCurrentNavFragment(destination: NavDestination) {

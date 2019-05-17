@@ -1,33 +1,30 @@
-package com.hutchins.navui.viewdelegates
+package com.hutchins.navui.sampleviewdelegates
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.res.ColorStateList
-import android.util.Log
-import android.view.Menu
+import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.annotation.StyleRes
-import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
+import com.hutchins.navui.BaseNavUIController
 import com.hutchins.navui.NavViewActivity
+import com.hutchins.navui.NavigationViewDelegate
 import com.hutchins.navui.R
-import com.hutchins.navui.ToolbarDelegate
 import com.hutchins.navui.databinding.ActivityDrawerNavBinding
 
 /**
  * Created by jhutchins on 5/9/19.
  * Copyright (c) 2019 Engage FT. All rights reserved.
  */
-class SideNavViewDelegate(navViewActivity: NavViewActivity,
-                          private val navigationMenuResourceId: Int
-        ) : NavigationViewDelegate(navViewActivity) {
+class SideNavViewDelegate(private val navigationMenuResourceId: Int
+        ) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+    lateinit var navViewActivity: NavViewActivity
     lateinit var binding: ActivityDrawerNavBinding
-    private lateinit var navController: NavController
+    lateinit var navController: NavController
 
     private var valueAnimator: ValueAnimator? = null
 
@@ -38,17 +35,41 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
 
     override val navHostResourceId: Int = R.id.navHost
 
-    override fun onCreateContentView(): View {
-        binding = DataBindingUtil.setContentView(navigationActivity,
+    internal val toolbarDelegate: ToolbarDelegate by lazy {
+        ToolbarDelegate(
+            binding.constraintActivityContentLayout,
+            binding.toolbarLayout.appbar,
+            binding.toolbarLayout.toolbar,
+            this
+        )
+    }
+
+    val upDrawable: DrawerArrowDrawable by lazy {
+        val arrow = DrawerArrowDrawable(navViewActivity)
+//        arrow.arrowHeadLength = resources.getDimension(R.dimen.toolbarUpArrowHeadLength)
+//        arrow.arrowShaftLength = resources.getDimension(R.dimen.toolbarUpArrowShaftLength)
+//        arrow.barThickness = resources.getDimension(R.dimen.toolbarUpArrowThickness)
+//        arrow.barLength = resources.getDimension(R.dimen.toolbarHamburgerBarLength)
+//        arrow.gapSize = resources.getDimension(R.dimen.toolbarHamburgerGapSize)
+//        arrow.color = ContextCompat.getColor(this@LotusActivity, R.color.structure6)
+        arrow
+    }
+
+    override fun getNavUiToolbarDelegate(): ToolbarDelegate {
+        return toolbarDelegate
+    }
+
+    override fun getNavigationController(): NavController {
+        return navController
+    }
+
+    override fun onCreateContentView(navViewActivity: NavViewActivity): View {
+        this.navViewActivity = navViewActivity
+        binding = DataBindingUtil.setContentView(navViewActivity,
             R.layout.activity_drawer_nav)
         binding.navigationView.menu.clear()
         binding.navigationView.inflateMenu(navigationMenuResourceId)
 
-        binding.navigationView.addHeaderView(navigationActivity.layoutInflater.inflate(R.layout.layout_nav_header, null, false))
-//        setSideNavigationStyle(
-//            ContextCompat.getColor(navigationActivity, R.color.primary),
-//            ContextCompat.getColorStateList(navigationActivity, R.color.side_navigation_text)!!,
-//            resources.getDimension(R.dimen.sideNavigationHorizontalPadding).toInt(), R.style.Body)
         return binding.root
     }
 
@@ -59,7 +80,7 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         // Immediately override the navigation click listener. We do this because we want to provide overridable functionality
         // for the up button presses.
         binding.toolbarLayout.toolbar.setNavigationOnClickListener {
-            navigationActivity.onSupportNavigateUp()
+            navViewActivity.onSupportNavigateUp()
         }
 
         // Initialize the icon.
@@ -74,9 +95,9 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         var handled = false
         if (navController.currentDestination!!.id == navController.graph.startDestination) {
             if (showUp) {
-                handled = navigationActivity.maybeDoNavigateUpOverride()
+                handled = navViewActivity.maybeDoNavigateUpOverride()
                 if (!handled) {
-                    navigationActivity.finish()
+                    navViewActivity.finish()
                     handled = true
                 }
             } else {
@@ -91,7 +112,7 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
                 handled = true
             }
         } else {
-            handled = navigationActivity.maybeDoNavigateUpOverride()
+            handled = navViewActivity.maybeDoNavigateUpOverride()
             if (!handled) {
                 handled = navController.navigateUp()
             }
@@ -100,7 +121,6 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
     }
 
     override fun onBackPressed(): Boolean {
-        Log.e("Joey", "onBackPressed navEnabled? $navigationEnabled showUp? $showUp")
         return if (binding.activityContainer.isDrawerOpen(GravityCompat.START)) {
             binding.activityContainer.closeDrawer(GravityCompat.START)
             true
@@ -118,7 +138,6 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         val desiredState = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
         val stateChanged = (desiredState != currentState)
 
-        //setNavigationIcon(upDrawable)
         val endValue = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
         if (stateChanged) {
             if (shouldAnimate) {
@@ -155,6 +174,18 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
         updateNavigationEnabled(show)
     }
 
+    override fun newInstanceNavUiController(): BaseNavUIController {
+        return SampleNavUIController(context = navViewActivity)
+    }
+
+    private fun setNavigationIcon(icon: Drawable?) {
+        if (icon == null) {
+            binding.toolbarLayout.toolbar.setNavigationIcon(null)
+        } else {
+            binding.toolbarLayout.toolbar.setNavigationIcon(icon)
+        }
+    }
+
     private fun updateNavigationEnabled(enabled: Boolean) {
         navigationEnabled = enabled
         if (enabled) {
@@ -163,33 +194,4 @@ class SideNavViewDelegate(navViewActivity: NavViewActivity,
             binding.activityContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
     }
-
-    fun setSideNavigationStyle(color: Int, textColorStateList: ColorStateList, itemHorizontalPadding: Int,
-                               @StyleRes textAppearance: Int, showNavHeader: Boolean = false) {
-        // TODO(jhutchins): Some other alterable things if needed?
-//            binding.navigationView.itemBackground
-//            binding.navigationView.itemIconPadding
-//            binding.navigationView.itemBackground
-//            binding.navigationView.itemIconTintList
-        binding.navigationView.itemHorizontalPadding = itemHorizontalPadding
-        binding.navigationView.setItemTextAppearance(textAppearance)
-        binding.navigationView.itemTextColor = textColorStateList
-        binding.navigationView.setBackgroundColor(color)
-        if (!showNavHeader) {
-            binding.navigationView.removeHeaderView(binding.navigationView.getHeaderView(0))
-        }
-    }
-
-    fun getNavigationMenu(): Menu? {
-        return binding.navigationView.menu
-    }
-
-    override val toolbar: Toolbar
-        get() = binding.toolbarLayout.toolbar
-
-    override val contentConstraintLayout: ConstraintLayout
-        get() = binding.constraintActivityContentLayout
-
-    override val toolbarLayout: View
-        get() = binding.toolbarLayout.appbar
 }
