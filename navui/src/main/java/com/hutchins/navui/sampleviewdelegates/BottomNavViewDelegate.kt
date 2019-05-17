@@ -13,10 +13,6 @@ import com.hutchins.navui.NavigationViewDelegate
 import com.hutchins.navui.R
 import com.hutchins.navui.databinding.ActivityBottomNavBinding
 
-/**
- * Created by jhutchins on 5/9/19.
- * Copyright (c) 2019 Engage FT. All rights reserved.
- */
 class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
     lateinit var navViewActivity: NavViewActivity
     private lateinit var binding: ActivityBottomNavBinding

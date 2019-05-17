@@ -10,10 +10,6 @@ import com.hutchins.navui.BaseScreenFragment
 import com.hutchins.navuitest.TweakSettingsFragment
 import com.hutchins.navuitest.databinding.FragmentThirdFourthCBinding
 
-/**
- * Created by jhutchins on 5/15/19.
- * Copyright (c) 2019 Engage FT. All rights reserved.
- */
 class ThirdFourthCFragment : BaseScreenFragment() {
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)

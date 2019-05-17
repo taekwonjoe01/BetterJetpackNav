@@ -10,10 +10,6 @@ import com.hutchins.navui.sampleviewdelegates.SampleNavUIController
 import com.hutchins.navui.sampleviewdelegates.ToolbarDelegate
 import com.hutchins.navuitest.databinding.FragmentTweakSettingsBinding
 
-/**
- * Created by jhutchins on 5/15/19.
- * Copyright (c) 2019 Engage FT. All rights reserved.
- */
 class TweakSettingsFragment : Fragment() {
     private lateinit var sampleNavUIController: SampleNavUIController
     internal fun setToolbarController(navUiController: BaseNavUIController) {

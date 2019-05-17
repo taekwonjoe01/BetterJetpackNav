@@ -7,10 +7,6 @@ import com.hutchins.navui.BaseNavUIController
 import com.hutchins.navui.NavigationViewDelegate
 import com.hutchins.navui.R
 
-/**
- * Created by jhutchins on 5/16/19.
- * Copyright (c) 2019 Engage FT. All rights reserved.
- */
 class SampleNavUIController(context: Context) : BaseNavUIController(context) {
     companion object {
         // Keep these in sync with lotus/values/strings.xml navigation_toolbar_visibility values
