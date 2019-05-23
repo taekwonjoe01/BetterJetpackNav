@@ -55,16 +55,37 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
      */
     private var isHardwareBackNavigation = false
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.e("Joey", "onSaveInstanceState")
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Log.e("Joey", "onRestoreInstanceState")
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Get a NavHostFragment from a child activity. The child activity will have to create the
-        // Fragment and inject it with the navigation graph that that activity controls. Once this call
-        // returns, we can put our NavHostFragment into our activity's view hierarchy.
-        val navHostFragment = NavHostFragment.create(navigationGraphResourceId)
+        if (savedInstanceState == null) {
+            Log.e("Joey", "onCreate fresh")
+            val navHostFragment = NavHostFragment.create(navigationGraphResourceId)
 
-        // Get a view Delegate from inheriting activity, most likely LotusActivity.
+            onCreateInternal(navHostFragment)
 
+//        threshold = resources.getDimension(R.dimen.motionThresholdForEditTextDismiss)
+        } else {
+            Log.e("Joey", "onCreate restore")
+            val navHostFragment = supportFragmentManager.findFragmentById(navigationHostResourceId) as NavHostFragment
+
+            onCreateInternal(navHostFragment)
+
+//        threshold = resources.getDimension(R.dimen.motionThresholdForEditTextDismiss)
+        }
+    }
+
+    private fun onCreateInternal(navHostFragment: NavHostFragment) {
         // Set the layout view into our window.
         onSetContentView()
         // Immediately and synchronously insert the NavHostFragment into our navHost section of the UI.
@@ -77,8 +98,6 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         // in this call. Generally a side nav will want to connect, also an ActionBar.
         onNavigationInitialized(navController)
         navController.addOnNavigatedListener(this)
-
-//        threshold = resources.getDimension(R.dimen.motionThresholdForEditTextDismiss)
     }
 
     /**

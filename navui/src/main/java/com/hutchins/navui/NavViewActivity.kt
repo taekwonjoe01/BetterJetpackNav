@@ -3,6 +3,7 @@
 package com.hutchins.navui
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.NavController
@@ -26,7 +27,7 @@ abstract class NavViewActivity : NavigationActivity() {
     }
 
     override fun onSetContentView() {
-        setContentView(navigationViewDelegate.onCreateContentView(this))
+        setContentView(navigationViewDelegate.onCreateContentView())
     }
 
     override fun onNavigationInitialized(navController: NavController) {
@@ -39,6 +40,16 @@ abstract class NavViewActivity : NavigationActivity() {
         if (baseNavFragment !is BaseScreenFragment) {
             throw IllegalStateException("All Fragments used in the nav graph must inherit from BaseScreenFragment")
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        navigationViewDelegate.saveState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        navigationViewDelegate.restoreState(savedInstanceState)
     }
 
     override fun onBackPressed() {

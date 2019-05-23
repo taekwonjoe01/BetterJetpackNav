@@ -1,10 +1,8 @@
 package com.hutchins.navui
 
-import android.content.Context
 import androidx.navigation.NavDestination
 
-abstract class BaseNavUIController(protected val context: Context) {
-
+abstract class BaseNavUIController {
     private var destination: NavDestination? = null
     private var navigationViewDelegate: NavigationViewDelegate? = null
 

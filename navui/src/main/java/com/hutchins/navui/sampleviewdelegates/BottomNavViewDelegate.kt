@@ -1,25 +1,30 @@
 package com.hutchins.navui.sampleviewdelegates
 
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
-import com.hutchins.navui.BaseNavUIController
-import com.hutchins.navui.NavViewActivity
-import com.hutchins.navui.NavigationViewDelegate
-import com.hutchins.navui.R
+import com.hutchins.navui.*
 import com.hutchins.navui.databinding.ActivityBottomNavBinding
 
-class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
-    lateinit var navViewActivity: NavViewActivity
+class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+    companion object {
+        const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
+        const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
+        const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
+    }
+
+    override val navViewActivity = navViewActivity
     private lateinit var binding: ActivityBottomNavBinding
     private lateinit var navController: NavController
 
     override val navHostResourceId: Int = R.id.navHost
     private var showUp: Boolean = false
+    private var navViewVisible: Boolean = true
 
     internal val toolbarDelegate: ToolbarDelegate by lazy {
         ToolbarDelegate(
@@ -49,8 +54,7 @@ class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : Navigat
         return navController
     }
 
-    override fun onCreateContentView(navViewActivity: NavViewActivity): View {
-        this.navViewActivity = navViewActivity
+    override fun onCreateContentView(): View {
         binding = DataBindingUtil.setContentView(navViewActivity, R.layout.activity_bottom_nav)
         binding.bottomNav.menu.clear()
         binding.bottomNav.inflateMenu(navigationMenuResourceId)
@@ -106,6 +110,7 @@ class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : Navigat
     }
 
     override fun setNavViewVisible(show: Boolean) {
+        this.navViewVisible = show
         if (show) {
             binding.bottomNav.visibility = View.VISIBLE
         } else {
@@ -113,8 +118,8 @@ class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : Navigat
         }
     }
 
-    override fun newInstanceNavUiController(): BaseNavUIController {
-        return SampleNavUIController(context = navViewActivity)
+    override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
+        return SampleNavUIController(screenFragment)
     }
 
     fun getNavigationMenu(): Menu {
@@ -127,5 +132,22 @@ class BottomNavViewDelegate(private val navigationMenuResourceId: Int) : Navigat
         } else {
             binding.toolbarLayout.toolbar.setNavigationIcon(icon)
         }
+    }
+
+    override fun saveState(bundle: Bundle) {
+        bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
+        bundle.putBoolean(BUNDLE_KEY_NAV_STATE, navViewVisible)
+
+        toolbarDelegate.saveState(bundle)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        val navViewVisible = bundle.getBoolean(BUNDLE_KEY_NAV_STATE)
+        val showUp = bundle.getBoolean(BUNDLE_KEY_UP_STATE)
+
+        setUpNavigationVisible(showUp)
+        setNavViewVisible(navViewVisible)
+
+        toolbarDelegate.restoreState(bundle)
     }
 }

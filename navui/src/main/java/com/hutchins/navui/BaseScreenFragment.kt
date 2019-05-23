@@ -22,7 +22,7 @@ abstract class BaseScreenFragment : BaseNavFragment() {
 
         if (context is NavViewActivity) {
             navViewActivity = context
-            navUiController = navViewActivity.navigationViewDelegate.newInstanceNavUiController()
+            navUiController = navViewActivity.navigationViewDelegate.newInstanceNavUiController(this)
         } else {
             throw RuntimeException("$context must be child class of NavViewActivity!")
         }

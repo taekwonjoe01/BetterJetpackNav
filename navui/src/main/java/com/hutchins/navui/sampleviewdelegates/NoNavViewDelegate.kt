@@ -1,18 +1,20 @@
 package com.hutchins.navui.sampleviewdelegates
 
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import com.hutchins.navui.BaseNavUIController
-import com.hutchins.navui.NavViewActivity
-import com.hutchins.navui.NavigationViewDelegate
-import com.hutchins.navui.R
+import com.hutchins.navui.*
 import com.hutchins.navui.databinding.ActivityNoNavBinding
 
-class NoNavViewDelegate() : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
-    lateinit var navViewActivity: NavViewActivity
+class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+    companion object {
+        const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
+    }
+
+    override val navViewActivity = navViewActivity
     private lateinit var binding: ActivityNoNavBinding
     private lateinit var navController: NavController
 
@@ -48,8 +50,7 @@ class NoNavViewDelegate() : NavigationViewDelegate, SampleNavUIController.TestNa
         return navController
     }
 
-    override fun onCreateContentView(navViewActivity: NavViewActivity): View {
-        this.navViewActivity = navViewActivity
+    override fun onCreateContentView(): View {
         binding = DataBindingUtil.setContentView(navViewActivity, R.layout.activity_no_nav)
         return binding.root
     }
@@ -106,8 +107,8 @@ class NoNavViewDelegate() : NavigationViewDelegate, SampleNavUIController.TestNa
         // Do nothing because there is no navigation view.
     }
 
-    override fun newInstanceNavUiController(): BaseNavUIController {
-        return SampleNavUIController(context = navViewActivity)
+    override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
+        return SampleNavUIController(screenFragment)
     }
 
     private fun setNavigationIcon(icon: Drawable?) {
@@ -116,5 +117,17 @@ class NoNavViewDelegate() : NavigationViewDelegate, SampleNavUIController.TestNa
         } else {
             binding.toolbarLayout.toolbar.setNavigationIcon(icon)
         }
+    }
+
+    override fun saveState(bundle: Bundle) {
+        bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
+
+        toolbarDelegate.saveState(bundle)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        showUp = bundle.getBoolean(BUNDLE_KEY_UP_STATE)
+
+        toolbarDelegate.restoreState(bundle)
     }
 }

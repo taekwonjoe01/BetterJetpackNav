@@ -1,9 +1,12 @@
 package com.hutchins.navui
 
+import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavController
 
 interface NavigationViewDelegate {
+    val navViewActivity: NavViewActivity
+
     /**
      * The library requires knowing what the root view that will hold the NavHostFragment will be.
      */
@@ -12,7 +15,7 @@ interface NavigationViewDelegate {
     /**
      * Using the delegate pattern, we let this object inflate and create a view that will be the activity's content view.
      */
-    fun onCreateContentView(navViewActivity: NavViewActivity): View
+    fun onCreateContentView(): View
 
     /**
      * After the navController is instantiated and setup with the navHostFragment, allow the delegate to connect the controller
@@ -33,5 +36,8 @@ interface NavigationViewDelegate {
     fun setUpNavigationVisible(showUp: Boolean)
     fun setNavViewVisible(show: Boolean)
 
-    fun newInstanceNavUiController(): BaseNavUIController
+    fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController
+
+    fun saveState(bundle: Bundle)
+    fun restoreState(bundle: Bundle)
 }

@@ -60,4 +60,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlin_version"
     implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07'
     implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
 }

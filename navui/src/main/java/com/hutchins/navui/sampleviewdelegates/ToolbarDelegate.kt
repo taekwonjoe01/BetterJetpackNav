@@ -3,6 +3,7 @@
 package com.hutchins.navui.sampleviewdelegates
 
 import android.animation.ObjectAnimator
+import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +21,34 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
     companion object {
         const val PROGRESS_HAMBURGER = 0.0f
         const val PROGRESS_ARROW = 1.0f
+
+        private const val BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE = "BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE"
+        private const val BUNDLE_KEY_TOOLBAR_TITLE = "BUNDLE_KEY_TOOLBAR_TITLE"
+
+        private const val BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_VISIBLE = 0
+        private const val BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_INVISIBLE = 1
+        private const val BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_GONE = 2
+    }
+
+    internal fun saveState(bundle: Bundle) {
+        bundle.putString(BUNDLE_KEY_TOOLBAR_TITLE, toolbar.title.toString())
+        val intState = when (toolbarState) {
+            ToolbarVisibilityState.VISIBLE -> BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_VISIBLE
+            ToolbarVisibilityState.INVISIBLE -> BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_INVISIBLE
+            ToolbarVisibilityState.GONE -> BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_GONE
+        }
+        bundle.putInt(BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE, intState)
+    }
+
+    internal fun restoreState(bundle: Bundle) {
+        toolbar.title = bundle.getString(BUNDLE_KEY_TOOLBAR_TITLE)
+        val toolbarState = when (bundle.getInt(BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE)) {
+            BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_VISIBLE -> ToolbarVisibilityState.VISIBLE
+            BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_INVISIBLE -> ToolbarVisibilityState.INVISIBLE
+            BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_GONE -> ToolbarVisibilityState.GONE
+            else -> throw IllegalStateException("Unknown toolbar visibility state restored!")
+        }
+        setToolbarVisibilityState(toolbarState)
     }
 
     var toolbarState: ToolbarVisibilityState =

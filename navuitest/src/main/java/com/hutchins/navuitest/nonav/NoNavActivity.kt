@@ -6,5 +6,5 @@ import com.hutchins.navuitest.R
 
 class NoNavActivity : NavViewActivity() {
     override val navigationGraphResourceId = R.navigation.side_nav_graph
-    override val navigationViewDelegate = NoNavViewDelegate()
+    override val navigationViewDelegate = NoNavViewDelegate(this)
 }

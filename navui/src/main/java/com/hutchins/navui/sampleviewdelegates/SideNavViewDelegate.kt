@@ -3,6 +3,7 @@ package com.hutchins.navui.sampleviewdelegates
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.core.view.GravityCompat
@@ -10,15 +11,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
-import com.hutchins.navui.BaseNavUIController
-import com.hutchins.navui.NavViewActivity
-import com.hutchins.navui.NavigationViewDelegate
-import com.hutchins.navui.R
+import com.hutchins.navui.*
 import com.hutchins.navui.databinding.ActivityDrawerNavBinding
 
-class SideNavViewDelegate(private val navigationMenuResourceId: Int
+class SideNavViewDelegate(
+    override val navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int
         ) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
-    lateinit var navViewActivity: NavViewActivity
+    companion object {
+         const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
+         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
+         const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
+    }
+
     lateinit var binding: ActivityDrawerNavBinding
     lateinit var navController: NavController
 
@@ -59,8 +63,7 @@ class SideNavViewDelegate(private val navigationMenuResourceId: Int
         return navController
     }
 
-    override fun onCreateContentView(navViewActivity: NavViewActivity): View {
-        this.navViewActivity = navViewActivity
+    override fun onCreateContentView(): View {
         binding = DataBindingUtil.setContentView(navViewActivity,
             R.layout.activity_drawer_nav)
         binding.navigationView.menu.clear()
@@ -73,6 +76,7 @@ class SideNavViewDelegate(private val navigationMenuResourceId: Int
         this.navController = navController
 
         NavigationUI.setupWithNavController(binding.toolbarLayout.toolbar, navController, binding.activityContainer)
+        NavigationUI.setupWithNavController(binding.navigationView, navController)
         // Immediately override the navigation click listener. We do this because we want to provide overridable functionality
         // for the up button presses.
         binding.toolbarLayout.toolbar.setNavigationOnClickListener {
@@ -130,7 +134,7 @@ class SideNavViewDelegate(private val navigationMenuResourceId: Int
         setNavViewVisible(this.navigationEnabled)
     }
 
-    protected fun setToolbarUpIndicator(showDrawer: Boolean, shouldAnimate: Boolean = true) {
+    private  fun setToolbarUpIndicator(showDrawer: Boolean, shouldAnimate: Boolean = true) {
         val desiredState = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
         val stateChanged = (desiredState != currentState)
 
@@ -170,15 +174,15 @@ class SideNavViewDelegate(private val navigationMenuResourceId: Int
         updateNavigationEnabled(show)
     }
 
-    override fun newInstanceNavUiController(): BaseNavUIController {
-        return SampleNavUIController(context = navViewActivity)
+    override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
+        return SampleNavUIController(screenFragment)
     }
 
     private fun setNavigationIcon(icon: Drawable?) {
         if (icon == null) {
-            binding.toolbarLayout.toolbar.setNavigationIcon(null)
+            binding.toolbarLayout.toolbar.navigationIcon = null
         } else {
-            binding.toolbarLayout.toolbar.setNavigationIcon(icon)
+            binding.toolbarLayout.toolbar.navigationIcon = icon
         }
     }
 
@@ -189,5 +193,25 @@ class SideNavViewDelegate(private val navigationMenuResourceId: Int
         } else {
             binding.activityContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
+    }
+
+    override fun saveState(bundle: Bundle) {
+        bundle.putBoolean(BUNDLE_KEY_TOOLBAR_STATE, currentState == ToolbarDelegate.PROGRESS_HAMBURGER)
+        bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
+        bundle.putBoolean(BUNDLE_KEY_NAV_STATE, navigationEnabled)
+
+        toolbarDelegate.saveState(bundle)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        navigationEnabled = bundle.getBoolean(BUNDLE_KEY_NAV_STATE)
+        showUp = bundle.getBoolean(BUNDLE_KEY_UP_STATE)
+        val toolbarState = bundle.getBoolean(BUNDLE_KEY_TOOLBAR_STATE)
+
+        setUpNavigationVisible(showUp)
+        setNavViewVisible(navigationEnabled)
+        setToolbarUpIndicator(toolbarState, false)
+
+        toolbarDelegate.restoreState(bundle)
     }
 }

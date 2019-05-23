@@ -6,5 +6,5 @@ import com.hutchins.navuitest.R
 
 class SideNavActivity : NavViewActivity() {
     override val navigationGraphResourceId = R.navigation.side_nav_graph
-    override val navigationViewDelegate = SideNavViewDelegate(R.menu.side_nav_menu)
+    override val navigationViewDelegate = SideNavViewDelegate(this, R.menu.side_nav_menu)
 }

@@ -12,8 +12,6 @@
     <!-- navigation_hide_toolbar configures whether or not the toolbar is hidden.
     default is false (not hidden).
     -->
-    <!--DEPRECATED-->
-    <string name="navigation_hide_toolbar">navigation_hide_toolbar</string>
 
     <!-- navigation_toolbar_visibility configures whether or not the toolbar is hidden.
     default is false (not hidden).
