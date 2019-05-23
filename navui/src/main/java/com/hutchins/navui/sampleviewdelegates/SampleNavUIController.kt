@@ -19,47 +19,6 @@ class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIContr
     private val navUIControllerViewmodel = ViewModelProviders.of(screenFragment).get(NavUIControllerViewmodel::class.java)
     private val context: Context = screenFragment.context!!
 
-    inner class VisibilityToolbarTransaction(val toolbarVisibility: ToolbarDelegate.ToolbarVisibilityState) :
-        BaseNavUIControllerTransaction {
-        override fun doTransaction(navigationViewDelegate: NavigationViewDelegate, destination: NavDestination) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            toolbarDelegate.setToolbarVisibilityState(toolbarVisibility)
-        }
-    }
-    inner class TitleToolbarTransaction(val title: String) :
-        BaseNavUIControllerTransaction {
-        override fun doTransaction(navigationViewDelegate: NavigationViewDelegate, destination: NavDestination) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            toolbarDelegate.setToolbarTitle(title)
-        }
-    }
-    inner class OverrideUpToolbarTransaction(val override: Boolean) :
-        BaseNavUIControllerTransaction {
-        override fun doTransaction(navigationViewDelegate: NavigationViewDelegate, destination: NavDestination) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            val isStartDestination = (navigationViewDelegate.asTestNavViewDelegate().getNavigationController().graph.startDestination == destination.id)
-            if (isStartDestination) {
-                toolbarDelegate.setUpNavigationVisible(override)
-            } else {
-                toolbarDelegate.setUpNavigationVisible(!override)
-            }
-        }
-    }
-    inner class NavViewVisibilityToolbarTransaction(val hideNavView: Boolean) :
-        BaseNavUIControllerTransaction {
-        override fun doTransaction(navigationViewDelegate: NavigationViewDelegate, destination: NavDestination) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            toolbarDelegate.updateNavViewVisibility(!hideNavView)
-        }
-    }
-    inner class AnimateVisibilityTransaction(val stateToAnimateTo: ToolbarDelegate.ToolbarVisibilityState, val animationDuration: Long) :
-        BaseNavUIControllerTransaction {
-        override fun doTransaction(navigationViewDelegate: NavigationViewDelegate, destination: NavDestination) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            toolbarDelegate.animateToToolbarVisibilityState(stateToAnimateTo, animationDuration)
-        }
-    }
-
     override fun onNavUIActive(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate) {
         val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
 
@@ -96,44 +55,58 @@ class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIContr
             toolbarDelegate.setUpNavigationVisible(!overrideUp)
         }
 
-
         // Nav view visibility initialization:
-        val navViewGone = navUIControllerViewmodel.navViewGone ?: destination.defaultArguments.getBoolean(
+        val showNavView = navUIControllerViewmodel.showNavView ?: !destination.defaultArguments.getBoolean(
             context.getString(R.string.navigation_view_gone), false)
-        toolbarDelegate.updateNavViewVisibility(!navViewGone)
+        toolbarDelegate.updateNavViewVisibility(showNavView)
     }
 
     fun setToolbarVisibility(toolbarVisibility: ToolbarDelegate.ToolbarVisibilityState) {
         navUIControllerViewmodel.toolbarVisibilityState = toolbarVisibility
-        addTransaction(VisibilityToolbarTransaction(toolbarVisibility))
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            toolbarDelegate.setToolbarVisibilityState(toolbarVisibility)
+        }
     }
 
     fun setToolbarTitle(title: String) {
         navUIControllerViewmodel.toolbarTitle = title
-        addTransaction(TitleToolbarTransaction(title))
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            toolbarDelegate.setToolbarTitle(title)
+        }
     }
 
     fun setToolbarOverrideUp(overrideUp: Boolean) {
         navUIControllerViewmodel.overrideUp = overrideUp
-        addTransaction(OverrideUpToolbarTransaction(overrideUp))
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            val isStartDestination = (it.asTestNavViewDelegate().getNavigationController().graph.startDestination == destination!!.id)
+            if (isStartDestination) {
+                toolbarDelegate.setUpNavigationVisible(overrideUp)
+            } else {
+                toolbarDelegate.setUpNavigationVisible(!overrideUp)
+            }
+        }
     }
 
     fun setNavViewVisibility(showNavView: Boolean) {
-        navUIControllerViewmodel.navViewGone = !showNavView
-        addTransaction(NavViewVisibilityToolbarTransaction(!showNavView))
+        navUIControllerViewmodel.showNavView = showNavView
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            toolbarDelegate.updateNavViewVisibility(showNavView)
+        }
     }
 
     fun animateToolbarVisibility(toVisibilityState: ToolbarDelegate.ToolbarVisibilityState, animationDurationMs: Long) {
         navUIControllerViewmodel.toolbarVisibilityState = toVisibilityState
-        addTransaction(
-            AnimateVisibilityTransaction(
-                toVisibilityState,
-                animationDurationMs
-            )
-        )
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            toolbarDelegate.animateToToolbarVisibilityState(toVisibilityState, animationDurationMs)
+        }
     }
 
-    fun NavigationViewDelegate.asTestNavViewDelegate() : TestNavViewDelegate {
+    private fun NavigationViewDelegate.asTestNavViewDelegate() : TestNavViewDelegate {
         return this as TestNavViewDelegate
     }
 
