@@ -63,7 +63,7 @@
                 app:destination="@id/thirdFourthDFragment"/>
         <argument
             android:name="@string/navigation_toolbar_visibility"
-            app:argType="integer"
+            app:argType="reference"
             android:defaultValue="@integer/navigation_toolbar_visibility_gone"/>
         <argument
             android:name="@string/navigation_view_gone"
@@ -75,7 +75,7 @@
               android:label="ThirdFourthCFragment">
         <argument
             android:name="@string/navigation_toolbar_visibility"
-            app:argType="integer"
+            app:argType="reference"
             android:defaultValue="@integer/navigation_toolbar_visibility_invisible"/>
     </fragment>
     <fragment android:id="@+id/thirdFourthDFragment" android:name="com.hutchins.navuitest.side.ThirdFourthDFragment"
@@ -84,7 +84,7 @@
                 app:destination="@id/thirdFourthEFragment"/>
         <argument
             android:name="@string/navigation_toolbar_visibility"
-            app:argType="integer"
+            app:argType="reference"
             android:defaultValue="@integer/navigation_toolbar_visibility_visible"/>
     </fragment>
     <fragment android:id="@+id/thirdFourthEFragment" android:name="com.hutchins.navuitest.side.ThirdFourthEFragment"

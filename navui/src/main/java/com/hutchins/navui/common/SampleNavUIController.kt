@@ -27,10 +27,10 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
         // defaultArguments values.
 
         // Toolbar visibility state initialization:
-        val toolbarVisibilityState = navUIControllerViewmodel.toolbarVisibilityState ?: kotlin.run {
-            val intState = destination.defaultArguments.getInt(context.getString(R.string.navigation_toolbar_visibility))
+        val toolbarVisibilityState = navUIControllerViewmodel.toolbarVisibilityState ?: run {
+            val intReference: Int? = destination.arguments[context.getString(R.string.navigation_toolbar_visibility)]?.defaultValue as? Int
 
-            val desiredState = when (intState) {
+            val desiredState = when (intReference?.let { context.resources.getInteger(it) } ?: run { TOOLBAR_VISIBILITY_VISIBLE }) {
                 TOOLBAR_VISIBILITY_GONE -> ToolbarDelegate.ToolbarVisibilityState.GONE
                 TOOLBAR_VISIBILITY_VISIBLE -> ToolbarDelegate.ToolbarVisibilityState.VISIBLE
                 TOOLBAR_VISIBILITY_INVISIBLE -> ToolbarDelegate.ToolbarVisibilityState.INVISIBLE
@@ -46,14 +46,12 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
         toolbarDelegate.setToolbarTitle(title)
 
         // Subtitle initialization:
-        val subtitle = navUIControllerViewmodel.toolbarSubtitle ?: destination.defaultArguments.getString(
-            context.getString(R.string.navigation_toolbar_subtitle), "")
+        val subtitle = navUIControllerViewmodel.toolbarSubtitle ?: destination.arguments[context.getString(R.string.navigation_toolbar_subtitle)]?.defaultValue as? String ?:  ""
         toolbarDelegate.setToolbarSubtitle(subtitle)
 
 
         // Toolbar up override initialization:
-        val overrideUp = navUIControllerViewmodel.overrideUp ?: destination.defaultArguments.getBoolean(
-            context.getString(R.string.navigation_override_up), false)
+        val overrideUp = navUIControllerViewmodel.overrideUp ?: destination.arguments[context.getString(R.string.navigation_override_up)]?.defaultValue as? Boolean ?: false
         val isStartDestination = (navigationViewDelegate.asTestNavViewDelegate().getNavigationController().graph.startDestination == destination.id)
         if (isStartDestination) {
             toolbarDelegate.setUpNavigationVisible(overrideUp)
@@ -62,13 +60,13 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
         }
 
         // Nav view visibility initialization:
-        val showNavView = navUIControllerViewmodel.showNavView ?: !destination.defaultArguments.getBoolean(
-            context.getString(R.string.navigation_view_gone), false)
+        val showNavView = navUIControllerViewmodel.showNavView ?: !(destination.arguments[
+            context.getString(R.string.navigation_view_gone)]?.defaultValue as? Boolean ?: false)
         toolbarDelegate.updateNavViewVisibility(showNavView)
 
         // Action menu initialization:
-        val actionMenuResId = navUIControllerViewmodel.actionMenuResourceId ?: destination.defaultArguments.getInt(
-            context.getString(R.string.navigation_toolbar_action_menu), -1)
+        val actionMenuResId = navUIControllerViewmodel.actionMenuResourceId ?: destination.arguments[
+            context.getString(R.string.navigation_toolbar_action_menu)]?.defaultValue as? Int ?: -1
         if (actionMenuResId == -1) {
             toolbarDelegate.clearToolbarActionMenu()
         } else {
