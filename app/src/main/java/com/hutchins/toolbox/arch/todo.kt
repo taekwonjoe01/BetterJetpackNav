@@ -4,6 +4,7 @@ package com.hutchins.toolbox.arch
 /*
 -Update to latest nav component version.
     -Need to allow nav structure to accept non -BaseNavFragments as navigations.
+-Configure navUI so that the styles via xml can be parameterized somehow.
 
 TESTING
 -Test forward and back navigations
