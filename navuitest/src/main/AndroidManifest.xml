@@ -10,7 +10,8 @@
 
         <activity android:name=".side.SideNavActivity"
                   android:label="Side Nav Activity"
-                  android:taskAffinity=".side.SideNavActivity">
+                  android:taskAffinity=".side.SideNavActivity"
+                  android:theme="@style/SampleSideNavTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,8 @@
         </activity>
         <activity android:name=".bottom.BottomNavActivity"
                   android:label="Bottom Nav Activity"
-                  android:taskAffinity=".bottom.BottomNavActivity">
+                  android:taskAffinity=".bottom.BottomNavActivity"
+                  android:theme="@style/SampleBottomNavTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

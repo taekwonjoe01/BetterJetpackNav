@@ -4,7 +4,6 @@ package com.hutchins.navui.common
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -179,7 +178,6 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
     }
 
     internal fun setToolbarActionMenu(menuResId: Int, listener: Toolbar.OnMenuItemClickListener) {
-        Log.e("Joey", "setToolbarActionMenu")
         toolbar.menu.clear()
         toolbar.inflateMenu(menuResId)
         toolbar.setOnMenuItemClickListener(listener)

@@ -1,7 +1,10 @@
 package com.hutchins.navuitest.side
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.hutchins.navui.common.SampleNavUIController
@@ -23,16 +26,6 @@ class FirstAFragment : BaseScreenFragment() {
         }
         (navUiController as SampleNavUIController).setToolbarActionMenu(R.menu.first_a_action_menu)
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.first_a_action_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

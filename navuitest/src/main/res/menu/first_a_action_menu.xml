@@ -6,6 +6,18 @@
         android:title="ClickMe"
         android:id="@+id/clickme"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+
+    <item
+        android:title="Option 1"
+        android:id="@+id/opt1"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:title="Option 2"
+        android:id="@+id/opt2"
+        android:visible="true"
+        app:showAsAction="never" />
 
 </menu>

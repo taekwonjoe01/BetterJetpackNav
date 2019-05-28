@@ -1,25 +1,81 @@
 <resources>
     <!-- Base application theme. -->
     <style name="BaseNavUiTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Default used to color the actionBar -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <!-- Default used to color the statusBar -->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <!-- Default used to color the controls (buttons, etc) -->
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <!-- Default used to color view backgrounds -->
-        <!--<item name="android:colorBackground">TODO</item>-->
-        <!--<item name="actionBarStyle">TODO</item>-->
-        <!--<item name="actionMenuTextAppearance">TODO</item>-->
-
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
-        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
-        <!--<item name="android:windowTranslucentNavigation">true</item>-->
-        <!--<item name="android:fitsSystemWindows">true</item>-->
+    </style>
+    <style name="BaseSampleTheme" parent="BaseNavUiTheme">
+        <!--Below are examples to change the Toolbar action menu style. You can only do this here and not at runtime (for some stupid ass reason)-->
+        <item name="actionMenuTextAppearance">@style/ActionMenuTheme</item>
+        <!--For some stupid ass reason, this changes the menu items ONLY if they're in the toolbar-->
+        <item name="actionMenuTextColor">@android:color/holo_green_light</item>
+        <!--For some stupid ass reason, this is the only way to change the menu items textappearance-->
+        <item name="android:itemTextAppearance">@style/ActionMenuTheme</item>
+        <!--For some stupid ass reason, this is the only way to change the menu icon colors...-->
+        <item name="android:colorControlNormal">@android:color/holo_red_dark</item>
+    </style>
+    <style name="SampleSideNavTheme" parent="BaseSampleTheme">
+        <!--Some styling is done in the OnCreate of the activity, to show how to do some of that.-->
+
+        <!--Below are examples to change the Toolbar action menu style. You can only do this here and not at runtime (for some stupid ass reason)-->
+        <item name="actionMenuTextAppearance">@style/ActionMenuTheme</item>
+        <!--For some stupid ass reason, this changes the menu items ONLY if they're in the toolbar-->
+        <item name="actionMenuTextColor">@android:color/holo_green_light</item>
+        <!--For some stupid ass reason, this is the only way to change the menu items textappearance-->
+        <item name="android:itemTextAppearance">@style/ActionMenuTheme</item>
+        <!--For some stupid ass reason, this is the only way to change the menu icon colors...-->
+        <item name="android:colorControlNormal">@android:color/holo_red_dark</item>
+    </style>
+    <style name="SampleBottomNavTheme" parent="BaseSampleTheme">
+        <!--Some styling is done in the OnCreate of the activity, to show how to do some of that.-->
+
+        <!--Below are examples to change the Toolbar action menu style. You can only do this here and not at runtime (for some stupid ass reason)-->
+        <item name="actionMenuTextAppearance">@style/ActionMenuTheme</item>
+        <!--For some stupid ass reason, this changes the menu items ONLY if they're in the toolbar-->
+        <item name="actionMenuTextColor">@android:color/holo_green_light</item>
+        <!--For some stupid ass reason, this is the only way to change the menu items textappearance-->
+        <item name="android:itemTextAppearance">@style/ActionMenuTheme</item>
+        <!--For some stupid ass reason, this is the only way to change the menu icon colors...-->
+        <item name="android:colorControlNormal">@android:color/holo_red_dark</item>
+    </style>
+
+    <style name="SideToolbarTitleTextAppearance">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:typeface">serif</item>
+    </style>
+
+    <style name="SideToolbarSubTitleTextAppearance">
+        <item name="android:textColor">@android:color/holo_purple</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="ActionMenuItemTextAppearance">
+        <item name="android:textColor">@android:color/holo_green_light</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <!--<style name="ActionMenuTheme" parent="Base.Widget.AppCompat.Light.ActionBar.Solid">-->
+        <!--<item name="elevation">0dp</item>-->
+        <!--&lt;!&ndash; technically this call is doing nothing because we set a custom toolbar view, but it's here-->
+         <!--for consistency &ndash;&gt;-->
+        <!--<item name="android:actionMenuTextAppearance">@style/SideToolbarTitleTextAppearance</item>-->
+    <!--</style>-->
+
+    <style name="ActionBarTheme" parent="Base.Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="elevation">0dp</item>
+        <!-- technically this call is doing nothing because we set a custom toolbar view, but it's here
+         for consistency -->
+        <!--<item name="titleTextStyle">@style/LotusActionBarTextStyle</item>-->
+    </style>
+
+    <style name="ActionMenuTheme">
+        <item name="android:textColor">@android:color/holo_green_light</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">5sp</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
 </resources>
