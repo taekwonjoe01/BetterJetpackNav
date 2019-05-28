@@ -56,12 +56,10 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
     private var isHardwareBackNavigation = false
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.e("Joey", "onSaveInstanceState")
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        Log.e("Joey", "onRestoreInstanceState")
         super.onRestoreInstanceState(savedInstanceState)
     }
 
@@ -69,14 +67,12 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            Log.e("Joey", "onCreate fresh")
             val navHostFragment = NavHostFragment.create(navigationGraphResourceId)
 
             onCreateInternal(navHostFragment)
 
 //        threshold = resources.getDimension(R.dimen.motionThresholdForEditTextDismiss)
         } else {
-            Log.e("Joey", "onCreate restore")
             val navHostFragment = supportFragmentManager.findFragmentById(navigationHostResourceId) as NavHostFragment
 
             onCreateInternal(navHostFragment)

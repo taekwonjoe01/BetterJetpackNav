@@ -4,14 +4,15 @@ package com.hutchins.navui.common
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
-import com.hutchins.navui.core.NavigationViewDelegate
 import com.hutchins.navui.R
+import com.hutchins.navui.core.NavigationViewDelegate
 
 /**
  * This class manages the Toolbar and maintaints the state of it with respect to LotusPageFragments.
@@ -24,6 +25,7 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
 
         private const val BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE = "BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE"
         private const val BUNDLE_KEY_TOOLBAR_TITLE = "BUNDLE_KEY_TOOLBAR_TITLE"
+        private const val BUNDLE_KEY_TOOLBAR_SUBTITLE = "BUNDLE_KEY_TOOLBAR_SUBTITLE"
 
         private const val BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_VISIBLE = 0
         private const val BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_INVISIBLE = 1
@@ -32,6 +34,7 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
 
     internal fun saveState(bundle: Bundle) {
         bundle.putString(BUNDLE_KEY_TOOLBAR_TITLE, toolbar.title.toString())
+        bundle.putString(BUNDLE_KEY_TOOLBAR_SUBTITLE, toolbar.subtitle.toString())
         val intState = when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_VISIBLE
             ToolbarVisibilityState.INVISIBLE -> BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_INVISIBLE
@@ -42,6 +45,7 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
 
     internal fun restoreState(bundle: Bundle) {
         toolbar.title = bundle.getString(BUNDLE_KEY_TOOLBAR_TITLE)
+        toolbar.subtitle = bundle.getString(BUNDLE_KEY_TOOLBAR_SUBTITLE)
         val toolbarState = when (bundle.getInt(BUNDLE_KEY_TOOLBAR_VISIBILITY_STATE)) {
             BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_VISIBLE -> ToolbarVisibilityState.VISIBLE
             BUNDLE_VAL_TOOLBAR_VISIBILITY_STATE_INVISIBLE -> ToolbarVisibilityState.INVISIBLE
@@ -163,6 +167,22 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
 
     internal fun setToolbarTitle(title: CharSequence) {
         toolbar.title = title
+    }
+
+    internal fun setToolbarSubtitle(subTitle: CharSequence) {
+        toolbar.subtitle = subTitle
+    }
+
+    internal fun clearToolbarActionMenu() {
+        toolbar.menu.clear()
+        toolbar.setOnMenuItemClickListener(null)
+    }
+
+    internal fun setToolbarActionMenu(menuResId: Int, listener: Toolbar.OnMenuItemClickListener) {
+        Log.e("Joey", "setToolbarActionMenu")
+        toolbar.menu.clear()
+        toolbar.inflateMenu(menuResId)
+        toolbar.setOnMenuItemClickListener(listener)
     }
 
     internal fun setUpNavigationVisible(visible: Boolean) {

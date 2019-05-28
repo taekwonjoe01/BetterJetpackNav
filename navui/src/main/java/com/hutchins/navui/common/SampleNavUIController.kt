@@ -1,15 +1,16 @@
 package com.hutchins.navui.common
 
 import android.content.Context
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavigationViewDelegate
-import com.hutchins.navui.R
 
-class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIController() {
+class SampleNavUIController(private val screenFragment: BaseScreenFragment) : BaseNavUIController() {
     companion object {
         // Keep these in sync with lotus/values/strings.xml navigation_toolbar_visibility values
         private const val TOOLBAR_VISIBILITY_VISIBLE = 0
@@ -44,6 +45,11 @@ class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIContr
         val title = navUIControllerViewmodel.toolbarTitle ?: destination.label ?: ""
         toolbarDelegate.setToolbarTitle(title)
 
+        // Subtitle initialization:
+        val subtitle = navUIControllerViewmodel.toolbarSubtitle ?: destination.defaultArguments.getString(
+            context.getString(R.string.navigation_toolbar_subtitle), "")
+        toolbarDelegate.setToolbarSubtitle(subtitle)
+
 
         // Toolbar up override initialization:
         val overrideUp = navUIControllerViewmodel.overrideUp ?: destination.defaultArguments.getBoolean(
@@ -59,6 +65,17 @@ class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIContr
         val showNavView = navUIControllerViewmodel.showNavView ?: !destination.defaultArguments.getBoolean(
             context.getString(R.string.navigation_view_gone), false)
         toolbarDelegate.updateNavViewVisibility(showNavView)
+
+        // Action menu initialization:
+        val actionMenuResId = navUIControllerViewmodel.actionMenuResourceId ?: destination.defaultArguments.getInt(
+            context.getString(R.string.navigation_toolbar_action_menu), -1)
+        if (actionMenuResId == -1) {
+            toolbarDelegate.clearToolbarActionMenu()
+        } else {
+            toolbarDelegate.setToolbarActionMenu(
+                actionMenuResId,
+                Toolbar.OnMenuItemClickListener { item -> screenFragment.onOptionsItemSelected(item) })
+        }
     }
 
     fun setToolbarVisibility(toolbarVisibility: ToolbarDelegate.ToolbarVisibilityState) {
@@ -74,6 +91,14 @@ class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIContr
         navigationViewDelegate?.let {
             val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
             toolbarDelegate.setToolbarTitle(title)
+        }
+    }
+
+    fun setToolbarSubtitle(subtitle: String) {
+        navUIControllerViewmodel.toolbarSubtitle = subtitle
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            toolbarDelegate.setToolbarSubtitle(subtitle)
         }
     }
 
@@ -103,6 +128,20 @@ class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIContr
         navigationViewDelegate?.let {
             val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
             toolbarDelegate.animateToToolbarVisibilityState(toVisibilityState, animationDurationMs)
+        }
+    }
+
+    fun setToolbarActionMenu(actionMenuResId: Int) {
+        navUIControllerViewmodel.actionMenuResourceId = actionMenuResId
+        navigationViewDelegate?.let {
+            val toolbarDelegate = it.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            if (actionMenuResId == -1) {
+                toolbarDelegate.clearToolbarActionMenu()
+            } else {
+                toolbarDelegate.setToolbarActionMenu(
+                    actionMenuResId,
+                    Toolbar.OnMenuItemClickListener { item -> screenFragment.onOptionsItemSelected(item) })
+            }
         }
     }
 

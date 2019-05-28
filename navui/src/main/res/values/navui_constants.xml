@@ -26,5 +26,15 @@
     default is false (not hidden).
     -->
     <string name="navigation_view_gone">navigation_view_gone</string>
+
+
+    <!-- navigation_toolbar_subtitle sets the subtitle for a ScreenFragment
+    default is empty string.
+    -->
+    <string name="navigation_toolbar_subtitle">navigation_toolbar_subtitle</string>
+
+    <!-- navigation_toolbar_action_menu sets the action menu for a ScreenFragment.
+    -->
+    <string name="navigation_toolbar_action_menu">navigation_toolbar_action_menu</string>
     <!-- END NAVIGATION CONSTAINTS -->
 </resources>
