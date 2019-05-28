@@ -50,12 +50,6 @@ class SideNavViewDelegate(
 
     val upDrawable: DrawerArrowDrawable by lazy {
         val arrow = DrawerArrowDrawable(navViewActivity)
-//        arrow.arrowHeadLength = resources.getDimension(R.dimen.toolbarUpArrowHeadLength)
-//        arrow.arrowShaftLength = resources.getDimension(R.dimen.toolbarUpArrowShaftLength)
-//        arrow.barThickness = resources.getDimension(R.dimen.toolbarUpArrowThickness)
-//        arrow.barLength = resources.getDimension(R.dimen.toolbarHamburgerBarLength)
-//        arrow.gapSize = resources.getDimension(R.dimen.toolbarHamburgerGapSize)
-//        arrow.color = ContextCompat.getColor(this@LotusActivity, R.color.structure6)
         arrow
     }
 

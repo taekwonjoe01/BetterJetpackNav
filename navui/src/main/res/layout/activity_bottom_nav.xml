@@ -4,8 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO(jhutchins): This layout resource needs to be styled around lotus DPL -->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintActivityContentLayout"
         android:layout_width="match_parent"
@@ -29,17 +27,6 @@
             app:layout_constraintBottom_toTopOf="@id/bottomNav"
             app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
         />
-
-        <!--<com.google.android.material.bottomnavigation.BottomNavigationView-->
-            <!--android:id="@+id/bottomNav"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--tools:layout_height="56dp"-->
-            <!--style="@style/LotusBottomNavTheme"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@id/navHost" />-->
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNav"

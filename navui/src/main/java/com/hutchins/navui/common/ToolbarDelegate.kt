@@ -14,8 +14,7 @@ import com.hutchins.navui.R
 import com.hutchins.navui.core.NavigationViewDelegate
 
 /**
- * This class manages the Toolbar and maintaints the state of it with respect to LotusPageFragments.
- * Only ONE LotusPageFragment can use this manager at a time (per activity).
+ * This class manages the Toolbar and maintains the state of it with respect to ScreenFragments.
  */
 class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private val toolbarContainer: View, private val toolbar: Toolbar, private val navigationViewDelegate: NavigationViewDelegate/*, private val supportActionBar: ActionBar*/) {
     companion object {
