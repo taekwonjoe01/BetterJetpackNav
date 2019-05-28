@@ -6,8 +6,6 @@ package com.hutchins.toolbox.arch
     -Need to allow nav structure to accept non -BaseNavFragments as navigations.
 -Action menu?
 
--Test navUI constants
-
 -How to style via xml? Test style at runtime?
 
 -Add all toolbar features like subtitles and look for others.
