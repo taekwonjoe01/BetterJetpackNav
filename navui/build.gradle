@@ -61,8 +61,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlin_version"
 
-    implementation "androidx.navigation:navigation-fragment-ktx:2.0.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.0.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.1.0-alpha04"
+    implementation "androidx.navigation:navigation-ui-ktx:2.1.0-alpha04"
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
     kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
 }

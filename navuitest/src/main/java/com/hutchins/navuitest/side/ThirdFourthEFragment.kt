@@ -11,7 +11,7 @@ import com.hutchins.navuitest.TweakSettingsFragment
 import com.hutchins.navuitest.databinding.FragmentThirdFourthEBinding
 
 class ThirdFourthEFragment : BaseScreenFragment() {
-    override fun onAttachFragment(childFragment: Fragment?) {
+    override fun onAttachFragment(childFragment: Fragment) {
         super.onAttachFragment(childFragment)
         (childFragment as TweakSettingsFragment).setToolbarController(navUiController)
     }
