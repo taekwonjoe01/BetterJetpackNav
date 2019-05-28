@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.hutchins.navui.BaseScreenFragment
+import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navuitest.R
 import com.hutchins.navuitest.TweakSettingsFragment
 import com.hutchins.navuitest.databinding.FragmentSecondBBinding

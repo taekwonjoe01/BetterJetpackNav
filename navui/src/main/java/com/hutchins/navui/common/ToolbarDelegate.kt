@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package com.hutchins.navui.sampleviewdelegates
+package com.hutchins.navui.common
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
-import com.hutchins.navui.NavigationViewDelegate
+import com.hutchins.navui.core.NavigationViewDelegate
 import com.hutchins.navui.R
 
 /**

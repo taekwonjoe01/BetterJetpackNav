@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import com.hutchins.archcore.fragment.BaseFragmentDelegate
 import com.hutchins.archcore.fragment.BaseFragmentIm
-import com.hutchins.navui.BaseScreenFragment
+import com.hutchins.navui.core.BaseScreenFragment
 
 abstract class ScreenFragment : BaseScreenFragment(), BaseFragmentIm {
     protected val fragmentDelegate: BaseFragmentDelegate by lazy {

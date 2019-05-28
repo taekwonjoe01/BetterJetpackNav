@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.hutchins.navui.BaseNavUIController
-import com.hutchins.navui.sampleviewdelegates.SampleNavUIController
-import com.hutchins.navui.sampleviewdelegates.ToolbarDelegate
+import com.hutchins.navui.core.BaseNavUIController
+import com.hutchins.navui.common.SampleNavUIController
+import com.hutchins.navui.common.ToolbarDelegate
 import com.hutchins.navuitest.databinding.FragmentTweakSettingsBinding
 
 class TweakSettingsFragment : Fragment() {

@@ -1,7 +1,7 @@
 package com.hutchins.navuitest.side
 
-import com.hutchins.navui.NavViewActivity
-import com.hutchins.navui.sampleviewdelegates.SideNavViewDelegate
+import com.hutchins.navui.core.NavViewActivity
+import com.hutchins.navui.common.SideNavViewDelegate
 import com.hutchins.navuitest.R
 
 class SideNavActivity : NavViewActivity() {

@@ -1,4 +1,4 @@
-package com.hutchins.navui.sampleviewdelegates
+package com.hutchins.navui.common
 
 import androidx.lifecycle.ViewModel
 

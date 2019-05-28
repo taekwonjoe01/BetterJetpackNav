@@ -1,30 +1,31 @@
-package com.hutchins.navui.sampleviewdelegates
+package com.hutchins.navui.common
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
-import com.hutchins.navui.*
-import com.hutchins.navui.databinding.ActivityBottomNavBinding
+import com.hutchins.navui.R
+import com.hutchins.navui.core.BaseNavUIController
+import com.hutchins.navui.core.BaseScreenFragment
+import com.hutchins.navui.core.NavViewActivity
+import com.hutchins.navui.core.NavigationViewDelegate
+import com.hutchins.navui.databinding.ActivityNoNavBinding
 
-class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
     companion object {
-        const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
-        const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
     }
 
     override val navViewActivity = navViewActivity
-    private lateinit var binding: ActivityBottomNavBinding
+    private lateinit var binding: ActivityNoNavBinding
     private lateinit var navController: NavController
 
     override val navHostResourceId: Int = R.id.navHost
+
     private var showUp: Boolean = false
-    private var navViewVisible: Boolean = true
 
     internal val toolbarDelegate: ToolbarDelegate by lazy {
         ToolbarDelegate(
@@ -55,21 +56,13 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
     }
 
     override fun onCreateContentView(): View {
-        binding = DataBindingUtil.setContentView(navViewActivity, R.layout.activity_bottom_nav)
-        binding.bottomNav.menu.clear()
-        binding.bottomNav.inflateMenu(navigationMenuResourceId)
+        binding = DataBindingUtil.setContentView(navViewActivity, R.layout.activity_no_nav)
         return binding.root
     }
 
     override fun setupNavViewWithNavController(navController: NavController) {
         this.navController = navController
-        // We are now overriding the default jetpack NavigatedListeners in order to achieve
-        // customizable UP navigation.
-        //NavigationUI.setupActionBarWithNavController(appCompatActivity, navController)
-
-        navViewActivity.setSupportActionBar(binding.toolbarLayout.toolbar)
-
-        NavigationUI.setupWithNavController(binding.bottomNav, navController)
+        NavigationUI.setupWithNavController(binding.toolbarLayout.toolbar, navController)
 
         // To keep UI's similar, we are using drawable provided by Material Design Library that
         // animates an arrow to/from a hamburger icon. This view doesn't need the hamburger part
@@ -110,20 +103,11 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
     }
 
     override fun setNavViewVisible(show: Boolean) {
-        this.navViewVisible = show
-        if (show) {
-            binding.bottomNav.visibility = View.VISIBLE
-        } else {
-            binding.bottomNav.visibility = View.GONE
-        }
+        // Do nothing because there is no navigation view.
     }
 
     override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
         return SampleNavUIController(screenFragment)
-    }
-
-    fun getNavigationMenu(): Menu {
-        return binding.bottomNav.menu
     }
 
     private fun setNavigationIcon(icon: Drawable?) {
@@ -136,17 +120,12 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
 
     override fun saveState(bundle: Bundle) {
         bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
-        bundle.putBoolean(BUNDLE_KEY_NAV_STATE, navViewVisible)
 
         toolbarDelegate.saveState(bundle)
     }
 
     override fun restoreState(bundle: Bundle) {
-        val navViewVisible = bundle.getBoolean(BUNDLE_KEY_NAV_STATE)
-        val showUp = bundle.getBoolean(BUNDLE_KEY_UP_STATE)
-
-        setUpNavigationVisible(showUp)
-        setNavViewVisible(navViewVisible)
+        showUp = bundle.getBoolean(BUNDLE_KEY_UP_STATE)
 
         toolbarDelegate.restoreState(bundle)
     }

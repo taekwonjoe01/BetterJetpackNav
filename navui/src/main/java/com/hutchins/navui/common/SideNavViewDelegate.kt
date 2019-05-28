@@ -1,4 +1,4 @@
-package com.hutchins.navui.sampleviewdelegates
+package com.hutchins.navui.common
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -11,7 +11,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
-import com.hutchins.navui.*
+import com.hutchins.navui.R
+import com.hutchins.navui.core.BaseNavUIController
+import com.hutchins.navui.core.BaseScreenFragment
+import com.hutchins.navui.core.NavViewActivity
+import com.hutchins.navui.core.NavigationViewDelegate
 import com.hutchins.navui.databinding.ActivityDrawerNavBinding
 
 class SideNavViewDelegate(

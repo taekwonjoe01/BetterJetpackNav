@@ -1,4 +1,4 @@
-package com.hutchins.navui
+package com.hutchins.navui.core
 
 import android.content.Context
 import androidx.navigation.NavDestination

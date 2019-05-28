@@ -1,12 +1,12 @@
-package com.hutchins.navui.sampleviewdelegates
+package com.hutchins.navui.common
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import com.hutchins.navui.BaseNavUIController
-import com.hutchins.navui.BaseScreenFragment
-import com.hutchins.navui.NavigationViewDelegate
+import com.hutchins.navui.core.BaseNavUIController
+import com.hutchins.navui.core.BaseScreenFragment
+import com.hutchins.navui.core.NavigationViewDelegate
 import com.hutchins.navui.R
 
 class SampleNavUIController(screenFragment: BaseScreenFragment) : BaseNavUIController() {

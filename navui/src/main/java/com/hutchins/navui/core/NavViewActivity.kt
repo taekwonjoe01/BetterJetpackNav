@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package com.hutchins.navui
+package com.hutchins.navui.core
 
 import android.content.Context
 import android.os.Bundle
