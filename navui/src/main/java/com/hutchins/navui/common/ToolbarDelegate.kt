@@ -16,7 +16,13 @@ import com.hutchins.navui.core.NavigationViewDelegate
 /**
  * This class manages the Toolbar and maintains the state of it with respect to ScreenFragments.
  */
-class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private val toolbarContainer: View, private val toolbar: Toolbar, private val navigationViewDelegate: NavigationViewDelegate/*, private val supportActionBar: ActionBar*/) {
+class ToolbarDelegate(
+    private val constraintLayout: ConstraintLayout,
+    private val toolbarContainer: View,
+    private val toolbar: Toolbar,
+    private val navigationViewDelegate: NavigationViewDelegate,
+    private val upVisibilityHandler: UpVisibilityHandler
+) {
     companion object {
         const val PROGRESS_HAMBURGER = 0.0f
         const val PROGRESS_ARROW = 1.0f
@@ -183,11 +189,7 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
     }
 
     internal fun setUpNavigationVisible(visible: Boolean) {
-        navigationViewDelegate.setUpNavigationVisible(visible)
-    }
-
-    internal fun updateNavViewVisibility(visible: Boolean) {
-        navigationViewDelegate.setNavViewVisible(visible)
+        upVisibilityHandler.setUpNavigationVisible(visible)
     }
 
     private fun animateConstraintSet(durationMs: Long, constraintSet: ConstraintSet) {
@@ -195,5 +197,9 @@ class ToolbarDelegate(private val constraintLayout: ConstraintLayout, private va
         transition.duration = durationMs
         TransitionManager.beginDelayedTransition(constraintLayout, transition)
         constraintSet.applyTo(constraintLayout)
+    }
+
+    interface UpVisibilityHandler {
+        fun setUpNavigationVisible(visible: Boolean)
     }
 }

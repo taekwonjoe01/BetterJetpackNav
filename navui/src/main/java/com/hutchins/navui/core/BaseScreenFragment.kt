@@ -27,5 +27,4 @@ abstract class BaseScreenFragment : BaseNavFragment() {
             throw RuntimeException("$context must be child class of NavViewActivity!")
         }
     }
-
 }
