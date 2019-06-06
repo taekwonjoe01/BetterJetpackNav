@@ -10,7 +10,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import java.lang.ref.WeakReference
 
-abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigatedListener {
+abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
     companion object {
         const val TAG = "NavCore"
     }
@@ -55,14 +55,6 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
      */
     private var isHardwareBackNavigation = false
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -93,7 +85,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
         // If the view Delegate wants to connect the Navigation Controller to its view, it can do so
         // in this call. Generally a side nav will want to connect, also an ActionBar.
         onNavigationInitialized(navController)
-        navController.addOnNavigatedListener(this)
+        navController.addOnDestinationChangedListener(this)
     }
 
     /**
@@ -180,7 +172,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnNavigat
      * information bundle parameters so it can potentially customize its view, as well as allow for
      * inheritors to define a means to let a PageFragment that it alone is the current destination.
      */
-    override fun onNavigated(controller: NavController, destination: NavDestination) {
+    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         // Only trim and apply the current Fragment if this is a hardware back navigation. In a
         // hardware back navigation, registerFragment would have already been called, and therefore
         // the currentPageFragment is available now at the end of the list.

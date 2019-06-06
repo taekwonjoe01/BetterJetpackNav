@@ -20,7 +20,7 @@ import com.hutchins.navui.databinding.ActivityDrawerNavBinding
 
 class SideNavViewDelegate(
     override val navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int
-        ) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+        ) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler{
     companion object {
          const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
          const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
@@ -44,7 +44,7 @@ class SideNavViewDelegate(
             binding.constraintActivityContentLayout,
             binding.toolbarLayout.appbar,
             binding.toolbarLayout.toolbar,
-            this
+            this, this
         )
     }
 

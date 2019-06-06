@@ -20,6 +20,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="ThirdFourthC Fragment"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Go Forward to ThirdFourthB Fragment"/>
             <fragment
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

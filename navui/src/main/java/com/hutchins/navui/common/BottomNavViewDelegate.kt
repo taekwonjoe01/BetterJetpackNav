@@ -15,7 +15,7 @@ import com.hutchins.navui.core.NavViewActivity
 import com.hutchins.navui.core.NavigationViewDelegate
 import com.hutchins.navui.databinding.ActivityBottomNavBinding
 
-class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate {
+class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler {
     companion object {
         const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
@@ -35,7 +35,7 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
             binding.constraintActivityContentLayout,
             binding.toolbarLayout.appbar,
             binding.toolbarLayout.toolbar,
-            this
+            this, this
         )
     }
 

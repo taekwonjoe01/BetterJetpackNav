@@ -2,9 +2,15 @@ package com.hutchins.toolbox.arch
 
 
 /*
--Update to latest nav component version.
-    -Need to allow nav structure to accept non -BaseNavFragments as navigations.
--Configure navUI so that the styles via xml can be parameterized somehow.
+- Known issues, this won't work if you use DialogFragments from the Nav Graph. The state machine gets desynchronized. Recommend using DialogFragments the old fashioned way. 
+
+
+
+-Need to allow nav structure to accept non -BaseNavFragments as navigations.
+    -Also test the above.
+-Go over interfaces and method names.
+-Documentation
+-Unit tests
 
 TESTING
 -Test forward and back navigations

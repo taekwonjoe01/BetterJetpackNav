@@ -33,9 +33,6 @@ interface NavigationViewDelegate {
      */
     fun onBackPressed(): Boolean
 
-    fun setUpNavigationVisible(showUp: Boolean)
-    fun setNavViewVisible(show: Boolean)
-
     fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController
 
     fun saveState(bundle: Bundle)
