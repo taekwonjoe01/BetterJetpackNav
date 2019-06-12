@@ -27,7 +27,7 @@ abstract class NavViewActivity : NavigationActivity() {
     }
 
     override fun onSetContentView() {
-        setContentView(navigationViewDelegate.onCreateContentView())
+        navigationViewDelegate.setContentView()
     }
 
     override fun onNavigationInitialized(navController: NavController) {

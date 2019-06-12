@@ -5,36 +5,48 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
-import androidx.databinding.DataBindingUtil
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavViewActivity
 import com.hutchins.navui.core.NavigationViewDelegate
-import com.hutchins.navui.databinding.ActivityBottomNavBinding
 
-class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler {
+open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler {
     companion object {
-        const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
         const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
     }
 
+    open val activityLayoutRedId: Int = R.layout.activity_bottom_nav
+    open val constraintLayoutResId: Int = R.id.constraintActivityContentLayout
+    open val appBarLayoutResId: Int = R.id.toolbarLayout
+    open val toolbarResId: Int = R.id.toolbar
+    open val bottomNavResId: Int = R.id.bottomNav
+
     override val navViewActivity = navViewActivity
-    private lateinit var binding: ActivityBottomNavBinding
+
     private lateinit var navController: NavController
+    lateinit var constraintLayout: ConstraintLayout
+    lateinit var toolbar: Toolbar
+    lateinit var appBarLayout: AppBarLayout
+    lateinit var bottomNavigationView: BottomNavigationView
 
     override val navHostResourceId: Int = R.id.navHost
+
     private var showUp: Boolean = false
     private var navViewVisible: Boolean = true
 
     internal val toolbarDelegate: ToolbarDelegate by lazy {
         ToolbarDelegate(
-            binding.constraintActivityContentLayout,
-            binding.toolbarLayout.appbar,
-            binding.toolbarLayout.toolbar,
+            constraintLayout,
+            appBarLayout,
+            toolbar,
             this, this
         )
     }
@@ -52,17 +64,21 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
         return navController
     }
 
-    override fun onCreateContentView(): View {
-        binding = DataBindingUtil.setContentView(navViewActivity, R.layout.activity_bottom_nav)
-        binding.bottomNav.menu.clear()
-        binding.bottomNav.inflateMenu(navigationMenuResourceId)
-        return binding.root
+    override fun setContentView() {
+        navViewActivity.setContentView(activityLayoutRedId)
+        constraintLayout = navViewActivity.findViewById(constraintLayoutResId)
+        toolbar = navViewActivity.findViewById(toolbarResId)
+        appBarLayout = navViewActivity.findViewById(appBarLayoutResId)
+        bottomNavigationView = navViewActivity.findViewById(bottomNavResId)
+
+        bottomNavigationView.menu.clear()
+        bottomNavigationView.inflateMenu(navigationMenuResourceId)
     }
 
     override fun setupNavViewWithNavController(navController: NavController) {
         this.navController = navController
-        NavigationUI.setupWithNavController(binding.toolbarLayout.toolbar, navController)
-        NavigationUI.setupWithNavController(binding.bottomNav, navController)
+        NavigationUI.setupWithNavController(toolbar, navController)
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
         // To keep UI's similar, we are using drawable provided by Material Design Library that
         // animates an arrow to/from a hamburger icon. This view doesn't need the hamburger part
@@ -105,9 +121,9 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
     override fun setNavViewVisible(show: Boolean) {
         this.navViewVisible = show
         if (show) {
-            binding.bottomNav.visibility = View.VISIBLE
+            bottomNavigationView.visibility = View.VISIBLE
         } else {
-            binding.bottomNav.visibility = View.GONE
+            bottomNavigationView.visibility = View.GONE
         }
     }
 
@@ -116,14 +132,14 @@ class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val naviga
     }
 
     fun getNavigationMenu(): Menu {
-        return binding.bottomNav.menu
+        return bottomNavigationView.menu
     }
 
     private fun setNavigationIcon(icon: Drawable?) {
         if (icon == null) {
-            binding.toolbarLayout.toolbar.setNavigationIcon(null)
+            toolbar.navigationIcon = null
         } else {
-            binding.toolbarLayout.toolbar.setNavigationIcon(icon)
+            toolbar.navigationIcon = icon
         }
     }
 

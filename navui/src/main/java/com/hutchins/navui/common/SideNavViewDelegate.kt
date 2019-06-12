@@ -4,21 +4,22 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.navigation.NavigationView
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavViewActivity
 import com.hutchins.navui.core.NavigationViewDelegate
-import com.hutchins.navui.databinding.ActivityDrawerNavBinding
 
-class SideNavViewDelegate(
+open class SideNavViewDelegate(
     override val navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int
         ) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler{
     companion object {
@@ -27,8 +28,19 @@ class SideNavViewDelegate(
          const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
     }
 
-    lateinit var binding: ActivityDrawerNavBinding
-    lateinit var navController: NavController
+    open val activityLayoutRedId: Int = R.layout.activity_drawer_nav
+    open val constraintLayoutResId: Int = R.id.constraintActivityContentLayout
+    open val drawerLayoutResId: Int = R.id.activityContainer
+    open val appBarLayoutResId: Int = R.id.toolbarLayout
+    open val toolbarResId: Int = R.id.toolbar
+    open val navigationViewResId: Int = R.id.navigationView
+
+    private lateinit var navController: NavController
+    lateinit var constraintLayout: ConstraintLayout
+    lateinit var toolbar: Toolbar
+    lateinit var appBarLayout: AppBarLayout
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navigationView: NavigationView
 
     private var valueAnimator: ValueAnimator? = null
 
@@ -41,9 +53,9 @@ class SideNavViewDelegate(
 
     internal val toolbarDelegate: ToolbarDelegate by lazy {
         ToolbarDelegate(
-            binding.constraintActivityContentLayout,
-            binding.toolbarLayout.appbar,
-            binding.toolbarLayout.toolbar,
+            constraintLayout,
+            appBarLayout,
+            toolbar,
             this, this
         )
     }
@@ -61,29 +73,32 @@ class SideNavViewDelegate(
         return navController
     }
 
-    override fun onCreateContentView(): View {
-        binding = DataBindingUtil.setContentView(navViewActivity,
-            R.layout.activity_drawer_nav)
-        binding.navigationView.menu.clear()
-        binding.navigationView.inflateMenu(navigationMenuResourceId)
+    override fun setContentView() {
+        navViewActivity.setContentView(activityLayoutRedId)
+        constraintLayout = navViewActivity.findViewById(constraintLayoutResId)
+        toolbar = navViewActivity.findViewById(toolbarResId)
+        appBarLayout = navViewActivity.findViewById(appBarLayoutResId)
+        drawerLayout = navViewActivity.findViewById(drawerLayoutResId)
+        navigationView = navViewActivity.findViewById(navigationViewResId)
 
-        return binding.root
+        navigationView.menu.clear()
+        navigationView.inflateMenu(navigationMenuResourceId)
     }
 
     override fun setupNavViewWithNavController(navController: NavController) {
         this.navController = navController
 
-        NavigationUI.setupWithNavController(binding.toolbarLayout.toolbar, navController, binding.activityContainer)
-        NavigationUI.setupWithNavController(binding.navigationView, navController)
+        NavigationUI.setupWithNavController(toolbar, navController, drawerLayout)
+        NavigationUI.setupWithNavController(navigationView, navController)
         // Immediately override the navigation click listener. We do this because we want to provide overridable functionality
         // for the up button presses.
-        binding.toolbarLayout.toolbar.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             navViewActivity.onSupportNavigateUp()
         }
 
         // Initialize the icon.
         upDrawable.progress = ToolbarDelegate.PROGRESS_HAMBURGER
-        binding.toolbarLayout.toolbar.navigationIcon = upDrawable
+        toolbar.navigationIcon = upDrawable
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -100,13 +115,13 @@ class SideNavViewDelegate(
                 }
             } else {
                 if (navigationEnabled) {
-                    binding.activityContainer.openDrawer(GravityCompat.START)
+                    drawerLayout.openDrawer(GravityCompat.START)
                     handled = true
                 }
             }
         } else if (!showUp) {
             if (navigationEnabled) {
-                binding.activityContainer.openDrawer(GravityCompat.START)
+                drawerLayout.openDrawer(GravityCompat.START)
                 handled = true
             }
         } else {
@@ -119,8 +134,8 @@ class SideNavViewDelegate(
     }
 
     override fun onBackPressed(): Boolean {
-        return if (binding.activityContainer.isDrawerOpen(GravityCompat.START)) {
-            binding.activityContainer.closeDrawer(GravityCompat.START)
+        return if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
             true
         } else {
             false
@@ -178,18 +193,18 @@ class SideNavViewDelegate(
 
     private fun setNavigationIcon(icon: Drawable?) {
         if (icon == null) {
-            binding.toolbarLayout.toolbar.navigationIcon = null
+            toolbar.navigationIcon = null
         } else {
-            binding.toolbarLayout.toolbar.navigationIcon = icon
+            toolbar.navigationIcon = icon
         }
     }
 
     private fun updateNavigationEnabled(enabled: Boolean) {
         navigationEnabled = enabled
         if (enabled) {
-            binding.activityContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         } else {
-            binding.activityContainer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
     }
 

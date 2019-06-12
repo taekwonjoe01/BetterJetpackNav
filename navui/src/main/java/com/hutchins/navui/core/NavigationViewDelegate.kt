@@ -1,7 +1,6 @@
 package com.hutchins.navui.core
 
 import android.os.Bundle
-import android.view.View
 import androidx.navigation.NavController
 
 interface NavigationViewDelegate {
@@ -15,7 +14,7 @@ interface NavigationViewDelegate {
     /**
      * Using the delegate pattern, we let this object inflate and create a view that will be the activity's content view.
      */
-    fun onCreateContentView(): View
+    fun setContentView()
 
     /**
      * After the navController is instantiated and setup with the navHostFragment, allow the delegate to connect the controller

@@ -13,7 +13,7 @@ class SideNavActivity : NavViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val toolbar = navigationViewDelegate.binding.toolbarLayout.toolbar
+        val toolbar = navigationViewDelegate.toolbar
         toolbar.setTitleTextAppearance(this, R.style.SideToolbarTitleTextAppearance)
         toolbar.setSubtitleTextAppearance(this, R.style.SideToolbarSubTitleTextAppearance)
         toolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark))
