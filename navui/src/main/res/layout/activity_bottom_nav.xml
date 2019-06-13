@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-    This file is used by the BottomNavViewDelegate object to define the activity layout for a "Bottom Navigation Activity".
-    Clients of this library can use the BottomNavViewDelegate as-is in their applications and let it use this layout by default,
+    This file is used by the JetpackBottomNavDelegate object to define the activity layout for a "Bottom Navigation Activity".
+    Clients of this library can use the JetpackBottomNavDelegate as-is in their applications and let it use this layout by default,
     but generally an application will want to style this layout according to their app specific UX. When doing so,
     you can copy the contents of this file and apply the styling as appropriate. The Delegate does not do any styling of
     its own. The delegate requires a referenceID to a ConstaintLayout, FrameLayout, AppBarLayout, Toolbar, and

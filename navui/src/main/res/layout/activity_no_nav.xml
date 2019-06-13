@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!--
-            This file is used by the NoNavViewDelegate object to define the activity layout for a "No Navigation Activity".
-            Clients of this library can use the NoNavViewDelegate as-is in their applications and let it use this layout by default,
+            This file is used by the JetpackNoNavDelegate object to define the activity layout for a "No Navigation Activity".
+            Clients of this library can use the JetpackNoNavDelegate as-is in their applications and let it use this layout by default,
             but generally an application will want to style this layout according to their app specific UX. When doing so,
             you can copy the contents of this file and apply the styling as appropriate. The Delegate does not do any styling of
             its own. The delegate requires a referenceID to a ConstaintLayout, FrameLayout, AppBarLayout, and Toolbar.

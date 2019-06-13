@@ -6,49 +6,49 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.hutchins.navui.core.BaseNavUIController
-import com.hutchins.navui.common.SampleNavUIController
-import com.hutchins.navui.common.ToolbarDelegate
+import com.hutchins.navui.jetpack.JetpackNavUIController
+import com.hutchins.navui.jetpack.JetpackToolbarDelegate
 import com.hutchins.navuitest.databinding.FragmentTweakSettingsBinding
 
 class TweakSettingsFragment : Fragment() {
-    private lateinit var sampleNavUIController: SampleNavUIController
+    private lateinit var jetpackNavUIController: JetpackNavUIController
     internal fun setToolbarController(navUiController: BaseNavUIController) {
-        this.sampleNavUIController = navUiController as SampleNavUIController
+        this.jetpackNavUIController = navUiController as JetpackNavUIController
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentTweakSettingsBinding.inflate(inflater, container, false).apply {
             buttonChangeTitle.setOnClickListener {
-                sampleNavUIController.setToolbarTitle("Tweaked Title")
+                jetpackNavUIController.setToolbarTitle("Tweaked Title")
             }
             buttonSetVisible.setOnClickListener {
-                sampleNavUIController.setToolbarVisibility(ToolbarDelegate.ToolbarVisibilityState.VISIBLE)
+                jetpackNavUIController.setToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.VISIBLE)
             }
             buttonSetGone.setOnClickListener {
-                sampleNavUIController.setToolbarVisibility(ToolbarDelegate.ToolbarVisibilityState.GONE)
+                jetpackNavUIController.setToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.GONE)
             }
             buttonSetInvisible.setOnClickListener {
-                sampleNavUIController.setToolbarVisibility(ToolbarDelegate.ToolbarVisibilityState.INVISIBLE)
+                jetpackNavUIController.setToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.INVISIBLE)
             }
             buttonAnimateVisible.setOnClickListener {
-                sampleNavUIController.animateToolbarVisibility(ToolbarDelegate.ToolbarVisibilityState.VISIBLE, 1000L)
+                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.VISIBLE, 1000L)
             }
             buttonAnimateGone.setOnClickListener {
-                sampleNavUIController.animateToolbarVisibility(ToolbarDelegate.ToolbarVisibilityState.GONE, 1000L)
+                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.GONE, 1000L)
             }
             buttonAnimateInvisible.setOnClickListener {
-                sampleNavUIController.animateToolbarVisibility(ToolbarDelegate.ToolbarVisibilityState.INVISIBLE, 1000L)
+                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.INVISIBLE, 1000L)
             }
             buttonSetOverrideUp.setOnClickListener {
-                sampleNavUIController.setToolbarOverrideUp(true)
+                jetpackNavUIController.setToolbarOverrideUp(true)
             }
             buttonRemoveOverrideUp.setOnClickListener {
-                sampleNavUIController.setToolbarOverrideUp(false)
+                jetpackNavUIController.setToolbarOverrideUp(false)
             }
             buttonSetNavViewVisibile.setOnClickListener {
-                sampleNavUIController.setNavViewVisibility(true)
+                jetpackNavUIController.setNavViewVisibility(true)
             }
             buttonSetNavViewGone.setOnClickListener {
-                sampleNavUIController.setNavViewVisibility(false)
+                jetpackNavUIController.setNavViewVisibility(false)
             }
         }
         return binding.root

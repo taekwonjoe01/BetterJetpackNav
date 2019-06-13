@@ -11,10 +11,10 @@ import com.hutchins.navcore.BaseNavFragment
 import com.hutchins.navcore.NavigationActivity
 
 abstract class NavViewActivity : NavigationActivity() {
-    abstract val navigationViewDelegate: NavigationViewDelegate
+    abstract val navViewDelegate: NavViewDelegate
 
     override val navigationHostResourceId: Int
-        get() = navigationViewDelegate.navHostResourceId
+        get() = navViewDelegate.navHostResourceId
 
     override fun onSupportNavigateUp(): Boolean {
         // This is a redundant call just in case something fails to close the keyboard
@@ -22,17 +22,17 @@ abstract class NavViewActivity : NavigationActivity() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(rootView.windowToken, 0)
 
-        val delegateHandled = navigationViewDelegate.onSupportNavigateUp()
+        val delegateHandled = navViewDelegate.onSupportNavigateUp()
         return if (!delegateHandled) super.onSupportNavigateUp() else true
     }
 
     override fun onSetContentView() {
-        navigationViewDelegate.setContentView()
+        navViewDelegate.setContentView()
     }
 
     override fun onNavigationInitialized(navController: NavController) {
         super.onNavigationInitialized(navController)
-        navigationViewDelegate.setupNavViewWithNavController(navController)
+        navViewDelegate.setupNavViewWithNavController(navController)
     }
 
     override fun onNavigated(baseNavFragment: BaseNavFragment) {
@@ -44,16 +44,16 @@ abstract class NavViewActivity : NavigationActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        navigationViewDelegate.saveState(outState)
+        navViewDelegate.saveState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        navigationViewDelegate.restoreState(savedInstanceState)
+        navViewDelegate.restoreState(savedInstanceState)
     }
 
     override fun onBackPressed() {
-        if (!navigationViewDelegate.onBackPressed()) {
+        if (!navViewDelegate.onBackPressed()) {
             super.onBackPressed()
         }
     }

@@ -16,9 +16,9 @@ abstract class BaseNavUIController(private val baseScreenFragment: BaseScreenFra
         return navUIControllerViewModel.navUISettings
     }
 
-    internal fun onActive(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate) {
+    internal fun onActive(destination: NavDestination, navViewDelegate: NavViewDelegate) {
         if (!isInitialized) throw IllegalStateException("NavUIController not initialized. Did you forget to call initController?")
-        navUIControllerViewModel.onNavUIActive(destination, navigationViewDelegate)
+        navUIControllerViewModel.onNavUIActive(destination, navViewDelegate)
     }
 
     internal fun onInactive() {

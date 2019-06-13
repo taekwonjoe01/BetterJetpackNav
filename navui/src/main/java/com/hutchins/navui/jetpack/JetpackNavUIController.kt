@@ -1,4 +1,4 @@
-package com.hutchins.navui.common
+package com.hutchins.navui.jetpack
 
 import android.content.Context
 import androidx.appcompat.widget.Toolbar
@@ -8,9 +8,9 @@ import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavUISetting
-import com.hutchins.navui.core.NavigationViewDelegate
+import com.hutchins.navui.core.NavViewDelegate
 
-class SampleNavUIController(private val screenFragment: BaseScreenFragment) : BaseNavUIController(screenFragment) {
+class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : BaseNavUIController(screenFragment) {
     companion object {
         // Keep these in sync with lotus/values/strings.xml navigation_toolbar_visibility values
         private const val TOOLBAR_VISIBILITY_VISIBLE = 0
@@ -42,8 +42,8 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
         return arrayListOf(ToolbarVisibilitySetting(), ToolbarTitleSetting(), ToolbarSubTitleSetting(), OverrideUpSetting(), NavViewVisibilitySetting(), ActionMenuSetting())
     }
 
-    fun setToolbarVisibility(toolbarVisibility: ToolbarDelegate.ToolbarVisibilityState) {
-        toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.InstantTransition(toolbarVisibility)
+    fun setToolbarVisibility(jetpackToolbarVisibility: JetpackToolbarDelegate.ToolbarVisibilityState) {
+        toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.InstantTransition(jetpackToolbarVisibility)
     }
 
     fun setToolbarTitle(title: String) {
@@ -62,7 +62,7 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
         navVisibilitySetting.setting = showNavView
     }
 
-    fun animateToolbarVisibility(toVisibilityState: ToolbarDelegate.ToolbarVisibilityState, animationDurationMs: Long) {
+    fun animateToolbarVisibility(toVisibilityState: JetpackToolbarDelegate.ToolbarVisibilityState, animationDurationMs: Long) {
         toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.AnimateTransition(toVisibilityState, animationDurationMs)
     }
 
@@ -70,24 +70,24 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
         actionMenuSetting.setting = actionMenuResId
     }
 
-    private fun NavigationViewDelegate.asTestNavViewDelegate() : TestNavViewDelegate {
+    private fun NavViewDelegate.asTestNavViewDelegate() : TestNavViewDelegate {
         return this as TestNavViewDelegate
     }
 
     interface TestNavViewDelegate {
         fun getNavigationController(): NavController
-        fun getNavUiToolbarDelegate(): ToolbarDelegate
+        fun getNavUiToolbarDelegate(): JetpackToolbarDelegate
         fun setNavViewVisible(visible: Boolean)
     }
 
     inner class ToolbarTitleSetting : NavUISetting<String>() {
         override fun applySetting(
             destination: NavDestination,
-            navigationViewDelegate: NavigationViewDelegate,
+            navViewDelegate: NavViewDelegate,
             isNavigationTransition: Boolean,
             setting: String?
         ) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            val toolbarDelegate = navViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
             setting?.let {
                 toolbarDelegate.setToolbarTitle(setting)
             } ?: run {
@@ -99,11 +99,11 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
     inner class ToolbarSubTitleSetting : NavUISetting<String>() {
         override fun applySetting(
             destination: NavDestination,
-            navigationViewDelegate: NavigationViewDelegate,
+            navViewDelegate: NavViewDelegate,
             isNavigationTransition: Boolean,
             setting: String?
         ) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            val toolbarDelegate = navViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
             setting?.let {
                 toolbarDelegate.setToolbarSubtitle(it)
             } ?: run {
@@ -115,20 +115,20 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
     inner class OverrideUpSetting : NavUISetting<Boolean>() {
         override fun applySetting(
             destination: NavDestination,
-            navigationViewDelegate: NavigationViewDelegate,
+            navViewDelegate: NavViewDelegate,
             isNavigationTransition: Boolean,
             setting: Boolean?
         ) {
             setting?.let {
-                setUpNavigationVisible(destination, navigationViewDelegate, it)
+                setUpNavigationVisible(destination, navViewDelegate, it)
             } ?: run {
-                setUpNavigationVisible(destination, navigationViewDelegate, destination.arguments[context.getString(R.string.navigation_override_up)]?.defaultValue as? Boolean ?: false)
+                setUpNavigationVisible(destination, navViewDelegate, destination.arguments[context.getString(R.string.navigation_override_up)]?.defaultValue as? Boolean ?: false)
             }
         }
 
-        private fun setUpNavigationVisible(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate, overrideUp: Boolean) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            val isStartDestination = (navigationViewDelegate.asTestNavViewDelegate().getNavigationController().graph.startDestination == destination.id)
+        private fun setUpNavigationVisible(destination: NavDestination, navViewDelegate: NavViewDelegate, overrideUp: Boolean) {
+            val toolbarDelegate = navViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            val isStartDestination = (navViewDelegate.asTestNavViewDelegate().getNavigationController().graph.startDestination == destination.id)
             if (isStartDestination) {
                 toolbarDelegate.setUpNavigationVisible(overrideUp)
             } else {
@@ -141,11 +141,11 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
 
         override fun applySetting(
             destination: NavDestination,
-            navigationViewDelegate: NavigationViewDelegate,
+            navViewDelegate: NavViewDelegate,
             isNavigationTransition: Boolean,
             setting: ToolbarVisibilityTransition?
         ) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            val toolbarDelegate = navViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
             setting?.let {
                 when (it) {
                     is ToolbarVisibilityTransition.InstantTransition -> {
@@ -163,10 +163,10 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
                 val intReference: Int? = destination.arguments[context.getString(R.string.navigation_toolbar_visibility)]?.defaultValue as? Int
 
                 val desiredState = when (intReference?.let { context.resources.getInteger(it) } ?: run { TOOLBAR_VISIBILITY_VISIBLE }) {
-                    TOOLBAR_VISIBILITY_GONE -> ToolbarDelegate.ToolbarVisibilityState.GONE
-                    TOOLBAR_VISIBILITY_VISIBLE -> ToolbarDelegate.ToolbarVisibilityState.VISIBLE
-                    TOOLBAR_VISIBILITY_INVISIBLE -> ToolbarDelegate.ToolbarVisibilityState.INVISIBLE
-                    else -> ToolbarDelegate.ToolbarVisibilityState.VISIBLE
+                    TOOLBAR_VISIBILITY_GONE -> JetpackToolbarDelegate.ToolbarVisibilityState.GONE
+                    TOOLBAR_VISIBILITY_VISIBLE -> JetpackToolbarDelegate.ToolbarVisibilityState.VISIBLE
+                    TOOLBAR_VISIBILITY_INVISIBLE -> JetpackToolbarDelegate.ToolbarVisibilityState.INVISIBLE
+                    else -> JetpackToolbarDelegate.ToolbarVisibilityState.VISIBLE
                 }
                 toolbarDelegate.setToolbarVisibilityState(desiredState)
             }
@@ -176,16 +176,16 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
     inner class NavViewVisibilitySetting : NavUISetting<Boolean>() {
         override fun applySetting(
             destination: NavDestination,
-            navigationViewDelegate: NavigationViewDelegate,
+            navViewDelegate: NavViewDelegate,
             isNavigationTransition: Boolean,
             setting: Boolean?
         ) {
             setting?.let {
                 val showNavView = it
-                navigationViewDelegate.asTestNavViewDelegate().setNavViewVisible(showNavView)
+                navViewDelegate.asTestNavViewDelegate().setNavViewVisible(showNavView)
             } ?: run {
                 val showNavView = !(destination.arguments[context.getString(R.string.navigation_view_gone)]?.defaultValue as? Boolean ?: false)
-                navigationViewDelegate.asTestNavViewDelegate().setNavViewVisible(showNavView)
+                navViewDelegate.asTestNavViewDelegate().setNavViewVisible(showNavView)
             }
         }
     }
@@ -193,11 +193,11 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
     inner class ActionMenuSetting : NavUISetting<Int>() {
         override fun applySetting(
             destination: NavDestination,
-            navigationViewDelegate: NavigationViewDelegate,
+            navViewDelegate: NavViewDelegate,
             isNavigationTransition: Boolean,
             setting: Int?
         ) {
-            val toolbarDelegate = navigationViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
+            val toolbarDelegate = navViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
             setting?.let {
                 val actionMenuResId = it
                 if (actionMenuResId == -1) {
@@ -222,8 +222,8 @@ class SampleNavUIController(private val screenFragment: BaseScreenFragment) : Ba
     }
 
     sealed class ToolbarVisibilityTransition {
-        data class InstantTransition(val toState: ToolbarDelegate.ToolbarVisibilityState) : ToolbarVisibilityTransition()
-        data class AnimateTransition(val toState: ToolbarDelegate.ToolbarVisibilityState, val animationDurationMs: Long) : ToolbarVisibilityTransition()
+        data class InstantTransition(val toState: JetpackToolbarDelegate.ToolbarVisibilityState) : ToolbarVisibilityTransition()
+        data class AnimateTransition(val toState: JetpackToolbarDelegate.ToolbarVisibilityState, val animationDurationMs: Long) : ToolbarVisibilityTransition()
     }
 }
 

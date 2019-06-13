@@ -1,4 +1,4 @@
-package com.hutchins.navui.common
+package com.hutchins.navui.jetpack
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -15,9 +15,9 @@ import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavViewActivity
-import com.hutchins.navui.core.NavigationViewDelegate
+import com.hutchins.navui.core.NavViewDelegate
 
-open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler {
+open class JetpackBottomNavDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
     companion object {
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
         const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
@@ -42,8 +42,8 @@ open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val n
     private var showUp: Boolean = false
     private var navViewVisible: Boolean = true
 
-    internal val toolbarDelegate: ToolbarDelegate by lazy {
-        ToolbarDelegate(
+    internal val jetpackToolbarDelegate: JetpackToolbarDelegate by lazy {
+        JetpackToolbarDelegate(
             constraintLayout,
             appBarLayout,
             toolbar,
@@ -56,8 +56,8 @@ open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val n
         arrow
     }
 
-    override fun getNavUiToolbarDelegate(): ToolbarDelegate {
-        return toolbarDelegate
+    override fun getNavUiToolbarDelegate(): JetpackToolbarDelegate {
+        return jetpackToolbarDelegate
     }
 
     override fun getNavigationController(): NavController {
@@ -83,7 +83,7 @@ open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val n
         // To keep UI's similar, we are using drawable provided by Material Design Library that
         // animates an arrow to/from a hamburger icon. This view doesn't need the hamburger part
         // so we set it to be the arrow only, and never alter it.
-        upDrawable.progress = ToolbarDelegate.PROGRESS_ARROW
+        upDrawable.progress = JetpackToolbarDelegate.PROGRESS_ARROW
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -128,7 +128,7 @@ open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val n
     }
 
     override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
-        return SampleNavUIController(screenFragment)
+        return JetpackNavUIController(screenFragment)
     }
 
     fun getNavigationMenu(): Menu {
@@ -147,7 +147,7 @@ open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val n
         bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
         bundle.putBoolean(BUNDLE_KEY_NAV_STATE, navViewVisible)
 
-        toolbarDelegate.saveState(bundle)
+        jetpackToolbarDelegate.saveState(bundle)
     }
 
     override fun restoreState(bundle: Bundle) {
@@ -157,6 +157,6 @@ open class BottomNavViewDelegate(navViewActivity: NavViewActivity, private val n
         setUpNavigationVisible(showUp)
         setNavViewVisible(navViewVisible)
 
-        toolbarDelegate.restoreState(bundle)
+        jetpackToolbarDelegate.restoreState(bundle)
     }
 }

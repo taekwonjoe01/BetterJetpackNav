@@ -1,4 +1,4 @@
-package com.hutchins.navui.common
+package com.hutchins.navui.jetpack
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -17,11 +17,11 @@ import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavViewActivity
-import com.hutchins.navui.core.NavigationViewDelegate
+import com.hutchins.navui.core.NavViewDelegate
 
-open class SideNavViewDelegate(
+open class JetpackSideNavDelegate(
     override val navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int
-        ) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler{
+        ) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler{
     companion object {
          const val BUNDLE_KEY_TOOLBAR_STATE = "BUNDLE_KEY_TOOLBAR_STATE"
          const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
@@ -44,15 +44,15 @@ open class SideNavViewDelegate(
 
     private var valueAnimator: ValueAnimator? = null
 
-    private var currentState = ToolbarDelegate.PROGRESS_HAMBURGER
+    private var currentState = JetpackToolbarDelegate.PROGRESS_HAMBURGER
     private var showUp: Boolean = false
 
     private var navigationEnabled = true
 
     override val navHostResourceId: Int = R.id.navHost
 
-    internal val toolbarDelegate: ToolbarDelegate by lazy {
-        ToolbarDelegate(
+    internal val jetpackToolbarDelegate: JetpackToolbarDelegate by lazy {
+        JetpackToolbarDelegate(
             constraintLayout,
             appBarLayout,
             toolbar,
@@ -65,8 +65,8 @@ open class SideNavViewDelegate(
         arrow
     }
 
-    override fun getNavUiToolbarDelegate(): ToolbarDelegate {
-        return toolbarDelegate
+    override fun getNavUiToolbarDelegate(): JetpackToolbarDelegate {
+        return jetpackToolbarDelegate
     }
 
     override fun getNavigationController(): NavController {
@@ -97,7 +97,7 @@ open class SideNavViewDelegate(
         }
 
         // Initialize the icon.
-        upDrawable.progress = ToolbarDelegate.PROGRESS_HAMBURGER
+        upDrawable.progress = JetpackToolbarDelegate.PROGRESS_HAMBURGER
         toolbar.navigationIcon = upDrawable
     }
 
@@ -148,10 +148,10 @@ open class SideNavViewDelegate(
     }
 
     private  fun setToolbarUpIndicator(showDrawer: Boolean, shouldAnimate: Boolean = true) {
-        val desiredState = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
+        val desiredState = if (showDrawer) JetpackToolbarDelegate.PROGRESS_HAMBURGER else JetpackToolbarDelegate.PROGRESS_ARROW
         val stateChanged = (desiredState != currentState)
 
-        val endValue = if (showDrawer) ToolbarDelegate.PROGRESS_HAMBURGER else ToolbarDelegate.PROGRESS_ARROW
+        val endValue = if (showDrawer) JetpackToolbarDelegate.PROGRESS_HAMBURGER else JetpackToolbarDelegate.PROGRESS_ARROW
         if (stateChanged) {
             if (shouldAnimate) {
                 val startValue = upDrawable.progress
@@ -188,7 +188,7 @@ open class SideNavViewDelegate(
     }
 
     override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
-        return SampleNavUIController(screenFragment)
+        return JetpackNavUIController(screenFragment)
     }
 
     private fun setNavigationIcon(icon: Drawable?) {
@@ -209,11 +209,11 @@ open class SideNavViewDelegate(
     }
 
     override fun saveState(bundle: Bundle) {
-        bundle.putBoolean(BUNDLE_KEY_TOOLBAR_STATE, currentState == ToolbarDelegate.PROGRESS_HAMBURGER)
+        bundle.putBoolean(BUNDLE_KEY_TOOLBAR_STATE, currentState == JetpackToolbarDelegate.PROGRESS_HAMBURGER)
         bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
         bundle.putBoolean(BUNDLE_KEY_NAV_STATE, navigationEnabled)
 
-        toolbarDelegate.saveState(bundle)
+        jetpackToolbarDelegate.saveState(bundle)
     }
 
     override fun restoreState(bundle: Bundle) {
@@ -225,6 +225,6 @@ open class SideNavViewDelegate(
         setNavViewVisible(navigationEnabled)
         setToolbarUpIndicator(toolbarState, false)
 
-        toolbarDelegate.restoreState(bundle)
+        jetpackToolbarDelegate.restoreState(bundle)
     }
 }

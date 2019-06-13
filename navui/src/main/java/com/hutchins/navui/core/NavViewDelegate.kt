@@ -3,7 +3,7 @@ package com.hutchins.navui.core
 import android.os.Bundle
 import androidx.navigation.NavController
 
-interface NavigationViewDelegate {
+interface NavViewDelegate {
     val navViewActivity: NavViewActivity
 
     /**

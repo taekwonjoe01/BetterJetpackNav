@@ -12,24 +12,24 @@ class NavUIControllerViewModel(val navUISettings: List<NavUISetting<*>>) : ViewM
     }
 
     private var destination: NavDestination? = null
-    private var navigationViewDelegate: NavigationViewDelegate? = null
-    fun onNavUIActive(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate) {
+    private var navViewDelegate: NavViewDelegate? = null
+    fun onNavUIActive(destination: NavDestination, navViewDelegate: NavViewDelegate) {
         this.destination = destination
-        this.navigationViewDelegate = navigationViewDelegate
+        this.navViewDelegate = navViewDelegate
 
         for (navUIPersistentSetting in navUISettings) {
-            navUIPersistentSetting.onActive(destination, navigationViewDelegate)
+            navUIPersistentSetting.onActive(destination, navViewDelegate)
         }
     }
 
     fun onNavUIInactive() {
         this.destination = null
-        this.navigationViewDelegate = null
+        this.navViewDelegate = null
     }
 
     override fun onValueSet(navUISetting: NavUISetting<*>) {
         destination?.let { dest ->
-            navigationViewDelegate?.let { viewDelegate ->
+            navViewDelegate?.let { viewDelegate ->
                 navUISetting.onSettingSetWhileActive(dest, viewDelegate)
             }
         }
@@ -55,13 +55,13 @@ abstract class NavUISetting<T : Any?> {
             listener.onValueSet(this)
         }
 
-    internal fun onActive(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate) {
-        applySetting(destination, navigationViewDelegate, true, setting)
+    internal fun onActive(destination: NavDestination, navViewDelegate: NavViewDelegate) {
+        applySetting(destination, navViewDelegate, true, setting)
     }
 
-    internal fun onSettingSetWhileActive(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate) {
-        applySetting(destination, navigationViewDelegate, false, setting)
+    internal fun onSettingSetWhileActive(destination: NavDestination, navViewDelegate: NavViewDelegate) {
+        applySetting(destination, navViewDelegate, false, setting)
     }
 
-    abstract fun applySetting(destination: NavDestination, navigationViewDelegate: NavigationViewDelegate, isNavigationTransition: Boolean, setting: T?)
+    abstract fun applySetting(destination: NavDestination, navViewDelegate: NavViewDelegate, isNavigationTransition: Boolean, setting: T?)
 }

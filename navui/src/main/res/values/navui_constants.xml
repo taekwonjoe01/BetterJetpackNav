@@ -9,8 +9,8 @@
         1. If the BaseNavFragment is the "startDestination" of the Navigation Graph, it will display a Back arrow and when
         clicked, will close the Activity.
         2. If the BaseNavFragment is NOT the "startDestination", the UP button will be displayed as if it WAS the start Destination.
-        This means for a SideNavViewDelegate activity, the Hamburger icon would be displayed and when clicked, opens the SideNav. If
-        BottomNavViewDelegate is used, there will be no button displayed. If a NoNavViewDelegate is used, there will be no button displayed.
+        This means for a JetpackSideNavDelegate activity, the Hamburger icon would be displayed and when clicked, opens the SideNav. If
+        JetpackBottomNavDelegate is used, there will be no button displayed. If a JetpackNoNavDelegate is used, there will be no button displayed.
     -->
     <string name="navigation_override_up">navigation_override_up</string>
 
@@ -28,10 +28,10 @@
     configures the navigation view.
 
     If true:
-        1. For SideNavViewDelegate, the SideDrawer will be locked shut and the Hamburger Icon will
+        1. For JetpackSideNavDelegate, the SideDrawer will be locked shut and the Hamburger Icon will
         never appear.
-        2. For BottomNavViewDelegate, the BottomNavigationView will be set as View.GONE.
-        3. For NoNavViewDelegate, nothing will be done.
+        2. For JetpackBottomNavDelegate, the BottomNavigationView will be set as View.GONE.
+        3. For JetpackNoNavDelegate, nothing will be done.
     default is false (not hidden).
     -->
     <string name="navigation_view_gone">navigation_view_gone</string>

@@ -1,4 +1,4 @@
-package com.hutchins.navui.common
+package com.hutchins.navui.jetpack
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -13,9 +13,9 @@ import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavViewActivity
-import com.hutchins.navui.core.NavigationViewDelegate
+import com.hutchins.navui.core.NavViewDelegate
 
-open class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewDelegate, SampleNavUIController.TestNavViewDelegate, ToolbarDelegate.UpVisibilityHandler {
+open class JetpackNoNavDelegate(navViewActivity: NavViewActivity) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
     companion object {
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
     }
@@ -37,8 +37,8 @@ open class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewD
 
     private var showUp: Boolean = false
 
-    internal val toolbarDelegate: ToolbarDelegate by lazy {
-        ToolbarDelegate(
+    internal val jetpackToolbarDelegate: JetpackToolbarDelegate by lazy {
+        JetpackToolbarDelegate(
             constraintLayout,
             appBarLayout,
             toolbar,
@@ -51,8 +51,8 @@ open class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewD
         arrow
     }
 
-    override fun getNavUiToolbarDelegate(): ToolbarDelegate {
-        return toolbarDelegate
+    override fun getNavUiToolbarDelegate(): JetpackToolbarDelegate {
+        return jetpackToolbarDelegate
     }
 
     override fun getNavigationController(): NavController {
@@ -73,7 +73,7 @@ open class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewD
         // To keep UI's similar, we are using drawable provided by Material Design Library that
         // animates an arrow to/from a hamburger icon. This view doesn't need the hamburger part
         // so we set it to be the arrow only, and never alter it.
-        upDrawable.progress = ToolbarDelegate.PROGRESS_ARROW
+        upDrawable.progress = JetpackToolbarDelegate.PROGRESS_ARROW
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -113,7 +113,7 @@ open class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewD
     }
 
     override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
-        return SampleNavUIController(screenFragment)
+        return JetpackNavUIController(screenFragment)
     }
 
     private fun setNavigationIcon(icon: Drawable?) {
@@ -127,12 +127,12 @@ open class NoNavViewDelegate(navViewActivity: NavViewActivity) : NavigationViewD
     override fun saveState(bundle: Bundle) {
         bundle.putBoolean(BUNDLE_KEY_UP_STATE, showUp)
 
-        toolbarDelegate.saveState(bundle)
+        jetpackToolbarDelegate.saveState(bundle)
     }
 
     override fun restoreState(bundle: Bundle) {
         showUp = bundle.getBoolean(BUNDLE_KEY_UP_STATE)
 
-        toolbarDelegate.restoreState(bundle)
+        jetpackToolbarDelegate.restoreState(bundle)
     }
 }

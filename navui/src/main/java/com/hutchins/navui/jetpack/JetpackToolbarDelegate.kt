@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package com.hutchins.navui.common
+package com.hutchins.navui.jetpack
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -11,16 +11,16 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.hutchins.navui.R
-import com.hutchins.navui.core.NavigationViewDelegate
+import com.hutchins.navui.core.NavViewDelegate
 
 /**
  * This class manages the Toolbar and maintains the state of it with respect to ScreenFragments.
  */
-class ToolbarDelegate(
+class JetpackToolbarDelegate(
     private val constraintLayout: ConstraintLayout,
     private val toolbarContainer: View,
     private val toolbar: Toolbar,
-    private val navigationViewDelegate: NavigationViewDelegate,
+    private val navViewDelegate: NavViewDelegate,
     private val upVisibilityHandler: UpVisibilityHandler
 ) {
     companion object {
