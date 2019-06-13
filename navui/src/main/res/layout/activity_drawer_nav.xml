@@ -2,7 +2,16 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--
+        This file is used by the SideNavViewDelegate object to define the activity layout for a "Side Navigation Activity".
+        Clients of this library can use the SideNavViewDelegate as-is in their applications and let it use this layout by default,
+        but generally an application will want to style this layout according to their app specific UX. When doing so,
+        you can copy the contents of this file and apply the styling as appropriate. The Delegate does not do any styling of
+        its own. The delegate requires a referenceID to a ConstaintLayout, FrameLayout, AppBarLayout, Toolbar, and
+        NavigationView.
 
+        Alternatives, of course, are to define your own Delegate and view hierarchy.
+        -->
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/activityContainer"
         android:layout_width="match_parent"

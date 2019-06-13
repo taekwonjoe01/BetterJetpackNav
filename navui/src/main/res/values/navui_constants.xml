@@ -1,28 +1,37 @@
 <resources>
-    <!-- BEGIN NAVIGATION CONSTAINTS -->
-    <!-- Navigation constants must be defined here in this xml file because they must be accessible
+    <!--
+    Navigation constants must be defined here in this xml file because they must be accessible
     in the navigation_graph.
     -->
 
-    <!-- navigation_override_up will make it so that if a fragment would normally have back navigation,
-    we override the default behavior of showing UP and fall back to that navigation type's "root" display option.
-    default is false.
+    <!-- navigation_override_up
+    When true, the default Navigation behavior of the UP button will be overridden in the following ways:
+        1. If the BaseNavFragment is the "startDestination" of the Navigation Graph, it will display a Back arrow and when
+        clicked, will close the Activity.
+        2. If the BaseNavFragment is NOT the "startDestination", the UP button will be displayed as if it WAS the start Destination.
+        This means for a SideNavViewDelegate activity, the Hamburger icon would be displayed and when clicked, opens the SideNav. If
+        BottomNavViewDelegate is used, there will be no button displayed. If a NoNavViewDelegate is used, there will be no button displayed.
     -->
     <string name="navigation_override_up">navigation_override_up</string>
-    <!-- navigation_hide_toolbar configures whether or not the toolbar is hidden.
-    default is false (not hidden).
-    -->
 
-    <!-- navigation_toolbar_visibility configures whether or not the toolbar is hidden.
-    default is false (not hidden).
+
+    <!-- navigation_toolbar_visibility
+    configures the toolbar display state.
+    default is navigation_toolbar_visibility_visible.
     -->
     <string name="navigation_toolbar_visibility">navigation_toolbar_visibility</string>
     <integer name="navigation_toolbar_visibility_visible">0</integer>
     <integer name="navigation_toolbar_visibility_invisible">1</integer>
     <integer name="navigation_toolbar_visibility_gone">2</integer>
 
-    <!-- navigation_view_gone configured whether or not the Nav View is hidden for a specific
-    fragment.
+    <!-- navigation_view_gone
+    configures the navigation view.
+
+    If true:
+        1. For SideNavViewDelegate, the SideDrawer will be locked shut and the Hamburger Icon will
+        never appear.
+        2. For BottomNavViewDelegate, the BottomNavigationView will be set as View.GONE.
+        3. For NoNavViewDelegate, nothing will be done.
     default is false (not hidden).
     -->
     <string name="navigation_view_gone">navigation_view_gone</string>
@@ -30,11 +39,12 @@
 
     <!-- navigation_toolbar_subtitle sets the subtitle for a ScreenFragment
     default is empty string.
+
+    The title is set by the NavDestination 'label' attribute.
     -->
     <string name="navigation_toolbar_subtitle">navigation_toolbar_subtitle</string>
 
     <!-- navigation_toolbar_action_menu sets the action menu for a ScreenFragment.
     -->
     <string name="navigation_toolbar_action_menu">navigation_toolbar_action_menu</string>
-    <!-- END NAVIGATION CONSTAINTS -->
 </resources>
