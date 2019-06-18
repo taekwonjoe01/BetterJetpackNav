@@ -14,7 +14,8 @@ import com.hutchins.navui.R
 import com.hutchins.navui.core.NavViewDelegate
 
 /**
- * This class manages the Toolbar and maintains the state of it with respect to ScreenFragments.
+ * This object is used by the [JetpackBottomNavDelegate], [JetpackNoNavDelegate], and [JetpackSideNavDelegate] to
+ * consolidate all behavior related to the [Toolbar] provided in those view hierarchies.
  */
 class JetpackToolbarDelegate(
     private val constraintLayout: ConstraintLayout,

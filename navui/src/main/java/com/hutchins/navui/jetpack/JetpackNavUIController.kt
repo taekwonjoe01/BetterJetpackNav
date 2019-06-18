@@ -10,6 +10,13 @@ import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavUISetting
 import com.hutchins.navui.core.NavViewDelegate
 
+/**
+ * Implementation of a [BaseNavUIController] that is used by the [JetpackBottomNavDelegate], [JetpackNoNavDelegate], and
+ * [JetpackSideNavDelegate]. This provides and API and state management for [BaseScreenFragment]'s to provide a configuration
+ * of the [NavViewActivity]'s view state when their screens are active in the Navigation lifecycle.
+ *
+ * This class maintains each [BaseScreenFragment]'s state view a [ViewModel] and works with respect to screen rotations.
+ */
 class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : BaseNavUIController(screenFragment) {
     companion object {
         // Keep these in sync with lotus/values/strings.xml navigation_toolbar_visibility values
@@ -42,30 +49,95 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
         return arrayListOf(ToolbarVisibilitySetting(), ToolbarTitleSetting(), ToolbarSubTitleSetting(), OverrideUpSetting(), NavViewVisibilitySetting(), ActionMenuSetting())
     }
 
+    /**
+     * @param jetpackToolbarVisibility Immediately set the visibility of the toolbar.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun setToolbarVisibility(jetpackToolbarVisibility: JetpackToolbarDelegate.ToolbarVisibilityState) {
         toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.InstantTransition(jetpackToolbarVisibility)
     }
 
+    /**
+     * @param title Immediately set the title of the toolbar.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun setToolbarTitle(title: String) {
         titleSetting.setting = title
     }
 
+    /**
+     * @param subtitle Immediately set the subtitle of the toolbar.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun setToolbarSubtitle(subtitle: String) {
         subTitleSetting.setting = subtitle
     }
 
+    /**
+     * @param overrideUp Immediately set the overrideUp state of the toolbar.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun setToolbarOverrideUp(overrideUp: Boolean) {
         overrideUpSetting.setting = overrideUp
     }
 
+    /**
+     * @param showNavView Immediately set the showNavView state of the toolbar.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun setNavViewVisibility(showNavView: Boolean) {
         navVisibilitySetting.setting = showNavView
     }
 
+    /**
+     * @param toVisibilityState Animate set the visibility of the toolbar.
+     * @param animationDurationMs Duration for the animation to run.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun animateToolbarVisibility(toVisibilityState: JetpackToolbarDelegate.ToolbarVisibilityState, animationDurationMs: Long) {
         toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.AnimateTransition(toVisibilityState, animationDurationMs)
     }
 
+    /**
+     * @param actionMenuResId Immediately set the actionMenuResId of the toolbar. This will inflate a menu that is visible
+     * for this screen's toolbar.
+     *
+     * If this controller is not currently
+     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * made before the controller becomes active, it will override any previous calls.
+     *
+     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     */
     fun setToolbarActionMenu(actionMenuResId: Int) {
         actionMenuSetting.setting = actionMenuResId
     }

@@ -7,7 +7,7 @@ interface NavViewDelegate {
     val navViewActivity: NavViewActivity
 
     /**
-     * The library requires knowing what the root view that will hold the NavHostFragment will be.
+     * The [NavViewDelegate] requires knowing what the root view that will hold the [NavHostFragment] will be.
      */
     val navHostResourceId: Int
 

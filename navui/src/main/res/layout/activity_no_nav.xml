@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<!--
+        This file is used by the JetpackNoNavDelegate object to define the activity layout for a "No Navigation Activity".
+        Clients of this library can use the JetpackNoNavDelegate as-is in their applications and let it use this layout by default,
+        but generally an application will want to style this layout according to their app specific UX. When doing so,
+        you can copy the contents of this file and apply the styling as appropriate. The Delegate does not do any styling of
+        its own. The delegate requires a referenceID to a ConstaintLayout, FrameLayout, AppBarLayout, and Toolbar.
+
+        Alternatives, of course, are to define your own Delegate and view hierarchy.
+        -->
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--
-            This file is used by the JetpackNoNavDelegate object to define the activity layout for a "No Navigation Activity".
-            Clients of this library can use the JetpackNoNavDelegate as-is in their applications and let it use this layout by default,
-            but generally an application will want to style this layout according to their app specific UX. When doing so,
-            you can copy the contents of this file and apply the styling as appropriate. The Delegate does not do any styling of
-            its own. The delegate requires a referenceID to a ConstaintLayout, FrameLayout, AppBarLayout, and Toolbar.
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintActivityContentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/layout_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navHost"
+    />
 
-            Alternatives, of course, are to define your own Delegate and view hierarchy.
-            -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintActivityContentLayout"
+    <FrameLayout
+        android:id="@+id/navHost"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include
-            android:id="@+id/toolbarLayout"
-            layout="@layout/layout_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/navHost"
-        />
-
-        <FrameLayout
-            android:id="@+id/navHost"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
-        />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
+    />
+</androidx.constraintlayout.widget.ConstraintLayout>

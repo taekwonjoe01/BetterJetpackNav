@@ -8,7 +8,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.core.BaseScreenFragment
@@ -20,9 +19,32 @@ open class JetpackNoNavDelegate(navViewActivity: NavViewActivity) : NavViewDeleg
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
     }
 
+    /**
+     * Set the res Id of the activity layout. This defaults to a prepackaged layout provided by this library.
+     *
+     * For usage by this [JetpackBottomNavDelegate], there must be a reference to
+     * a [ConstraintLayout] that represents the view containing the [FrameLayout] (That the [NavHostFragment] will use) and
+     * the [Toolbar]. This is to manage visibility state.
+     *
+     * There must also be a reference to the [AppBarLayout] that holds the [Toolbar].
+     *
+     * There must also be a reference to the [Toolbar].
+     */
     open val activityLayoutRedId: Int = R.layout.activity_no_nav
+
+    /**
+     * The reference to the [ConstraintLayout] required by this [NavViewDelegate].
+     */
     open val constraintLayoutResId: Int = R.id.constraintActivityContentLayout
+
+    /**
+     * The reference to the [AppBarLayout] required by this [NavViewDelegate].
+     */
     open val appBarLayoutResId: Int = R.id.toolbarLayout
+
+    /**
+     * The reference to the [Toolbar] required by this [NavViewDelegate].
+     */
     open val toolbarResId: Int = R.id.toolbar
 
     override val navViewActivity = navViewActivity
@@ -31,8 +53,10 @@ open class JetpackNoNavDelegate(navViewActivity: NavViewActivity) : NavViewDeleg
     lateinit var constraintLayout: ConstraintLayout
     lateinit var toolbar: Toolbar
     lateinit var appBarLayout: AppBarLayout
-    lateinit var bottomNavigationView: BottomNavigationView
 
+    /**
+     * The reference to the [FrameLayout] that will host the [NavHostFragment]. Required by the [NavigationActivity].
+     */
     override val navHostResourceId: Int = R.id.navHost
 
     private var showUp: Boolean = false

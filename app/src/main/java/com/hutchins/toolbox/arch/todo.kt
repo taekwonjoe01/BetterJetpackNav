@@ -2,7 +2,6 @@ package com.hutchins.toolbox.arch
 
 
 /*
--Remove databinding.
 -trim out unnecessary code.
 - Known issues, this won't work if you use DialogFragments from the Nav Graph. The state machine gets desynchronized. Recommend using DialogFragments the old fashioned way. 
 

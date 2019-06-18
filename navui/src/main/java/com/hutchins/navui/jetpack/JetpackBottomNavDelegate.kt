@@ -17,16 +17,55 @@ import com.hutchins.navui.core.BaseScreenFragment
 import com.hutchins.navui.core.NavViewActivity
 import com.hutchins.navui.core.NavViewDelegate
 
-open class JetpackBottomNavDelegate(navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
+
+/**
+ * Example implementation of a [BottomNavigationView] layout for an activity. The [BottomNavigationView] and [Toolbar]
+ * belong to the activity layout, and each "screen" belongs to the BaseScreenFragment.
+ *
+ * This class can be used as-is as a [NavViewDelegate] for any activity.
+ */
+open class JetpackBottomNavDelegate(
+    navViewActivity: NavViewActivity,
+    private val navigationMenuResourceId: Int
+) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
     companion object {
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
         const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
     }
 
+    /**
+     * Set the res Id of the activity layout. This defaults to a prepackaged layout provided by this library.
+     *
+     * For usage by this [JetpackBottomNavDelegate], there must be a reference to
+     * a [ConstraintLayout] that represents the view containing the [FrameLayout] (That the [NavHostFragment] will use) and
+     * the [Toolbar]. This is to manage visibility state.
+     *
+     * There must also be a reference to the [AppBarLayout] that holds the [Toolbar].
+     *
+     * There must also be a reference to the [Toolbar].
+     *
+     * There must also be a reference to the [BottomNavigationView]
+     */
     open val activityLayoutRedId: Int = R.layout.activity_bottom_nav
+
+    /**
+     * The reference to the [ConstraintLayout] required by this [NavViewDelegate].
+     */
     open val constraintLayoutResId: Int = R.id.constraintActivityContentLayout
+
+    /**
+     * The reference to the [AppBarLayout] required by this [NavViewDelegate].
+     */
     open val appBarLayoutResId: Int = R.id.toolbarLayout
+
+    /**
+     * The reference to the [Toolbar] required by this [NavViewDelegate].
+     */
     open val toolbarResId: Int = R.id.toolbar
+
+    /**
+     * The reference to the [BottomNavigationView] required by this [NavViewDelegate].
+     */
     open val bottomNavResId: Int = R.id.bottomNav
 
     override val navViewActivity = navViewActivity
@@ -37,6 +76,9 @@ open class JetpackBottomNavDelegate(navViewActivity: NavViewActivity, private va
     lateinit var appBarLayout: AppBarLayout
     lateinit var bottomNavigationView: BottomNavigationView
 
+    /**
+     * The reference to the [FrameLayout] that will host the [NavHostFragment]. Required by the [NavigationActivity].
+     */
     override val navHostResourceId: Int = R.id.navHost
 
     private var showUp: Boolean = false

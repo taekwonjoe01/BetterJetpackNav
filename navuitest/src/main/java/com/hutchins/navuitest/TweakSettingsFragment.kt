@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.hutchins.navui.core.BaseNavUIController
 import com.hutchins.navui.jetpack.JetpackNavUIController
 import com.hutchins.navui.jetpack.JetpackToolbarDelegate
 import com.hutchins.navuitest.databinding.FragmentTweakSettingsBinding
 
 class TweakSettingsFragment : Fragment() {
     private lateinit var jetpackNavUIController: JetpackNavUIController
-    internal fun setToolbarController(navUiController: BaseNavUIController) {
-        this.jetpackNavUIController = navUiController as JetpackNavUIController
+    internal fun setToolbarController(jetpackNavUIController: JetpackNavUIController) {
+        this.jetpackNavUIController = jetpackNavUIController
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentTweakSettingsBinding.inflate(inflater, container, false).apply {

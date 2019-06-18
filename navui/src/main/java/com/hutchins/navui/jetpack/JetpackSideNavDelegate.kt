@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
@@ -28,11 +29,48 @@ open class JetpackSideNavDelegate(
          const val BUNDLE_KEY_NAV_STATE= "BUNDLE_KEY_NAV_STATE"
     }
 
+    /**
+     * Set the res Id of the activity layout. This defaults to a prepackaged layout provided by this library.
+     *
+     * For usage by this [JetpackSideNavDelegate], there must be a reference to
+     * a [ConstraintLayout] that represents the view containing the [FrameLayout] (That the [NavHostFragment] will use) and
+     * the [Toolbar]. This is to manage visibility state.
+     *
+     * There must also be a reference to the [AppBarLayout] that holds the [Toolbar].
+     *
+     * There must also be a reference to the [Toolbar].
+     *
+     * There must also be a reference to the [BottomNavigationView].
+     *
+     * There must also be a reference to the [DrawerLayout].
+     *
+     * There must also be a reference to the [NavigationView]
+     */
     open val activityLayoutRedId: Int = R.layout.activity_drawer_nav
+
+    /**
+     * The reference to the [ConstraintLayout] required by this [NavViewDelegate].
+     */
     open val constraintLayoutResId: Int = R.id.constraintActivityContentLayout
+
+    /**
+     * The reference to the [DrawerLayout] required by this [NavViewDelegate].
+     */
     open val drawerLayoutResId: Int = R.id.activityContainer
+
+    /**
+     * The reference to the [AppBarLayout] required by this [NavViewDelegate].
+     */
     open val appBarLayoutResId: Int = R.id.toolbarLayout
+
+    /**
+     * The reference to the [Toolbar] required by this [NavViewDelegate].
+     */
     open val toolbarResId: Int = R.id.toolbar
+
+    /**
+     * The reference to the [NavigationView] required by this [NavViewDelegate].
+     */
     open val navigationViewResId: Int = R.id.navigationView
 
     private lateinit var navController: NavController
@@ -49,6 +87,9 @@ open class JetpackSideNavDelegate(
 
     private var navigationEnabled = true
 
+    /**
+     * The reference to the [FrameLayout] that will host the [NavHostFragment]. Required by the [NavigationActivity].
+     */
     override val navHostResourceId: Int = R.id.navHost
 
     internal val jetpackToolbarDelegate: JetpackToolbarDelegate by lazy {
@@ -102,8 +143,6 @@ open class JetpackSideNavDelegate(
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        /*return NavigationUI.navigateUp(binding.activityContainer,
-                navController)*/
         // Must override default so we can have custom press functionality:
         var handled = false
         if (navController.currentDestination!!.id == navController.graph.startDestination) {

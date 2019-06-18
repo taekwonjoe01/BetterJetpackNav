@@ -5,8 +5,15 @@ import androidx.navigation.NavDestination
 import com.hutchins.navcore.BaseNavFragment
 
 abstract class BaseScreenFragment : BaseNavFragment() {
+    /**
+     * The [NavViewActivity] that this [BaseScreenFragment] lives in.
+     */
     protected lateinit var navViewActivity: NavViewActivity
 
+    /**
+     * The navUIController provides an API for users of the [BaseScreenFragment] to interact at runtime with the
+     * [NavViewDelegate].
+     */
     protected lateinit var navUiController: BaseNavUIController
 
     override fun onCurrentNavFragment(destination: NavDestination) {
