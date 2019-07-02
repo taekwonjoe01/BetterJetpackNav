@@ -20,7 +20,7 @@ class FifthFragment : BaseNavFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentFifthBing.inflate(inflater, container, false).apply {
+        val binding = FragmentFifthBinding.inflate(inflater, container, false).apply {
         }
         return binding.root
     }
