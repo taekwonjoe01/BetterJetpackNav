@@ -33,15 +33,15 @@ import java.lang.ref.WeakReference
 /**
  * NavigationActivity defines a Navigation pattern that allows for safe access of Navigation lifecycle events to a Fragment.
  * This Activity maintains a state machine that keeps track of Fragment transactions within the [NavController] and provides
- * a lifecycle of these navigation transitions through methods calls [BaseNavFragment][setCurrentBaseNavFragment] and
- * [BaseNavFragment][onRemoveAsCurrentNavFragment].
+ * a lifecycle of these navigation transitions through methods calls [BaseNavFragment.onCurrentNavFragment] and
+ * [BaseNavFragment.onRemoveAsCurrentNavFragment].
  *
  *
  * <p>This Activity must be used with the Navigation Architecture component and children must provide the resource Id to
  * the navigation graph. All [NavDestination]s within the navigation graph must be children of [BaseNavFragment] as that is
  * the only way we can keep track of the navigation backstack state machine.</p>
  *
- * <p> The Navigation lifecycle guarantees that only one [BaseNavFragment] will be inside the [onCurrentNavFragment] lifecycle
+ * <p> The Navigation lifecycle guarantees that only one [BaseNavFragment] will be inside the [BaseNavFragment.onCurrentNavFragment] lifecycle
  * at a time. This is useful to know for many reasons, one common one is synchronization around a Fragment's access to a
  * "Navigation View" held by the [Activity]. Generally, a toolbar is held at the Activity level, but a Fragment may want
  * to change the title or other features. Common bugs can occur if the Fragment attempts to do this at invalid times close to
@@ -58,7 +58,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
     protected lateinit var navController: NavController
 
     /**
-     * Called during [AppCompatActivity][onCreate]. A child must provide a resource id to a [FrameLayout] that is
+     * Called during [AppCompatActivity.onCreate]. A child must provide a resource id to a [FrameLayout] that is
      * the "navigation host" view for [BaseNavFragment]'s.
      *
      * A Common layout pattern for an Activity is to have a Toolbar and a Frame for Fragments to be inflated into. The
@@ -92,24 +92,33 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
 
     /**
      * Called on transitions of the [NavigationActivity]s internal state machine, providing a reference to the currently
-     * active [BaseNavFragment]
+     * active [BaseNavFragment].
      *
      * @param baseNavFragment The currently active BaseNavFragment.
      */
+    @Deprecated("Use onAfterSynchronizedNavigated instead")
     open fun onNavigated(baseNavFragment: BaseNavFragment) {
+
+    }
+
+    /**
+     * Called when a baseNavFragment navigation exchange is about to occur.
+     */
+    open fun onBeforeSynchronizedNavigated() {
+
+    }
+
+    /**
+     * Called after the baseNavFragments have swapped and the view created.
+     *
+     * @param baseNavFragment The currently active BaseNavFragment.
+     */
+    open fun onAfterSynchronizedNavigated(baseNavFragment: BaseNavFragment) {
 
     }
 
     private val baseNavFragments = ArrayList<WeakReference<BaseNavFragment>>()
     private var currentNavigationConfig: NavigationConfig? = null
-    /**
-     * This flag is used to distinguish a hardware back button navigation from the rest. This is needed
-     * because hardware back button navigation has a different lifecycle than all others (normal forward
-     * navigations and UP button navigations). The back button pops the fragment BEFORE onNavigated is called
-     * however the other navigation methods generally call onNavigated first, and THEN a fragment transaction
-     * occurs. We use this flag to distinguish the differences so we can synchronize appropriately.
-     */
-    private var isHardwareBackNavigation = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +150,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
     }
 
     /**
-     * Should ONLY be called by a BaseNavFragment when the view is created.
+     * Should ONLY be called by a BaseNavFragment after the view is created.
      *
      * The synchronization of Fragment lifecycles with navigation lifecycles is delicate. A Fragment might be created and attached
      * before or after the onDestinationChanged callback occurs in the NavController. Empirically, I have gathered this behavior as it differs
@@ -150,35 +159,19 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
     internal fun registerBaseNavFragment(baseNavFragment: BaseNavFragment) {
         baseNavFragments.add(WeakReference(baseNavFragment))
         Log.i(TAG, "Registering baseNavFragment. Current size (including this): " + baseNavFragments.size)
-
-        // Only trim and apply the current Fragment if this is a normal navigation. In a forward navigation or up navigation,
-        // onNavigated would have already been called, and therefore the NavDestination is available now.
-        // On a HardwareBackNavigation, we have not yet been given the NavDestination object, so we must
-        // wait to synchronize.
-
-        // There is also another unique navigation, one where a new fragment is made, but no onNavigated
-        // call will happen. This occurs when menu items are reselected when already on that screen.
-        // The behavior is to "restart" the screen. We must allow the new fragment to become the
-        // current PageFragment with the same NavDirections object.
-
-        // NOTE: If this is a replacement PageFragment transaction with NO onNavigated call, the
-        // parameters saved in the NavDirections bundle will go to the new Fragment. So if a title was
-        // changed, or visibility state altered, these changes persist to the new instance of the
-        // fragment.
-        if (!isHardwareBackNavigation) {
-            trimFragments()
-            setCurrentBaseNavFragment()
+        if (baseNavFragments.size > 2) {
+            Log.w(TAG, "Warning - more than two baseNavFragments are registered, this can lead to undefined behavior.")
         }
+
+        conditionallyUnsetCurrentBaseNavFragment()
+        setCurrentBaseNavFragment()
     }
 
     /**
      * Let's avoid memory leaks and only hold references to Fragments that are active.
      */
-    private fun trimFragments() {
-        if (baseNavFragments.size < 2) {
-            Log.w(TAG, "trimFragments called when none will be trimmed.")
-        }
-        while (baseNavFragments.size > 1) {
+    private fun conditionallyUnsetCurrentBaseNavFragment() {
+        if (baseNavFragments.size > 1) {
             val pageFragment = baseNavFragments.removeAt(0)
             pageFragment.get()?.apply {
                 this.onRemoveAsCurrentNavFragment()
@@ -191,18 +184,22 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
      * this is called empirically, as the design expects these to be non null here, and if that is
      * ever false, we have a big big problem.
      */
+    @Suppress("DEPRECATION")
     private fun setCurrentBaseNavFragment() {
+        onBeforeSynchronizedNavigated()
+
         val current = baseNavFragments[0].get()!!
         val navConfig = current.onSetAsCurrentNavFragment(navController.currentDestination!!)
         currentNavigationConfig = navConfig
 
         onNavigated(current)
+        onAfterSynchronizedNavigated(current)
     }
 
     override fun onBackPressed() {
         if (!maybeDoBackButtonOverride()) {
             // Distinguish this navigation.
-            isHardwareBackNavigation = true
+            //isHardwareBackNavigation = true
             super.onBackPressed()
         }
     }
@@ -228,18 +225,7 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
      * inheritors to define a means to let a BaseNavFragment that it alone is the current destination.
      */
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
-        // Only trim and apply the current Fragment if this is a hardware back navigation. In a
-        // hardware back navigation, registerFragment would have already been called, and therefore
-        // the currentPageFragment is available now at the end of the list.
-        // On a normal navigation, we have not yet been given the PageFragment object, so we must
-        // wait to synchronize.
-        if (isHardwareBackNavigation) {
-            trimFragments()
-            setCurrentBaseNavFragment()
 
-            // Reset the flag
-            isHardwareBackNavigation = false
-        }
     }
 }
 
