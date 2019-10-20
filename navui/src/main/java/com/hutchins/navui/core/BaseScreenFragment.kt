@@ -24,6 +24,7 @@ import android.content.Context
 import androidx.navigation.NavDestination
 import com.hutchins.navcore.BaseNavFragment
 
+@Suppress("MemberVisibilityCanBePrivate")
 abstract class BaseScreenFragment : BaseNavFragment() {
     /**
      * The [NavViewActivity] that this [BaseScreenFragment] lives in.

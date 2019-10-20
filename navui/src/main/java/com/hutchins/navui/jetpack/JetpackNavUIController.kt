@@ -37,6 +37,7 @@ import com.hutchins.navui.core.NavViewDelegate
  *
  * This class maintains each [BaseScreenFragment]'s state view a [ViewModel] and works with respect to screen rotations.
  */
+@Suppress("unused")
 class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : BaseNavUIController(screenFragment) {
     companion object {
         // Keep these in sync with lotus/values/strings.xml navigation_toolbar_visibility values
@@ -72,14 +73,21 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
     /**
      * @param jetpackToolbarVisibility Immediately set the visibility of the toolbar.
      *
-     * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
-     * made before the controller becomes active, it will override any previous calls.
+     * If this controller is not currently active, the action will be queued to run immediately
+     * when it is made active. If a subsequent call to this method is made before the controller
+     * becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     *
+     * @param jetpackToolbarVisibility The visibility to set this toolbar, or null if you want to fallback
+     *          to the navigation graph arguments.
      */
-    fun setToolbarVisibility(jetpackToolbarVisibility: JetpackToolbarDelegate.ToolbarVisibilityState) {
-        toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.InstantTransition(jetpackToolbarVisibility)
+    fun setToolbarVisibility(jetpackToolbarVisibility: JetpackToolbarDelegate.ToolbarVisibilityState?) {
+        jetpackToolbarVisibility?.let {
+            toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.InstantTransition(it)
+        } ?: kotlin.run {
+            toolbarVisibilitySetting.setting = null
+        }
     }
 
     /**
@@ -90,8 +98,11 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     *
+     * @param title The title to set this toolbar, or null if you want to fallback
+     *          to the navigation graph arguments.
      */
-    fun setToolbarTitle(title: String) {
+    fun setToolbarTitle(title: String?) {
         titleSetting.setting = title
     }
 
@@ -103,8 +114,11 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     *
+     * @param subtitle The subtitle to set this toolbar, or null if you want to fallback
+     *          to the navigation graph arguments.
      */
-    fun setToolbarSubtitle(subtitle: String) {
+    fun setToolbarSubtitle(subtitle: String?) {
         subTitleSetting.setting = subtitle
     }
 
@@ -116,8 +130,11 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     *
+     * @param overrideUp Whether or not to override the default up behavior of the nav graph. Use null to
+     *          fall back to the nav graph argument for this destination.
      */
-    fun setToolbarOverrideUp(overrideUp: Boolean) {
+    fun setToolbarOverrideUp(overrideUp: Boolean?) {
         overrideUpSetting.setting = overrideUp
     }
 
@@ -129,8 +146,11 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     *
+     * @param showNavView Whether or not to show the nav view. Use null to
+     *          fall back to the nav graph argument for this destination.
      */
-    fun setNavViewVisibility(showNavView: Boolean) {
+    fun setNavViewVisibility(showNavView: Boolean?) {
         navVisibilitySetting.setting = showNavView
     }
 
@@ -157,8 +177,11 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     *
+     * @param actionMenuResId  Use null to
+     *          fall back to the nav graph argument for this destination.
      */
-    fun setToolbarActionMenu(actionMenuResId: Int) {
+    fun setToolbarActionMenu(actionMenuResId: Int?) {
         actionMenuSetting.setting = actionMenuResId
     }
 
