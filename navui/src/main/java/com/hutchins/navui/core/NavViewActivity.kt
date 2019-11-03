@@ -34,7 +34,7 @@ import com.hutchins.navcore.NavigationActivity
 abstract class NavViewActivity : NavigationActivity() {
     abstract val navViewDelegate: NavViewDelegate
 
-    final override val navigationHostResourceId: Int
+    override val navigationHostResourceId: Int
         get() = navViewDelegate.navHostResourceId
 
     @CallSuper
@@ -48,7 +48,7 @@ abstract class NavViewActivity : NavigationActivity() {
         return if (!delegateHandled) super.onSupportNavigateUp() else true
     }
 
-    final override fun onSetContentView() {
+    override fun onSetContentView() {
         navViewDelegate.setContentView()
     }
 
