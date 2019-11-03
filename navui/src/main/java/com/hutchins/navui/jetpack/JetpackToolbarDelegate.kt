@@ -22,8 +22,8 @@
 
 package com.hutchins.navui.jetpack
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -83,39 +83,58 @@ class JetpackToolbarDelegate(
     var toolbarState: ToolbarVisibilityState =
         ToolbarVisibilityState.VISIBLE
         private set
-    private val invisibleAnimator = ObjectAnimator.ofFloat(toolbarContainer, "alpha", 0.0F)
-    private val visibleAnimator = ObjectAnimator.ofFloat(toolbarContainer, "alpha", 1.0F)
 
-    private val constraintSetToolbarVisible: ConstraintSet = ConstraintSet().apply {
-        clone(constraintLayout)
-        connect(
-            R.id.toolbarLayout, ConstraintSet.TOP,
-            R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
-        connect(
-            R.id.toolbarLayout, ConstraintSet.BOTTOM,
-            R.id.navHost, ConstraintSet.TOP, 0)
-        setVisibility(R.id.toolbarLayout, View.VISIBLE)
-    }
-    private val constraintSetToolbarGone: ConstraintSet = ConstraintSet().apply {
-        clone(constraintLayout)
-        clear(R.id.toolbarLayout, ConstraintSet.TOP)
-        connect(
-            R.id.toolbarLayout, ConstraintSet.BOTTOM,
-            R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
-        // We don't use View.GONE because it has undesirable animations by default. It first sets invisible THEN goes to GONE.
-        // We want this to be a more or less instant transition.
-        //setVisibility(R.id.toolbarLayout, View.GONE)
-    }
-    private val constraintSetToolbarInvisible: ConstraintSet = ConstraintSet().apply {
-        clone(constraintLayout)
-        connect(
-            R.id.toolbarLayout, ConstraintSet.TOP,
-            R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0)
-        connect(
-            R.id.toolbarLayout, ConstraintSet.BOTTOM,
-            R.id.navHost, ConstraintSet.TOP, 0)
-        setVisibility(R.id.toolbarLayout, View.INVISIBLE)
-    }
+    private val constraintSetToolbarVisible: ConstraintSet
+            get() =
+                ConstraintSet().apply {
+                    clone(constraintLayout)
+                    connect(
+                        R.id.toolbarLayout, ConstraintSet.TOP,
+                        R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0
+                    )
+                    connect(
+                        R.id.toolbarLayout, ConstraintSet.BOTTOM,
+                        R.id.navHost, ConstraintSet.TOP, 0
+                    )
+                    setVisibility(R.id.toolbarLayout, View.VISIBLE)
+                }
+    private val constraintSetToolbarGone: ConstraintSet
+        get() =
+            ConstraintSet().apply {
+                clone(constraintLayout)
+                clear(R.id.toolbarLayout, ConstraintSet.TOP)
+                connect(
+                    R.id.toolbarLayout, ConstraintSet.BOTTOM,
+                    R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0
+                )
+                // There's a weird bug where if we try to set this to GONE here, we see the "invisible"
+                // animation played before the transition off screen. This is undesirable. Also, if we
+                // don'e set to GONE at all, we will see a thin strip of the toolbar view visible at the top of the
+                // screen. As a result, we queue up the constraintSetToolbarGoneAfter after this
+                // constraintSet is done to set to GONE. This is obviously undesirable, but it works...
+                //setVisibility(R.id.toolbarLayout, View.VISIBLE)
+            }
+    // See comment above. 
+    private val constraintSetToolbarGoneAfter: ConstraintSet
+        get() =
+            ConstraintSet().apply {
+                clone(constraintLayout)
+                setVisibility(R.id.toolbarLayout, View.GONE)
+            }
+    private val constraintSetToolbarInvisible: ConstraintSet
+        get() =
+            ConstraintSet().apply {
+                clone(constraintLayout)
+                connect(
+                    R.id.toolbarLayout, ConstraintSet.TOP,
+                    R.id.constraintActivityContentLayout, ConstraintSet.TOP, 0
+                )
+                connect(
+                    R.id.toolbarLayout, ConstraintSet.BOTTOM,
+                    R.id.navHost, ConstraintSet.TOP, 0
+                )
+                setVisibility(R.id.toolbarLayout, View.INVISIBLE)
+            }
 
     /**
      * GONE - The Toolbar is off the top of the screen and not accessible to a user.
@@ -134,6 +153,7 @@ class JetpackToolbarDelegate(
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     animateConstraintSet(0L, constraintSetToolbarGone)
+                    animateConstraintSet(0L, constraintSetToolbarGoneAfter)
                 }
                 else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
                     animateConstraintSet(0L, constraintSetToolbarInvisible)
@@ -149,6 +169,7 @@ class JetpackToolbarDelegate(
             ToolbarVisibilityState.INVISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     animateConstraintSet(0L, constraintSetToolbarGone)
+                    animateConstraintSet(0L, constraintSetToolbarGoneAfter)
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
                     animateConstraintSet(0L, constraintSetToolbarVisible)
                 }
@@ -165,6 +186,7 @@ class JetpackToolbarDelegate(
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     animateConstraintSet(animationDurationMS, constraintSetToolbarGone)
+                    Handler().postDelayed({animateConstraintSet(0L, constraintSetToolbarGoneAfter)},animationDurationMS)
                 }
                 else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
                     animateConstraintSet(animationDurationMS, constraintSetToolbarInvisible)
@@ -182,6 +204,7 @@ class JetpackToolbarDelegate(
             ToolbarVisibilityState.INVISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     animateConstraintSet(animationDurationMS, constraintSetToolbarGone)
+                    Handler().postDelayed({animateConstraintSet(0L, constraintSetToolbarGoneAfter)},animationDurationMS)
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
                     animateConstraintSet(animationDurationMS, constraintSetToolbarVisible)
                 }

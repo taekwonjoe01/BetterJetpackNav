@@ -94,7 +94,7 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * @param title Immediately set the title of the toolbar.
      *
      * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
@@ -110,7 +110,7 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * @param subtitle Immediately set the subtitle of the toolbar.
      *
      * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
@@ -126,7 +126,7 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * @param overrideUp Immediately set the overrideUp state of the toolbar.
      *
      * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
@@ -142,7 +142,7 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * @param showNavView Immediately set the showNavView state of the toolbar.
      *
      * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
@@ -159,7 +159,7 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * @param animationDurationMs Duration for the animation to run.
      *
      * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
@@ -173,7 +173,7 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
      * for this screen's toolbar.
      *
      * If this controller is not currently
-     * active, the action will be queued to run immediately when it is made active. If a subsequence call to this method is
+     * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
      * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.

@@ -46,11 +46,11 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Toggle these dependencies when building locally vs using hosted.
     // Local:
-//    implementation project(':navcore')
-//    implementation project(':navui')
+    implementation project(':navcore')
+    implementation project(':navui')
     // Hosted:
-    implementation 'com.github.taekwonjoe01.BetterJetpackNav:navcore:1.0.0-rc1'
-    implementation 'com.github.taekwonjoe01.BetterJetpackNav:navui:1.0.0-rc1'
+//    implementation 'com.github.taekwonjoe01.BetterJetpackNav:navcore:1.0.0-rc1'
+//    implementation 'com.github.taekwonjoe01.BetterJetpackNav:navui:1.0.0-rc1'
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
