@@ -190,7 +190,7 @@ open class JetpackBottomNavDelegate(
     }
 
     override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
-        return JetpackNavUIController(screenFragment)
+        return JetpackNavUIController(screenFragment as JetpackScreenFragment)
     }
 
     fun getNavigationMenu(): Menu {

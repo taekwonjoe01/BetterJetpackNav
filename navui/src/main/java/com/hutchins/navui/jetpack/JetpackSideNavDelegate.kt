@@ -247,7 +247,7 @@ open class JetpackSideNavDelegate(
     }
 
     override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
-        return JetpackNavUIController(screenFragment)
+        return JetpackNavUIController(screenFragment as JetpackScreenFragment)
     }
 
     private fun setNavigationIcon(icon: Drawable?) {

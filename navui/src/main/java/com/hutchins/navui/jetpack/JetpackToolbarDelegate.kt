@@ -24,6 +24,7 @@ package com.hutchins.navui.jetpack
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -114,7 +115,7 @@ class JetpackToolbarDelegate(
                 // constraintSet is done to set to GONE. This is obviously undesirable, but it works...
                 //setVisibility(R.id.toolbarLayout, View.VISIBLE)
             }
-    // See comment above. 
+    // See comment above.
     private val constraintSetToolbarGoneAfter: ConstraintSet
         get() =
             ConstraintSet().apply {
@@ -226,10 +227,11 @@ class JetpackToolbarDelegate(
         toolbar.setOnMenuItemClickListener(null)
     }
 
-    internal fun setToolbarActionMenu(menuResId: Int, listener: Toolbar.OnMenuItemClickListener) {
+    internal fun setToolbarActionMenu(menuResId: Int, listener: Toolbar.OnMenuItemClickListener): Menu {
         toolbar.menu.clear()
         toolbar.inflateMenu(menuResId)
         toolbar.setOnMenuItemClickListener(listener)
+        return toolbar.menu
     }
 
     internal fun setUpNavigationVisible(visible: Boolean) {

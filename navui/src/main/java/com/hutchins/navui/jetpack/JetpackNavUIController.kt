@@ -38,7 +38,7 @@ import com.hutchins.navui.core.NavViewDelegate
  * This class maintains each [BaseScreenFragment]'s state view a [ViewModel] and works with respect to screen rotations.
  */
 @Suppress("unused")
-class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : BaseNavUIController(screenFragment) {
+class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) : BaseNavUIController(screenFragment) {
     companion object {
         // Keep these in sync with lotus/values/strings.xml navigation_toolbar_visibility values
         private const val TOOLBAR_VISIBILITY_VISIBLE = 0
@@ -318,9 +318,10 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
                 if (actionMenuResId == -1) {
                     toolbarDelegate.clearToolbarActionMenu()
                 } else {
-                    toolbarDelegate.setToolbarActionMenu(
+                    val menu = toolbarDelegate.setToolbarActionMenu(
                         actionMenuResId,
-                        Toolbar.OnMenuItemClickListener { item -> screenFragment.onOptionsItemSelected(item) })
+                        Toolbar.OnMenuItemClickListener { item -> screenFragment.onActionItemSelected(item) })
+                    screenFragment.onActionMenuCreated(menu)
                 }
             } ?: run {
                 val actionMenuResId = destination.arguments[
@@ -328,9 +329,10 @@ class JetpackNavUIController(private val screenFragment: BaseScreenFragment) : B
                 if (actionMenuResId == -1) {
                     toolbarDelegate.clearToolbarActionMenu()
                 } else {
-                    toolbarDelegate.setToolbarActionMenu(
+                    val menu = toolbarDelegate.setToolbarActionMenu(
                         actionMenuResId,
-                        Toolbar.OnMenuItemClickListener { item -> screenFragment.onOptionsItemSelected(item) })
+                        Toolbar.OnMenuItemClickListener { item -> screenFragment.onActionItemSelected(item) })
+                    screenFragment.onActionMenuCreated(menu)
                 }
             }
         }

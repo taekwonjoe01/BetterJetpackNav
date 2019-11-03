@@ -21,6 +21,8 @@
 package com.hutchins.navui.jetpack
 
 import android.content.Context
+import android.view.Menu
+import android.view.MenuItem
 import com.hutchins.navui.core.BaseScreenFragment
 
 /**
@@ -32,6 +34,14 @@ open class JetpackScreenFragment : BaseScreenFragment() {
      * Reference to the [JetpackNavUIController] that provides an API to interact with the Navigation Views.
      */
     protected lateinit var jetpackNavUIController: JetpackNavUIController
+
+    open fun onActionMenuCreated(menu: Menu) {
+
+    }
+
+    open fun onActionItemSelected(item: MenuItem): Boolean {
+        return false
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

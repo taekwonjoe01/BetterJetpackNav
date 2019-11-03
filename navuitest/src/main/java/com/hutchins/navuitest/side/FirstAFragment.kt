@@ -27,12 +27,13 @@ class FirstAFragment : JetpackScreenFragment() {
         return binding.root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onActionItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.clickme -> {
                 jetpackNavUIController.setToolbarSubtitle("Look at this cool subtitle!")
+                return true
             }
         }
-        return super.onOptionsItemSelected(item)
+        return super.onActionItemSelected(item)
     }
 }
