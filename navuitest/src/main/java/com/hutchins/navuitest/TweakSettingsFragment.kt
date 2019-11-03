@@ -29,13 +29,13 @@ class TweakSettingsFragment : Fragment() {
                 jetpackNavUIController.setToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.INVISIBLE)
             }
             buttonAnimateVisible.setOnClickListener {
-                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.VISIBLE, 1000L)
+                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.VISIBLE, 500L)
             }
             buttonAnimateGone.setOnClickListener {
-                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.GONE, 1000L)
+                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.GONE, 500L)
             }
             buttonAnimateInvisible.setOnClickListener {
-                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.INVISIBLE, 1000L)
+                jetpackNavUIController.animateToolbarVisibility(JetpackToolbarDelegate.ToolbarVisibilityState.INVISIBLE, 500L)
             }
             buttonSetOverrideUp.setOnClickListener {
                 jetpackNavUIController.setToolbarOverrideUp(true)
