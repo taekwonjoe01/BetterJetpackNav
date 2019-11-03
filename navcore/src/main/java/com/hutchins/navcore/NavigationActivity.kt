@@ -218,6 +218,11 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
 
     /**
      * Details of Navigation Logic:
+     *
+     * As of 2.1.0 of the navigation component, the following statement is no longer true. We expect
+     * this callback to be called before the Fragment calls onCreateView.
+     *
+     *
      * The lifecycle of navigation is not consistent (at all) with any lifecycle of a Fragment. As a
      * result, custom code has been written to synchronize navigation lifecycle with a BaseNavFragment's
      * lifecycle. This was done in order to properly manage providing a BaseNavFragment with it's navigation
