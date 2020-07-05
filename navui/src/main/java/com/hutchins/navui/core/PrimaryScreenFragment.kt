@@ -22,26 +22,26 @@ package com.hutchins.navui.core
 
 import android.content.Context
 import androidx.navigation.NavDestination
-import com.hutchins.navcore.BaseNavFragment
+import com.hutchins.navcore.PrimaryNavFragment
 
 @Suppress("MemberVisibilityCanBePrivate")
-abstract class BaseScreenFragment : BaseNavFragment() {
+abstract class PrimaryScreenFragment : PrimaryNavFragment() {
     /**
-     * The [NavViewActivity] that this [BaseScreenFragment] lives in.
+     * The [NavViewActivity] that this [PrimaryScreenFragment] lives in.
      */
     protected lateinit var navViewActivity: NavViewActivity
 
     /**
-     * The navUIController provides an API for users of the [BaseScreenFragment] to interact at runtime with the
+     * The navUIController provides an API for users of the [PrimaryScreenFragment] to interact at runtime with the
      * [NavViewDelegate].
      */
     protected lateinit var navUiController: BaseNavUIController
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
         this.navUiController.onActive(destination, navViewActivity.navViewDelegate)
     }
 
-    override fun onNotCurrentNavFragment() {
+    override fun onStopPrimaryNavFragment() {
         this.navUiController.onInactive()
     }
 

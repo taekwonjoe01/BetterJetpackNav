@@ -19,13 +19,13 @@ class SecondRootFragment: JetpackScreenFragment() {
         (childFragment as TweakSettingsFragment).setToolbarController(jetpackNavUIController)
     }
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
-        super.onCurrentNavFragment(destination)
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
+        super.onStartPrimaryNavFragment(destination)
         Log.e("AppDebug", "SecondRootFragment onCurrentNavFragment")
     }
 
-    override fun onNotCurrentNavFragment() {
-        super.onNotCurrentNavFragment()
+    override fun onStopPrimaryNavFragment() {
+        super.onStopPrimaryNavFragment()
         Log.e("AppDebug", "SecondRootFragment onNotCurrentNavFragment")
     }
 
@@ -38,6 +38,7 @@ class SecondRootFragment: JetpackScreenFragment() {
                 findNavController().navigate(R.id.action_secondRootFragment_to_secondBFragment)
             }
         }
+
         return binding.root
     }
 }

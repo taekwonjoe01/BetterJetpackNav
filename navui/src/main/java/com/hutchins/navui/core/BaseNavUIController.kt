@@ -23,7 +23,7 @@ package com.hutchins.navui.core
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDestination
 
-abstract class BaseNavUIController(private val baseScreenFragment: BaseScreenFragment) {
+abstract class BaseNavUIController(private val primaryScreenFragment: PrimaryScreenFragment) {
     private lateinit var navUIControllerViewModel: NavUIControllerViewModel
 
     private var isInitialized = false
@@ -32,7 +32,7 @@ abstract class BaseNavUIController(private val baseScreenFragment: BaseScreenFra
 
     protected fun initController(): List<NavUISetting<*>> {
         isInitialized = true
-        navUIControllerViewModel = ViewModelProviders.of(baseScreenFragment, NavUIControllerViewModelFactory(this)).get(NavUIControllerViewModel::class.java)
+        navUIControllerViewModel = ViewModelProviders.of(primaryScreenFragment, NavUIControllerViewModelFactory(this)).get(NavUIControllerViewModel::class.java)
         return navUIControllerViewModel.navUISettings
     }
 

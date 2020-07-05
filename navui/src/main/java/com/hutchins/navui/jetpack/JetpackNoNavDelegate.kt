@@ -22,6 +22,7 @@ package com.hutchins.navui.jetpack
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import androidx.annotation.CallSuper
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,11 +31,12 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.appbar.AppBarLayout
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
-import com.hutchins.navui.core.BaseScreenFragment
+import com.hutchins.navui.core.PrimaryScreenFragment
 import com.hutchins.navui.core.NavViewActivity
 import com.hutchins.navui.core.NavViewDelegate
 
-open class JetpackNoNavDelegate(navViewActivity: NavViewActivity) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
+@Suppress("MemberVisibilityCanBePrivate")
+open class JetpackNoNavDelegate(override val navViewActivity: NavViewActivity) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
     companion object {
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
     }
@@ -67,17 +69,10 @@ open class JetpackNoNavDelegate(navViewActivity: NavViewActivity) : NavViewDeleg
      */
     open val toolbarResId: Int = R.id.toolbar
 
-    override val navViewActivity = navViewActivity
-
     private lateinit var navController: NavController
     lateinit var constraintLayout: ConstraintLayout
     lateinit var toolbar: Toolbar
     lateinit var appBarLayout: AppBarLayout
-
-    /**
-     * The reference to the [FrameLayout] that will host the [NavHostFragment]. Required by the [NavigationActivity].
-     */
-    override val navHostResourceId: Int = R.id.navHost
 
     private var showUp: Boolean = false
 
@@ -143,20 +138,20 @@ open class JetpackNoNavDelegate(navViewActivity: NavViewActivity) : NavViewDeleg
         return false
     }
 
-    override fun setUpNavigationVisible(showUp: Boolean) {
-        this.showUp = showUp
-        if (showUp) {
+    override fun setUpNavigationVisible(visible: Boolean) {
+        this.showUp = visible
+        if (visible) {
             setNavigationIcon(upDrawable)
         } else {
             setNavigationIcon(null)
         }
     }
 
-    override fun setNavViewVisible(show: Boolean) {
+    override fun setNavViewVisible(visible: Boolean) {
         // Do nothing because there is no navigation view.
     }
 
-    override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
+    override fun newInstanceNavUiController(screenFragment: PrimaryScreenFragment): BaseNavUIController {
         return JetpackNavUIController(screenFragment as JetpackScreenFragment)
     }
 

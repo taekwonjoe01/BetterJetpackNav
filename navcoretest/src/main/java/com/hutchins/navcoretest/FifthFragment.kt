@@ -1,4 +1,4 @@
-package com.hutchins.navcoresample
+package com.hutchins.navcoretest
 
 import android.os.Bundle
 import android.util.Log
@@ -6,16 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDestination
-import com.hutchins.navcore.BaseNavFragment
-import com.hutchins.navcoresample.databinding.FragmentFifthBinding
+import com.hutchins.navcore.PrimaryNavFragment
+import com.hutchins.navcoretest.databinding.FragmentFifthBinding
 
-class FifthFragment : BaseNavFragment() {
+class FifthFragment : TestablePrimaryNavFragment() {
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
+        super.onStartPrimaryNavFragment(destination)
         Log.e("AppDebug", "FifthFragment onCurrentNavFragment")
     }
 
-    override fun onNotCurrentNavFragment() {
+    override fun onStopPrimaryNavFragment() {
+        super.onStopPrimaryNavFragment()
         Log.e("AppDebug", "FifthFragment onNotCurrentNavFragment")
     }
 

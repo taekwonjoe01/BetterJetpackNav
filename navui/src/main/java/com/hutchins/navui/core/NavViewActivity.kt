@@ -28,14 +28,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.CallSuper
 import androidx.navigation.NavController
-import com.hutchins.navcore.BaseNavFragment
+import com.hutchins.navcore.PrimaryNavFragment
 import com.hutchins.navcore.NavigationActivity
 
 abstract class NavViewActivity : NavigationActivity() {
     abstract val navViewDelegate: NavViewDelegate
-
-    override val navigationHostResourceId: Int
-        get() = navViewDelegate.navHostResourceId
 
     @CallSuper
     override fun onSupportNavigateUp(): Boolean {
@@ -47,21 +44,16 @@ abstract class NavViewActivity : NavigationActivity() {
         val delegateHandled = navViewDelegate.onSupportNavigateUp()
         return if (!delegateHandled) super.onSupportNavigateUp() else true
     }
-
-    override fun onSetContentView() {
-        navViewDelegate.setContentView()
-    }
-
     @CallSuper
-    override fun onNavigationInitialized(navController: NavController) {
-        super.onNavigationInitialized(navController)
+    override fun onPrimaryNavigationInitialized(navController: NavController) {
+        super.onPrimaryNavigationInitialized(navController)
         navViewDelegate.setupNavViewWithNavController(navController)
     }
 
     @CallSuper
-    override fun onAfterSynchronizedNavigated(baseNavFragment: BaseNavFragment) {
-        super.onAfterSynchronizedNavigated(baseNavFragment)
-        if (baseNavFragment !is BaseScreenFragment) {
+    override fun afterPrimaryNavigation(primaryNavFragment: PrimaryNavFragment) {
+        super.afterPrimaryNavigation(primaryNavFragment)
+        if (primaryNavFragment !is PrimaryScreenFragment) {
             throw IllegalStateException("All Fragments used in the nav graph must inherit from BaseScreenFragment")
         }
     }

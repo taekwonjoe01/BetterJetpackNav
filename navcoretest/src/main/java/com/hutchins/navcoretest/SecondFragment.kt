@@ -1,4 +1,4 @@
-package com.hutchins.navcoresample
+package com.hutchins.navcoretest
 
 import android.os.Bundle
 import android.util.Log
@@ -7,25 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
-import com.hutchins.navcore.BaseNavFragment
-import com.hutchins.navcoresample.databinding.FragmentSecondBinding
+import com.hutchins.navcore.PrimaryNavFragment
+import com.hutchins.navcoretest.databinding.FragmentSecondBinding
 
-class SecondFragment : BaseNavFragment() {
+class SecondFragment : TestablePrimaryNavFragment() {
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
+        super.onStartPrimaryNavFragment(destination)
         Log.e("AppDebug", "SecondFragment onCurrentNavFragment")
     }
 
-    override fun onNotCurrentNavFragment() {
+    override fun onStopPrimaryNavFragment() {
+        super.onStopPrimaryNavFragment()
         Log.e("AppDebug", "SecondFragment onNotCurrentNavFragment")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentSecondBinding.inflate(inflater, container, false).apply {
-            button.setOnClickListener {
+            secondFragmentButton.setOnClickListener {
                 findNavController().navigate(R.id.action_secondFragment_to_thirdFragment)
             }
-            button2.setOnClickListener {
+            secondFragmentButton2.setOnClickListener {
                 findNavController().navigate(R.id.action_secondFragment_to_fifthFragment)
             }
         }

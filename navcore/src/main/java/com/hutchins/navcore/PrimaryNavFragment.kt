@@ -24,7 +24,6 @@ package com.hutchins.navcore
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
@@ -38,13 +37,13 @@ import androidx.navigation.NavDestination
  * [NavigationActivity]</p>
  *
  * <p>Similar to normal Fragment lifecycle callbacks, two new callbacks are added to this class
- * [onCurrentNavFragment] and [onNotCurrentNavFragment]. These methods define the Fragment's lifecycle within the
+ * [onStartPrimaryNavFragment] and [onStopPrimaryNavFragment]. These methods define the Fragment's lifecycle within the
  * Navigation engine. </p>
  *
  * <p>Additionally, two features exist for this Fragment providing overridable BACK and UP methods. See
  * [BackButtonOverrideProvider] and [UpButtonOverrideProvider]</p>
  */
-abstract class BaseNavFragment : Fragment() {
+abstract class PrimaryNavFragment : Fragment() {
     protected lateinit var navigationActivity: NavigationActivity
     protected val backButtonOverrideProvider = BackButtonOverrideProvider()
     protected val upButtonOverrideProvider = UpButtonOverrideProvider()
@@ -54,7 +53,8 @@ abstract class BaseNavFragment : Fragment() {
      *
      * <p>This can be called on a forward navigation or when this Fragment is popped off the backstack.</p>
      */
-    open fun onNotCurrentNavFragment() {
+    open fun onStopPrimaryNavFragment() {
+
     }
 
     /**
@@ -63,19 +63,15 @@ abstract class BaseNavFragment : Fragment() {
      *
      * @param destination The [NavDestination] defining this navigation event.
      */
-    open fun onCurrentNavFragment(destination: NavDestination) {
+    open fun onStartPrimaryNavFragment(destination: NavDestination) {
 
     }
-
-    // This flag is used to issue warning to consumers when the Nav state machine might be out of whack.
-    private var isCurrentNavFragment = false
 
     /**
      * Called only by [NavigationActivity] to signal to this Fragment that it is NOT the current navFragment anymore
      */
     internal fun onRemoveAsCurrentNavFragment() {
-        onNotCurrentNavFragment()
-        isCurrentNavFragment = false
+        onStopPrimaryNavFragment()
     }
 
     /**
@@ -84,21 +80,15 @@ abstract class BaseNavFragment : Fragment() {
      *
      * @param destination The [NavDestination] object defining this navigation event.
      */
-    internal fun onSetAsCurrentNavFragment(destination: NavDestination): NavigationConfig {
-        if (isCurrentNavFragment) {
-            Log.w(NavigationActivity.TAG, "onSetAsCurrentNavFragment called but it looks like this BaseNavFragment was already set as current screen. " +
-                    "Perhaps you have a non-BaseNavFragment in the navigation graph which will cause undefined behavior.")
-        }
-        isCurrentNavFragment = true
-        onCurrentNavFragment(destination)
+    internal fun onSetAsCurrentNavFragment(destination: NavDestination): PrimaryNavigationConfig {
+        onStartPrimaryNavFragment(destination)
 
-        return NavigationConfig(backButtonOverrideProvider, upButtonOverrideProvider)
+        return PrimaryNavigationConfig(backButtonOverrideProvider, upButtonOverrideProvider)
     }
 
     @CallSuper
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         if (context is NavigationActivity) {
             navigationActivity = context
         } else {
@@ -110,6 +100,10 @@ abstract class BaseNavFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // When a BaseNavFragment is built, it needs to register to the NavigationActivity.
-        navigationActivity.registerBaseNavFragment(this)
+        try {
+            navigationActivity.registerPrimaryNavFragment(this)
+        } catch(uninitializedPropertyAccessException: UninitializedPropertyAccessException) {
+            throw IllegalStateException("navigation activity not initialized. Call initPrimaryNavigation prior to any fragment transactions.")
+        }
     }
 }

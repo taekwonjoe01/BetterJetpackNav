@@ -23,13 +23,14 @@ package com.hutchins.navui.jetpack
 import android.content.Context
 import android.view.Menu
 import android.view.MenuItem
-import com.hutchins.navui.core.BaseScreenFragment
+import androidx.annotation.CallSuper
+import com.hutchins.navui.core.PrimaryScreenFragment
 
 /**
- * Convenient extension of [BaseScreenFragment] to provide references for child Fragments to have a direct reference to
+ * Convenient extension of [PrimaryScreenFragment] to provide references for child Fragments to have a direct reference to
  * the [JetpackNavUIController].
  */
-open class JetpackScreenFragment : BaseScreenFragment() {
+open class JetpackScreenFragment : PrimaryScreenFragment() {
     /**
      * Reference to the [JetpackNavUIController] that provides an API to interact with the Navigation Views.
      */
@@ -43,6 +44,7 @@ open class JetpackScreenFragment : BaseScreenFragment() {
         return false
     }
 
+    @CallSuper
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

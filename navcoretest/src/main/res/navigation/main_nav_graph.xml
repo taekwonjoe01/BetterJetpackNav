@@ -4,23 +4,23 @@
             android:id="@+id/main_nav_graph"
             app:startDestination="@id/firstFragment">
 
-    <fragment android:id="@+id/firstFragment" android:name="com.hutchins.navcoresample.FirstFragment"
+    <fragment android:id="@+id/firstFragment" android:name="com.hutchins.navcoretest.FirstFragment"
               android:label="FirstFragment">
         <action android:id="@+id/action_firstFragment_to_secondFragment" app:destination="@id/secondFragment"/>
     </fragment>
-    <fragment android:id="@+id/secondFragment" android:name="com.hutchins.navcoresample.SecondFragment"
+    <fragment android:id="@+id/secondFragment" android:name="com.hutchins.navcoretest.SecondFragment"
               android:label="SecondFragment">
         <action android:id="@+id/action_secondFragment_to_thirdFragment" app:destination="@id/thirdFragment"/>
         <action android:id="@+id/action_secondFragment_to_fifthFragment" app:destination="@id/fifthFragment"/>
     </fragment>
-    <fragment android:id="@+id/thirdFragment" android:name="com.hutchins.navcoresample.ThirdFragment"
+    <fragment android:id="@+id/thirdFragment" android:name="com.hutchins.navcoretest.ThirdFragment"
               android:label="ThirdFragment">
         <action android:id="@+id/action_thirdFragment_to_fourthFragment" app:destination="@id/fourthFragment"/>
     </fragment>
-    <fragment android:id="@+id/fourthFragment" android:name="com.hutchins.navcoresample.FourthFragment"
+    <fragment android:id="@+id/fourthFragment" android:name="com.hutchins.navcoretest.FourthFragment"
               android:label="FourthFragment">
         <action android:id="@+id/action_fourthFragment_to_fifthFragment" app:destination="@id/fifthFragment"/>
     </fragment>
-    <fragment android:id="@+id/fifthFragment" android:name="com.hutchins.navcoresample.FifthFragment"
+    <fragment android:id="@+id/fifthFragment" android:name="com.hutchins.navcoretest.FifthFragment"
               android:label="FifthFragment"/>
 </navigation>

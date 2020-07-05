@@ -36,10 +36,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
-import com.hutchins.navui.core.BaseScreenFragment
+import com.hutchins.navui.core.PrimaryScreenFragment
 import com.hutchins.navui.core.NavViewActivity
 import com.hutchins.navui.core.NavViewDelegate
 
+@Suppress("MemberVisibilityCanBePrivate")
 open class JetpackSideNavDelegate(
     override val navViewActivity: NavViewActivity, private val navigationMenuResourceId: Int
         ) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler{
@@ -106,11 +107,6 @@ open class JetpackSideNavDelegate(
     private var showUp: Boolean = false
 
     private var navigationEnabled = true
-
-    /**
-     * The reference to the [FrameLayout] that will host the [NavHostFragment]. Required by the [NavigationActivity].
-     */
-    override val navHostResourceId: Int = R.id.navHost
 
     internal val jetpackToolbarDelegate: JetpackToolbarDelegate by lazy {
         JetpackToolbarDelegate(
@@ -201,8 +197,8 @@ open class JetpackSideNavDelegate(
         }
     }
 
-    override fun setUpNavigationVisible(showUp: Boolean) {
-        this.showUp = showUp
+    override fun setUpNavigationVisible(visible: Boolean) {
+        this.showUp = visible
         setNavViewVisible(this.navigationEnabled)
     }
 
@@ -230,8 +226,8 @@ open class JetpackSideNavDelegate(
         }
     }
 
-    override fun setNavViewVisible(show: Boolean) {
-        if (show) {
+    override fun setNavViewVisible(visible: Boolean) {
+        if (visible) {
             setNavigationIcon(upDrawable)
             setToolbarUpIndicator(!showUp)
         } else {
@@ -243,10 +239,10 @@ open class JetpackSideNavDelegate(
             }
         }
 
-        updateNavigationEnabled(show)
+        updateNavigationEnabled(visible)
     }
 
-    override fun newInstanceNavUiController(screenFragment: BaseScreenFragment): BaseNavUIController {
+    override fun newInstanceNavUiController(screenFragment: PrimaryScreenFragment): BaseNavUIController {
         return JetpackNavUIController(screenFragment as JetpackScreenFragment)
     }
 

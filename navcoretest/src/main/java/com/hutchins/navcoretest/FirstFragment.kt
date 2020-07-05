@@ -1,4 +1,4 @@
-package com.hutchins.navcoresample
+package com.hutchins.navcoretest
 
 import android.os.Bundle
 import android.util.Log
@@ -7,22 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
-import com.hutchins.navcore.BaseNavFragment
-import com.hutchins.navcoresample.databinding.FragmentFirstBinding
+import com.hutchins.navcore.PrimaryNavFragment
+import com.hutchins.navcoretest.databinding.FragmentFirstBinding
 
-class FirstFragment : BaseNavFragment() {
+class FirstFragment : TestablePrimaryNavFragment() {
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
+        super.onStartPrimaryNavFragment(destination)
         Log.e("AppDebug", "FirstFragment onCurrentNavFragment")
     }
 
-    override fun onNotCurrentNavFragment() {
+    override fun onStopPrimaryNavFragment() {
+        super.onStopPrimaryNavFragment()
         Log.e("AppDebug", "FirstFragment onNotCurrentNavFragment")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentFirstBinding.inflate(inflater, container, false).apply {
-            button.setOnClickListener {
+            firstFragmentButton.setOnClickListener {
                 findNavController().navigate(R.id.action_firstFragment_to_secondFragment)
             }
         }

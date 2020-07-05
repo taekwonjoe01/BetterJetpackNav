@@ -22,131 +22,84 @@
 
 package com.hutchins.navcore
 
-import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
-import java.lang.ref.WeakReference
+import java.lang.Exception
 
 /**
  * NavigationActivity defines a Navigation pattern that allows for safe access of Navigation lifecycle events to a Fragment.
  * This Activity maintains a state machine that keeps track of Fragment transactions within the [NavController] and provides
- * a lifecycle of these navigation transitions through methods calls [BaseNavFragment.onCurrentNavFragment] and
- * [BaseNavFragment.onRemoveAsCurrentNavFragment].
- *
+ * a lifecycle of these navigation transitions through methods calls [PrimaryNavFragment.onStartPrimaryNavFragment] and
+ * [PrimaryNavFragment.onStopPrimaryNavFragment].
  *
  * <p>This Activity must be used with the Navigation Architecture component and children must provide the resource Id to
- * the navigation graph. All [NavDestination]s within the navigation graph must be children of [BaseNavFragment] as that is
+ * the navigation graph. All [NavDestination]s within the navigation graph must be children of [PrimaryNavFragment] as that is
  * the only way we can keep track of the navigation backstack state machine.</p>
  *
- * <p> The Navigation lifecycle guarantees that only one [BaseNavFragment] will be inside the [BaseNavFragment.onCurrentNavFragment] lifecycle
+ * <p> The Navigation lifecycle guarantees that only one [PrimaryNavFragment] will be inside the [PrimaryNavFragment.onStartPrimaryNavFragment] lifecycle
  * at a time. This is useful to know for many reasons, one common one is synchronization around a Fragment's access to a
- * "Navigation View" held by the [Activity]. Generally, a toolbar is held at the Activity level, but a Fragment may want
+ * "Navigation View" held by the [AppCompatActivity]. Generally, a toolbar is held at the Activity level, but a Fragment may want
  * to change the title or other features. Common bugs can occur if the Fragment attempts to do this at invalid times close to
  * Lifecycle transitions. This pattern explicitly defines that so a Fragment can know when it is safe to do these operations.</p>
  *
- * <p> This Navigation pattern also provides convenient means for a [BaseNavFragment] to register for callbacks on common
+ * <p> This Navigation pattern also provides convenient means for a [PrimaryNavFragment] to register for callbacks on common
  * navigation events like [onBackPressed] and [onSupportNavigateUp] and optionally handle those events themselves. See
  * [UpButtonOverrideProvider] and [BackButtonOverrideProvider].</p>
  */
-abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
+abstract class NavigationActivity : AppCompatActivity() {
     companion object {
         const val TAG = "NavCore"
     }
-    protected lateinit var navController: NavController
-
-    /**
-     * Called during [AppCompatActivity.onCreate]. A child must provide a resource id to a [FrameLayout] that is
-     * the "navigation host" view for [BaseNavFragment]'s.
-     *
-     * A Common layout pattern for an Activity is to have a Toolbar and a Frame for Fragments to be inflated into. The
-     * Navigation Architecture component promotes this as well. This Base [AppCompatActivity] needs to know where to inflate
-     * the [NavHostFragment].
-     */
-    abstract val navigationHostResourceId: Int
-
-    /**
-     * Called during Called during [AppCompatActivity][onCreate]. A child must provide the reference to the navigation graph.
-     *
-     * Note navigation graphs should only have [NavDestination]s that inherit [BaseNavFragment].
-     */
-    abstract val navigationGraphResourceId: Int
-
-    /**
-     * Called during Called during [AppCompatActivity][onCreate]. A child must inflate the activity's basic layout and
-     * provide references to the navigation graph resource id and a [FrameLayout] where the [NavHostFragment] will be inflated.
-     * Those two resources are provided in separate calls that will be invoked during [onCreate]. See [navigationGraphResourceId] and
-     * [navigationHostResourceId]
-     */
-    abstract fun onSetContentView()
+    protected lateinit var primaryNavController: NavController
 
     /**
      * Called during Called during [AppCompatActivity][onCreate]. This will be called at the end of [onCreate] providing
      * a reference to the [NavController] this activity will use during its lifetime.
      */
-    open fun onNavigationInitialized(navController: NavController) {
-
-    }
-
-    /**
-     * Called on transitions of the [NavigationActivity]s internal state machine, providing a reference to the currently
-     * active [BaseNavFragment].
-     *
-     * @param baseNavFragment The currently active BaseNavFragment.
-     */
-    @Deprecated("Use onAfterSynchronizedNavigated instead")
-    open fun onNavigated(baseNavFragment: BaseNavFragment) {
+    protected open fun onPrimaryNavigationInitialized(navController: NavController) {
 
     }
 
     /**
      * Called when a baseNavFragment navigation exchange is about to occur.
      */
-    open fun onBeforeSynchronizedNavigated() {
+    protected open fun beforePrimaryNavigation() {
 
     }
 
     /**
      * Called after the baseNavFragments have swapped and the view created.
      *
-     * @param baseNavFragment The currently active BaseNavFragment.
+     * @param primaryNavFragment The currently active BaseNavFragment.
      */
-    open fun onAfterSynchronizedNavigated(baseNavFragment: BaseNavFragment) {
+    protected open fun afterPrimaryNavigation(primaryNavFragment: PrimaryNavFragment) {
 
     }
 
-    private val baseNavFragments = ArrayList<WeakReference<BaseNavFragment>>()
-    private var currentNavigationConfig: NavigationConfig? = null
+    private var firstFragmentSet = false
+    private lateinit var currentPrimaryNavFragmentReference: PrimaryNavFragment
+    private lateinit var currentPrimaryNavigationConfig: PrimaryNavigationConfig
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            val navHostFragment = NavHostFragment.create(navigationGraphResourceId)
-
-            onCreateInternal(navHostFragment)
-        } else {
-            val navHostFragment = supportFragmentManager.findFragmentById(navigationHostResourceId) as NavHostFragment
-
-            onCreateInternal(navHostFragment)
-        }
-    }
-
-    private fun onCreateInternal(navHostFragment: NavHostFragment) {
-        // Set the layout view into our window.
-        onSetContentView()
-        // Immediately and synchronously insert the NavHostFragment into our navHost section of the UI.
-        supportFragmentManager.beginTransaction()
-            .replace(navigationHostResourceId, navHostFragment)
-            .setPrimaryNavigationFragment(navHostFragment) // this is the equivalent to app:defaultNavHost="true"
-            .commitNow()
-        navController = navHostFragment.navController
+    /**
+     * Initializer function the implementing activity should call when the [getSupportFragmentManager]
+     * has been committed with
+     */
+    fun initPrimaryNavigation() {
+        val navHostFragment = supportFragmentManager.primaryNavigationFragment?.let {
+            try {
+                it as NavHostFragment
+            } catch (e: Exception) {
+                throw IllegalStateException("Cannot init Primary Navigation. No navHostFragment set as " +
+                        "primaryNavigationFragment on supportFragmentManager.")
+            }
+        } ?: throw IllegalStateException("Cannot init Primary Navigation. No navHostFragment set as " +
+                "primaryNavigationFragment on supportFragmentManager.")
+        this.primaryNavController = navHostFragment.navController
         // If the view Delegate wants to connect the Navigation Controller to its view, it can do so
         // in this call. Generally a side nav will want to connect, also an ActionBar.
-        onNavigationInitialized(navController)
-        navController.addOnDestinationChangedListener(this)
+        onPrimaryNavigationInitialized(primaryNavController)
     }
 
     /**
@@ -156,44 +109,22 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
      * before or after the onDestinationChanged callback occurs in the NavController. Empirically, I have gathered this behavior as it differs
      * between forward, back, and up navigation events. Not all events are equal.
      */
-    internal fun registerBaseNavFragment(baseNavFragment: BaseNavFragment) {
-        baseNavFragments.add(WeakReference(baseNavFragment))
-        Log.i(TAG, "Registering baseNavFragment. Current size (including this): " + baseNavFragments.size)
-        if (baseNavFragments.size > 2) {
-            Log.w(TAG, "Warning - more than two baseNavFragments are registered, this can lead to undefined behavior.")
-        }
+    internal fun registerPrimaryNavFragment(primaryNavFragment: PrimaryNavFragment) {
+        firstFragmentSet.apply {
+            beforePrimaryNavigation()
 
-        conditionallyUnsetCurrentBaseNavFragment()
-        setCurrentBaseNavFragment()
-    }
-
-    /**
-     * Let's avoid memory leaks and only hold references to Fragments that are active.
-     */
-    private fun conditionallyUnsetCurrentBaseNavFragment() {
-        if (baseNavFragments.size > 1) {
-            val pageFragment = baseNavFragments.removeAt(0)
-            pageFragment.get()?.apply {
-                this.onRemoveAsCurrentNavFragment()
+            if (this) {
+                currentPrimaryNavFragmentReference.onRemoveAsCurrentNavFragment()
             }
+            currentPrimaryNavFragmentReference = primaryNavFragment
+
+            val navConfig = primaryNavFragment.onSetAsCurrentNavFragment(primaryNavController.currentDestination!!)
+            currentPrimaryNavigationConfig = navConfig
+
+            afterPrimaryNavigation(primaryNavFragment)
+
+            firstFragmentSet = true
         }
-    }
-
-    /**
-     * This will throw exception if called at the wrong time. We assert that things are not null when
-     * this is called empirically, as the design expects these to be non null here, and if that is
-     * ever false, we have a big big problem.
-     */
-    @Suppress("DEPRECATION")
-    private fun setCurrentBaseNavFragment() {
-        onBeforeSynchronizedNavigated()
-
-        val current = baseNavFragments[0].get()!!
-        val navConfig = current.onSetAsCurrentNavFragment(navController.currentDestination!!)
-        currentNavigationConfig = navConfig
-
-        onNavigated(current)
-        onAfterSynchronizedNavigated(current)
     }
 
     override fun onBackPressed() {
@@ -209,37 +140,20 @@ abstract class NavigationActivity : AppCompatActivity(), NavController.OnDestina
     }
 
     fun maybeDoBackButtonOverride(): Boolean {
-        return currentNavigationConfig?.backButtonOverrideProvider?.onBackPressed() ?: false
+        return if (firstFragmentSet) currentPrimaryNavigationConfig.backButtonOverrideProvider.onBackPressed() else false
     }
 
     fun maybeDoNavigateUpOverride(): Boolean {
-        return currentNavigationConfig?.upButtonOverrideProvider?.onSupportNavigateUp() ?: false
-    }
-
-    /**
-     * Details of Navigation Logic:
-     *
-     * As of 2.1.0 of the navigation component, the following statement is no longer true. We expect
-     * this callback to be called before the Fragment calls onCreateView.
-     *
-     *
-     * The lifecycle of navigation is not consistent (at all) with any lifecycle of a Fragment. As a
-     * result, custom code has been written to synchronize navigation lifecycle with a BaseNavFragment's
-     * lifecycle. This was done in order to properly manage providing a BaseNavFragment with it's navigation
-     * information bundle parameters so it can potentially customize its view, as well as allow for
-     * inheritors to define a means to let a BaseNavFragment that it alone is the current destination.
-     */
-    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
-
+        return if (firstFragmentSet) currentPrimaryNavigationConfig.upButtonOverrideProvider.onSupportNavigateUp() else false
     }
 }
 
 /**
- * Config class returned by [BaseNavFragment] when the [NavigationActivity] has notified it that it is the active
+ * Config class returned by [PrimaryNavFragment] when the [NavigationActivity] has notified it that it is the active
  * Fragment in the navigation. These providers are overrides a Fragments can optionally set to receive callbacks
  * when up or back events occur.
  */
-open class NavigationConfig(val backButtonOverrideProvider: BackButtonOverrideProvider, val upButtonOverrideProvider: UpButtonOverrideProvider)
+open class PrimaryNavigationConfig(val backButtonOverrideProvider: BackButtonOverrideProvider, val upButtonOverrideProvider: UpButtonOverrideProvider)
 
 interface NavigationOverrideClickListener {
     fun onClick(): Boolean

@@ -24,6 +24,7 @@ package com.hutchins.navui.jetpack
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -85,7 +86,7 @@ class JetpackToolbarDelegate(
         ToolbarVisibilityState.VISIBLE
         private set
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     private val constraintSetToolbarVisible: ConstraintSet
             get() =

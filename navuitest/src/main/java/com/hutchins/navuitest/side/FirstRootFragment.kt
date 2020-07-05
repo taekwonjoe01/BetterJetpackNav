@@ -19,13 +19,13 @@ class FirstRootFragment : JetpackScreenFragment() {
         (childFragment as TweakSettingsFragment).setToolbarController(jetpackNavUIController)
     }
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
-        super.onCurrentNavFragment(destination)
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
+        super.onStartPrimaryNavFragment(destination)
         Log.e("AppDebug", "FirstRootFragment onCurrentNavFragment")
     }
 
-    override fun onNotCurrentNavFragment() {
-        super.onNotCurrentNavFragment()
+    override fun onStopPrimaryNavFragment() {
+        super.onStopPrimaryNavFragment()
         Log.e("AppDebug", "FirstRootFragment onNotCurrentNavFragment")
     }
 

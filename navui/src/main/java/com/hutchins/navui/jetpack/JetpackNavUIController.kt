@@ -26,16 +26,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.hutchins.navui.R
 import com.hutchins.navui.core.BaseNavUIController
-import com.hutchins.navui.core.BaseScreenFragment
+import com.hutchins.navui.core.PrimaryScreenFragment
 import com.hutchins.navui.core.NavUISetting
 import com.hutchins.navui.core.NavViewDelegate
 
 /**
  * Implementation of a [BaseNavUIController] that is used by the [JetpackBottomNavDelegate], [JetpackNoNavDelegate], and
- * [JetpackSideNavDelegate]. This provides and API and state management for [BaseScreenFragment]'s to provide a configuration
+ * [JetpackSideNavDelegate]. This provides and API and state management for [PrimaryScreenFragment]'s to provide a configuration
  * of the [NavViewActivity]'s view state when their screens are active in the Navigation lifecycle.
  *
- * This class maintains each [BaseScreenFragment]'s state view a [ViewModel] and works with respect to screen rotations.
+ * This class maintains each [PrimaryScreenFragment]'s state view a [ViewModel] and works with respect to screen rotations.
  */
 @Suppress("unused")
 class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) : BaseNavUIController(screenFragment) {
@@ -45,7 +45,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
         private const val TOOLBAR_VISIBILITY_INVISIBLE = 1
         private const val TOOLBAR_VISIBILITY_GONE = 2
     }
-    private val context: Context = screenFragment.context!!
+    private val context: Context = screenFragment.requireContext()
 
     private val titleSetting: ToolbarTitleSetting
     private val subTitleSetting: ToolbarSubTitleSetting
@@ -77,7 +77,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * when it is made active. If a subsequent call to this method is made before the controller
      * becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      *
      * @param jetpackToolbarVisibility The visibility to set this toolbar, or null if you want to fallback
      *          to the navigation graph arguments.
@@ -97,7 +97,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      *
      * @param title The title to set this toolbar, or null if you want to fallback
      *          to the navigation graph arguments.
@@ -113,7 +113,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      *
      * @param subtitle The subtitle to set this toolbar, or null if you want to fallback
      *          to the navigation graph arguments.
@@ -129,7 +129,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      *
      * @param overrideUp Whether or not to override the default up behavior of the nav graph. Use null to
      *          fall back to the nav graph argument for this destination.
@@ -145,7 +145,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      *
      * @param showNavView Whether or not to show the nav view. Use null to
      *          fall back to the nav graph argument for this destination.
@@ -162,7 +162,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      */
     fun animateToolbarVisibility(toVisibilityState: JetpackToolbarDelegate.ToolbarVisibilityState, animationDurationMs: Long) {
         toolbarVisibilitySetting.setting = ToolbarVisibilityTransition.AnimateTransition(toVisibilityState, animationDurationMs)
@@ -176,7 +176,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
      * active, the action will be queued to run immediately when it is made active. If a subsequent call to this method is
      * made before the controller becomes active, it will override any previous calls.
      *
-     * This state will be maintained for as long as the [BaseScreenFragment] that holds this controller is alive.
+     * This state will be maintained for as long as the [PrimaryScreenFragment] that holds this controller is alive.
      *
      * @param actionMenuResId  Use null to
      *          fall back to the nav graph argument for this destination.

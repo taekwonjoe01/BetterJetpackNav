@@ -19,13 +19,13 @@ class FourthRootFragment: JetpackScreenFragment() {
         (childFragment as TweakSettingsFragment).setToolbarController(jetpackNavUIController)
     }
 
-    override fun onCurrentNavFragment(destination: NavDestination) {
-        super.onCurrentNavFragment(destination)
+    override fun onStartPrimaryNavFragment(destination: NavDestination) {
+        super.onStartPrimaryNavFragment(destination)
         Log.e("AppDebug", "FourthRootFragment onCurrentNavFragment")
     }
 
-    override fun onNotCurrentNavFragment() {
-        super.onNotCurrentNavFragment()
+    override fun onStopPrimaryNavFragment() {
+        super.onStopPrimaryNavFragment()
         Log.e("AppDebug", "FourthRootFragment onNotCurrentNavFragment")
     }
 

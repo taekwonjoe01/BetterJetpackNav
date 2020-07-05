@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Joseph Hutchins
+ * Copyright 2020 Joseph Hutchins
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without
@@ -18,37 +18,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.hutchins.navui.core
+package com.hutchins.navcoretest
 
-import android.os.Bundle
-import androidx.navigation.NavController
+import androidx.fragment.app.Fragment
 
-interface NavViewDelegate {
-    val navViewActivity: NavViewActivity
-
-    /**
-     * Using the delegate pattern, we let this object inflate and create a view that will be the activity's content view.
-     */
-    fun setContentView()
-
-    /**
-     * After the navController is instantiated and setup with the navHostFragment, allow the delegate to connect the controller
-     * with any view setup it needs.
-     */
-    fun setupNavViewWithNavController(navController: NavController)
-
-    /**
-     * Handle supportNavigateUp calls that the activity gets.
-     */
-    fun onSupportNavigateUp(): Boolean
-
-    /**
-     * Handle back button calls that the activity gets.
-     */
-    fun onBackPressed(): Boolean
-
-    fun newInstanceNavUiController(screenFragment: PrimaryScreenFragment): BaseNavUIController
-
-    fun saveState(bundle: Bundle)
-    fun restoreState(bundle: Bundle)
-}
+/**
+ * Created by joeyhutchins on 7/5/20.
+ */
+class TestFragment: Fragment()
