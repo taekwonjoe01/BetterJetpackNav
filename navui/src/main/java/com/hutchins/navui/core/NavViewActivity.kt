@@ -32,6 +32,9 @@ import com.hutchins.navcore.PrimaryNavFragment
 import com.hutchins.navcore.NavigationActivity
 
 abstract class NavViewActivity : NavigationActivity() {
+    /**
+     * Delegate that dictates the Navigation View chosen by this activity.
+     */
     abstract val navViewDelegate: NavViewDelegate
 
     @CallSuper
@@ -54,7 +57,7 @@ abstract class NavViewActivity : NavigationActivity() {
     override fun afterPrimaryNavigation(primaryNavFragment: PrimaryNavFragment) {
         super.afterPrimaryNavigation(primaryNavFragment)
         if (primaryNavFragment !is PrimaryScreenFragment) {
-            throw IllegalStateException("All Fragments used in the nav graph must inherit from BaseScreenFragment")
+            throw IllegalStateException("All PrimaryNavFragments used in the nav graph must inherit from PrimaryScreenFragment")
         }
     }
 

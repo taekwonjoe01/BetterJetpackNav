@@ -23,6 +23,11 @@ package com.hutchins.navui.core
 import android.os.Bundle
 import androidx.navigation.NavController
 
+/**
+ * Delegate interface describing Navigation View functions that must be fulfilled to satisfy the Jetpack
+ * Navigation Architecture Component. This interface allows for extensibility and flexibility in creating
+ * new custom navigation containers for an Activity.
+ */
 interface NavViewDelegate {
     val navViewActivity: NavViewActivity
 
@@ -47,8 +52,23 @@ interface NavViewDelegate {
      */
     fun onBackPressed(): Boolean
 
+    /**
+     * When implementing a custom Navigation View, a [NavViewDelegate] must be defined as well as a
+     * [BaseNavUIController]. Certain Fragment/Activity lifecycle events require a re-instantiation
+     * of the custom [BaseNavUIController], and this method will be called when this is needed.
+     *
+     * This method should return a new instance of the custom [BaseNavUIController] for the
+     * [PrimaryScreenFragment]s to use at runtime.
+     */
     fun newInstanceNavUiController(screenFragment: PrimaryScreenFragment): BaseNavUIController
 
+    /**
+     * Called when the [NavViewActivity] is saving state. Deriving classes can save their state.
+     */
     fun saveState(bundle: Bundle)
+
+    /**
+     * Called when the [NavViewActivity] is restoring state. Deriving classes can restore their state.
+     */
     fun restoreState(bundle: Bundle)
 }

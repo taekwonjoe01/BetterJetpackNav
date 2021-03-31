@@ -30,11 +30,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
 
 /**
- * BaseNavFragment defines a specific Fragment implementation that receives contextual information about the
+ * Defines a specific Fragment implementation that receives contextual information about the
  * navigation lifecycle as well as features to interact better with that lifecycle.
  *
  * <p>This Fragment is intended to be used as a Base class for all of your Fragments in a navigation graph provided to a
- * [NavigationActivity]</p>
+ * [NavigationActivity]. Only one [PrimaryNavFragment] will ever be in the active state at a time, which means
+ * child implementations of this class can assume exclusive access to the Navigation Lifecycle betwee calls of
+ * [onStartPrimaryNavFragment] and [onStopPrimaryNavFragment]</p>
  *
  * <p>Similar to normal Fragment lifecycle callbacks, two new callbacks are added to this class
  * [onStartPrimaryNavFragment] and [onStopPrimaryNavFragment]. These methods define the Fragment's lifecycle within the

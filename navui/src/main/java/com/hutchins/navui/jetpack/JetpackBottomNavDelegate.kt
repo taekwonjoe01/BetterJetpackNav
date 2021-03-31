@@ -43,7 +43,7 @@ import com.hutchins.navui.core.NavViewDelegate
  *
  * This class can be used as-is as a [NavViewDelegate] for any activity.
  */
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "SpellCheckingInspection")
 open class JetpackBottomNavDelegate(
     override val navViewActivity: NavViewActivity,
     private val navigationMenuResourceId: Int

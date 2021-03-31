@@ -29,7 +29,7 @@ import androidx.navigation.fragment.NavHostFragment
 import java.lang.Exception
 
 /**
- * NavigationActivity defines a Navigation pattern that allows for safe access of Navigation lifecycle events to a Fragment.
+ * NavigationActivity defines a Navigation pattern that allows for safe access to Navigation lifecycle events to a Fragment.
  * This Activity maintains a state machine that keeps track of Fragment transactions within the [NavController] and provides
  * a lifecycle of these navigation transitions through methods calls [PrimaryNavFragment.onStartPrimaryNavFragment] and
  * [PrimaryNavFragment.onStopPrimaryNavFragment].
@@ -42,7 +42,7 @@ import java.lang.Exception
  * at a time. This is useful to know for many reasons, one common one is synchronization around a Fragment's access to a
  * "Navigation View" held by the [AppCompatActivity]. Generally, a toolbar is held at the Activity level, but a Fragment may want
  * to change the title or other features. Common bugs can occur if the Fragment attempts to do this at invalid times close to
- * Lifecycle transitions. This pattern explicitly defines that so a Fragment can know when it is safe to do these operations.</p>
+ * Lifecycle transitions. This pattern explicitly defines lifecycle for a Fragment to know when it is safe to do these operations.</p>
  *
  * <p> This Navigation pattern also provides convenient means for a [PrimaryNavFragment] to register for callbacks on common
  * navigation events like [onBackPressed] and [onSupportNavigateUp] and optionally handle those events themselves. See
@@ -55,7 +55,7 @@ abstract class NavigationActivity : AppCompatActivity() {
     protected lateinit var primaryNavController: NavController
 
     /**
-     * Called during Called during [AppCompatActivity][onCreate]. This will be called at the end of [onCreate] providing
+     * Called during [AppCompatActivity].[onCreate]. This will be called at the end of [onCreate] providing
      * a reference to the [NavController] this activity will use during its lifetime.
      */
     protected open fun onPrimaryNavigationInitialized(navController: NavController) {
@@ -63,14 +63,14 @@ abstract class NavigationActivity : AppCompatActivity() {
     }
 
     /**
-     * Called when a baseNavFragment navigation exchange is about to occur.
+     * Called when a [PrimaryNavFragment] navigation exchange is about to occur.
      */
     protected open fun beforePrimaryNavigation() {
 
     }
 
     /**
-     * Called after the baseNavFragments have swapped and the view created.
+     * Called after the [PrimaryNavFragment] has swapped and the view created.
      *
      * @param primaryNavFragment The currently active BaseNavFragment.
      */
@@ -130,7 +130,7 @@ abstract class NavigationActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (!maybeDoBackButtonOverride()) {
             // Distinguish this navigation.
-            //isHardwareBackNavigation = true
+            // isHardwareBackNavigation = true
             super.onBackPressed()
         }
     }
@@ -150,15 +150,20 @@ abstract class NavigationActivity : AppCompatActivity() {
 
 /**
  * Config class returned by [PrimaryNavFragment] when the [NavigationActivity] has notified it that it is the active
- * Fragment in the navigation. These providers are overrides a Fragments can optionally set to receive callbacks
- * when up or back events occur.
+ * Fragment in the navigation.
  */
 open class PrimaryNavigationConfig(val backButtonOverrideProvider: BackButtonOverrideProvider, val upButtonOverrideProvider: UpButtonOverrideProvider)
 
+/**
+ * Listener callback when a Navigation override occurs.
+ */
 interface NavigationOverrideClickListener {
     fun onClick(): Boolean
 }
 
+/**
+ * Delegate class that manages setting an override for the Back Button press events while this [PrimaryNavFragment] is active.
+ */
 class BackButtonOverrideProvider {
     private var backButtonOverride: NavigationOverrideClickListener? = null
 
@@ -178,6 +183,10 @@ class BackButtonOverrideProvider {
         backButtonOverride = listener
     }
 }
+
+/**
+ * Delegate class that manages setting an override for the Up Button press events while this [PrimaryNavFragment] is active.
+ */
 class UpButtonOverrideProvider {
     private var upButtonOverride: NavigationOverrideClickListener? = null
 
