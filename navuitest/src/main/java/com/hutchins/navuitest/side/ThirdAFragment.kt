@@ -22,6 +22,7 @@ class ThirdAFragment : JetpackScreenFragment() {
             button.setOnClickListener {
                 findNavController().navigate(R.id.action_thirdAFragment_to_thirdBFragment)
             }
+            jetpackNavUIController.setNavViewVisibility(false)
         }
         return binding.root
     }
