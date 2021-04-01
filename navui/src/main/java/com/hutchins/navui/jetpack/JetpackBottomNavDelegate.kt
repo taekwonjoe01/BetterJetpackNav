@@ -27,6 +27,7 @@ import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -46,7 +47,8 @@ import com.hutchins.navui.core.NavViewDelegate
 @Suppress("MemberVisibilityCanBePrivate", "SpellCheckingInspection")
 open class JetpackBottomNavDelegate(
     override val navViewActivity: NavViewActivity,
-    private val navigationMenuResourceId: Int
+    private val navigationMenuResourceId: Int,
+    private val navGraphResId:Int
 ) : NavViewDelegate, JetpackNavUIController.TestNavViewDelegate, JetpackToolbarDelegate.UpVisibilityHandler {
     companion object {
         const val BUNDLE_KEY_UP_STATE = "BUNDLE_KEY_UP_STATE"
@@ -87,6 +89,11 @@ open class JetpackBottomNavDelegate(
      * The reference to the [BottomNavigationView] required by this [NavViewDelegate].
      */
     open val bottomNavResId: Int = R.id.bottomNav
+
+    override fun getNavHostFragment(): NavHostFragment {
+        return navViewActivity.supportFragmentManager.findFragmentById(R.id.navHost) as? NavHostFragment
+            ?: NavHostFragment.create(navGraphResId)
+    }
 
     private lateinit var navController: NavController
     lateinit var constraintLayout: ConstraintLayout

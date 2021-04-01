@@ -22,6 +22,7 @@ package com.hutchins.navui.core
 
 import android.os.Bundle
 import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 
 /**
  * Delegate interface describing Navigation View functions that must be fulfilled to satisfy the Jetpack
@@ -30,6 +31,13 @@ import androidx.navigation.NavController
  */
 interface NavViewDelegate {
     val navViewActivity: NavViewActivity
+
+    /**
+     * Called after setContentView. Return the instance of NavHostFragment. If the NavHostFragment
+     * was declared in xml, simply find it by id and return it here. Can also utilize
+     * [NavHostFragment.create] methods, but be mindful of lifecycle.
+     */
+    fun getNavHostFragment(): NavHostFragment
 
     /**
      * Using the delegate pattern, we let this object inflate and create a view that will be the activity's content view.

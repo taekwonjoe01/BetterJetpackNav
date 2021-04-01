@@ -30,12 +30,25 @@ import androidx.annotation.CallSuper
 import androidx.navigation.NavController
 import com.hutchins.navcore.PrimaryNavFragment
 import com.hutchins.navcore.NavigationActivity
+import com.hutchins.navui.R
 
 abstract class NavViewActivity : NavigationActivity() {
     /**
      * Delegate that dictates the Navigation View chosen by this activity.
      */
     abstract val navViewDelegate: NavViewDelegate
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        navViewDelegate.setContentView()
+        val navHostFragment = navViewDelegate.getNavHostFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.navHost, navHostFragment)
+            .setPrimaryNavigationFragment(navHostFragment)
+            .commitNow()
+        initPrimaryNavigation()
+    }
 
     @CallSuper
     override fun onSupportNavigateUp(): Boolean {
@@ -47,6 +60,7 @@ abstract class NavViewActivity : NavigationActivity() {
         val delegateHandled = navViewDelegate.onSupportNavigateUp()
         return if (!delegateHandled) super.onSupportNavigateUp() else true
     }
+
     @CallSuper
     override fun onPrimaryNavigationInitialized(navController: NavController) {
         super.onPrimaryNavigationInitialized(navController)
