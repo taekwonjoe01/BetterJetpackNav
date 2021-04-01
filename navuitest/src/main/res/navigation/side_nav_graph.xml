@@ -88,6 +88,11 @@
             android:name="@string/navigation_toolbar_visibility"
             app:argType="reference"
             android:defaultValue="@integer/navigation_toolbar_visibility_visible"/>
+
+        <argument
+            android:name="@string/navigation_toolbar_action_menu"
+            app:argType="reference"
+            android:defaultValue="@menu/first_a_action_menu"/>
     </fragment>
     <fragment android:id="@+id/thirdFourthEFragment" android:name="com.hutchins.navuitest.side.ThirdFourthEFragment"
               android:label="ThirdFourthEFragment">
