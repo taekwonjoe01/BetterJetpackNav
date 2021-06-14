@@ -27,6 +27,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
 
@@ -44,7 +45,10 @@ import androidx.navigation.NavDestination
  * <p>Additionally, two features exist for this Fragment providing overridable BACK and UP methods. See
  * [BackButtonOverrideProvider] and [UpButtonOverrideProvider]</p>
  */
-abstract class BaseNavFragment : Fragment() {
+abstract class BaseNavFragment : Fragment {
+    constructor() : super()
+    constructor(@LayoutRes contentLayoutId: Int) : super(contentLayoutId)
+
     protected lateinit var navigationActivity: NavigationActivity
     protected val backButtonOverrideProvider = BackButtonOverrideProvider()
     protected val upButtonOverrideProvider = UpButtonOverrideProvider()

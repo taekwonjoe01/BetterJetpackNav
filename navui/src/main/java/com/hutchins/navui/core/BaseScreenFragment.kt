@@ -21,11 +21,15 @@
 package com.hutchins.navui.core
 
 import android.content.Context
+import androidx.annotation.LayoutRes
 import androidx.navigation.NavDestination
 import com.hutchins.navcore.BaseNavFragment
 
 @Suppress("MemberVisibilityCanBePrivate")
-abstract class BaseScreenFragment : BaseNavFragment() {
+abstract class BaseScreenFragment : BaseNavFragment {
+    constructor() : super()
+    constructor(@LayoutRes contentLayoutId: Int) : super(contentLayoutId)
+
     /**
      * The [NavViewActivity] that this [BaseScreenFragment] lives in.
      */

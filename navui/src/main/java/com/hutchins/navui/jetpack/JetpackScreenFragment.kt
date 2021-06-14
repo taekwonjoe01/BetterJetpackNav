@@ -23,13 +23,17 @@ package com.hutchins.navui.jetpack
 import android.content.Context
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.LayoutRes
 import com.hutchins.navui.core.BaseScreenFragment
 
 /**
  * Convenient extension of [BaseScreenFragment] to provide references for child Fragments to have a direct reference to
  * the [JetpackNavUIController].
  */
-open class JetpackScreenFragment : BaseScreenFragment() {
+open class JetpackScreenFragment : BaseScreenFragment {
+    constructor() : super()
+    constructor(@LayoutRes contentLayoutId: Int) : super(contentLayoutId)
+
     /**
      * Reference to the [JetpackNavUIController] that provides an API to interact with the Navigation Views.
      */
