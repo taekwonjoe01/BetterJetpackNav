@@ -24,13 +24,17 @@ import android.content.Context
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import com.hutchins.navui.core.PrimaryScreenFragment
 
 /**
  * Convenient extension of [PrimaryScreenFragment] to provide references for child Fragments to have a direct reference to
  * the [JetpackNavUIController].
  */
-open class JetpackScreenFragment : PrimaryScreenFragment() {
+open class JetpackScreenFragment : PrimaryScreenFragment {
+    constructor() : super()
+    constructor(@LayoutRes contentLayoutId: Int ) : super(contentLayoutId)
+
     /**
      * Reference to the [JetpackNavUIController] that provides an API to interact with the Navigation Views.
      */

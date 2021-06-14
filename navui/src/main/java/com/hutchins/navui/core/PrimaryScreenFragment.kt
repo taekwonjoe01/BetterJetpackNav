@@ -21,11 +21,15 @@
 package com.hutchins.navui.core
 
 import android.content.Context
+import androidx.annotation.LayoutRes
 import androidx.navigation.NavDestination
 import com.hutchins.navcore.PrimaryNavFragment
 
 @Suppress("MemberVisibilityCanBePrivate")
-abstract class PrimaryScreenFragment : PrimaryNavFragment() {
+abstract class PrimaryScreenFragment : PrimaryNavFragment {
+    constructor() : super()
+    constructor(@LayoutRes contentLayoutId: Int ) : super(contentLayoutId)
+
     /**
      * The [NavViewActivity] that this [PrimaryScreenFragment] lives in.
      */
