@@ -36,7 +36,7 @@ import androidx.navigation.NavDestination
  *
  * <p>This Fragment is intended to be used as a Base class for all of your Fragments in a navigation graph provided to a
  * [NavigationActivity]. Only one [PrimaryNavFragment] will ever be in the active state at a time, which means
- * child implementations of this class can assume exclusive access to the Navigation Lifecycle betwee calls of
+ * child implementations of this class can assume exclusive access to the Navigation Lifecycle between calls of
  * [onStartPrimaryNavFragment] and [onStopPrimaryNavFragment]</p>
  *
  * <p>Similar to normal Fragment lifecycle callbacks, two new callbacks are added to this class
@@ -57,7 +57,7 @@ abstract class PrimaryNavFragment : Fragment {
     /**
      * Called when this Fragment is no longer the current [NavDestination].
      *
-     * <p>This can be called on a forward navigation or when this Fragment is popped off the backstack.</p>
+     * <p>This can be called on a forward navigation or when this Fragment is popped off the back-stack.</p>
      */
     open fun onStopPrimaryNavFragment() {
 

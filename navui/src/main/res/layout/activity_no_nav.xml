@@ -4,7 +4,7 @@
         Clients of this library can use the JetpackNoNavDelegate as-is in their applications and let it use this layout by default,
         but generally an application will want to style this layout according to their app specific UX. When doing so,
         you can copy the contents of this file and apply the styling as appropriate. The Delegate does not do any styling of
-        its own. The delegate requires a referenceID to a ConstaintLayout, FrameLayout, AppBarLayout, and Toolbar.
+        its own. The delegate requires a referenceID to a ConstraintLayout, FrameLayout, AppBarLayout, and Toolbar.
 
         Alternatives, of course, are to define your own Delegate and view hierarchy.
         -->

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--
     Navigation constants must be defined here in this xml file because they must be accessible
     in the navigation_graph.
@@ -20,9 +20,9 @@
     default is navigation_toolbar_visibility_visible.
     -->
     <string name="navigation_toolbar_visibility">navigation_toolbar_visibility</string>
-    <integer name="navigation_toolbar_visibility_visible">0</integer>
-    <integer name="navigation_toolbar_visibility_invisible">1</integer>
-    <integer name="navigation_toolbar_visibility_gone">2</integer>
+    <integer name="navigation_toolbar_visibility_visible" tools:keep="@integer/navigation_toolbar_visibility_visible">0</integer>
+    <integer name="navigation_toolbar_visibility_invisible" tools:keep="@integer/navigation_toolbar_visibility_invisible">1</integer>
+    <integer name="navigation_toolbar_visibility_gone" tools:keep="@integer/navigation_toolbar_visibility_gone">2</integer>
 
     <!-- navigation_view_gone
     configures the navigation view.

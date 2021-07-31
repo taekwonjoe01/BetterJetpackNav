@@ -55,7 +55,7 @@ open class JetpackSideNavDelegate(
      * Set the res Id of the activity layout. This defaults to a prepackaged layout provided by this library.
      *
      * For usage by this [JetpackSideNavDelegate], there must be a reference to
-     * a [ConstraintLayout] that represents the view containing the [FrameLayout] (That the [NavHostFragment] will use) and
+     * a [ConstraintLayout] that represents the view containing the FrameLayout (That the [NavHostFragment] will use) and
      * the [Toolbar]. This is to manage visibility state.
      *
      * There must also be a reference to the [AppBarLayout] that holds the [Toolbar].

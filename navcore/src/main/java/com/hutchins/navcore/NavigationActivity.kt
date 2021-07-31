@@ -36,7 +36,7 @@ import java.lang.Exception
  *
  * <p>This Activity must be used with the Navigation Architecture component and children must provide the resource Id to
  * the navigation graph. All [NavDestination]s within the navigation graph must be children of [PrimaryNavFragment] as that is
- * the only way we can keep track of the navigation backstack state machine.</p>
+ * the only way we can keep track of the navigation back-stack state machine.</p>
  *
  * <p> The Navigation lifecycle guarantees that only one [PrimaryNavFragment] will be inside the [PrimaryNavFragment.onStartPrimaryNavFragment] lifecycle
  * at a time. This is useful to know for many reasons, one common one is synchronization around a Fragment's access to a

@@ -21,7 +21,6 @@
 package com.hutchins.navui.jetpack
 
 import android.content.Context
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.hutchins.navui.R
@@ -33,9 +32,9 @@ import com.hutchins.navui.core.NavViewDelegate
 /**
  * Implementation of a [BaseNavUIController] that is used by the [JetpackBottomNavDelegate], [JetpackNoNavDelegate], and
  * [JetpackSideNavDelegate]. This provides and API and state management for [PrimaryScreenFragment]'s to provide a configuration
- * of the [NavViewActivity]'s view state when their screens are active in the Navigation lifecycle.
+ * of the [com.hutchins.navui.core.NavViewActivity]'s view state when their screens are active in the Navigation lifecycle.
  *
- * This class maintains each [PrimaryScreenFragment]'s state view a [ViewModel] and works with respect to screen rotations.
+ * This class maintains each [PrimaryScreenFragment]'s state view a ViewModel and works with respect to screen rotations.
  */
 @Suppress("unused")
 class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) : BaseNavUIController(screenFragment) {
@@ -319,8 +318,8 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
                     toolbarDelegate.clearToolbarActionMenu()
                 } else {
                     val menu = toolbarDelegate.setToolbarActionMenu(
-                        actionMenuResId,
-                        Toolbar.OnMenuItemClickListener { item -> screenFragment.onActionItemSelected(item) })
+                        actionMenuResId
+                    ) { item -> screenFragment.onActionItemSelected(item) }
                     screenFragment.onActionMenuCreated(menu)
                 }
             } ?: run {
@@ -330,8 +329,8 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
                     toolbarDelegate.clearToolbarActionMenu()
                 } else {
                     val menu = toolbarDelegate.setToolbarActionMenu(
-                        actionMenuResId,
-                        Toolbar.OnMenuItemClickListener { item -> screenFragment.onActionItemSelected(item) })
+                        actionMenuResId
+                    ) { item -> screenFragment.onActionItemSelected(item) }
                     screenFragment.onActionMenuCreated(menu)
                 }
             }
