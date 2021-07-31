@@ -11,7 +11,8 @@
         <activity android:name=".side.SideNavActivity"
                   android:label="Side Nav Activity"
                   android:taskAffinity=".side.SideNavActivity"
-                  android:theme="@style/SampleSideNavTheme">
+                  android:theme="@style/SampleSideNavTheme"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +23,8 @@
         <activity android:name=".bottom.BottomNavActivity"
                   android:label="Bottom Nav Activity"
                   android:taskAffinity=".bottom.BottomNavActivity"
-                  android:theme="@style/SampleBottomNavTheme">
+                  android:theme="@style/SampleBottomNavTheme"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +33,8 @@
         </activity>
         <activity android:name=".nonav.NoNavActivity"
                   android:label="No Nav Activity"
-                  android:taskAffinity=".nonav.NoNavActivity">
+                  android:taskAffinity=".nonav.NoNavActivity"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

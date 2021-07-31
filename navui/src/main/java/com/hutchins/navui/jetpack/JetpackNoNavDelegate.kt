@@ -121,7 +121,7 @@ open class JetpackNoNavDelegate(override val navViewActivity: NavViewActivity, p
 
     override fun onSupportNavigateUp(): Boolean {
         var handled = false
-        if (navController.currentDestination!!.id == navController.graph.startDestination) {
+        if (navController.currentDestination!!.id == navController.graph.startDestinationId) {
             if (showUp) {
                 handled = navViewActivity.maybeDoNavigateUpOverride()
                 if (!handled) {

@@ -242,7 +242,7 @@ class JetpackNavUIController(private val screenFragment: JetpackScreenFragment) 
 
         private fun setUpNavigationVisible(destination: NavDestination, navViewDelegate: NavViewDelegate, overrideUp: Boolean) {
             val toolbarDelegate = navViewDelegate.asTestNavViewDelegate().getNavUiToolbarDelegate()
-            val isStartDestination = (navViewDelegate.asTestNavViewDelegate().getNavigationController().graph.startDestination == destination.id)
+            val isStartDestination = (navViewDelegate.asTestNavViewDelegate().getNavigationController().graph.startDestinationId == destination.id)
             if (isStartDestination) {
                 toolbarDelegate.setUpNavigationVisible(overrideUp)
             } else {

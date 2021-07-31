@@ -23,8 +23,8 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
     }
 
     task sourceJar(type: Jar) {

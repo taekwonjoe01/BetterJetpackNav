@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.hutchins.navcore.NavigationActivity
 import com.hutchins.navcore.PrimaryNavFragment
-import kotlinx.android.synthetic.main.activity_bad2.*
 
 class MainActivity : NavigationActivity() {
     var numPrimaryNavInitializedCalls = 0
