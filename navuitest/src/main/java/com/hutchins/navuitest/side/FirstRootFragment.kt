@@ -21,12 +21,12 @@ class FirstRootFragment : JetpackScreenFragment() {
 
     override fun onStartPrimaryNavFragment(destination: NavDestination) {
         super.onStartPrimaryNavFragment(destination)
-        Log.e("AppDebug", "FirstRootFragment onCurrentNavFragment")
+        Log.e("AppDebug", "FirstRootFragment onStartPrimaryNavFragment")
     }
 
     override fun onStopPrimaryNavFragment() {
         super.onStopPrimaryNavFragment()
-        Log.e("AppDebug", "FirstRootFragment onNotCurrentNavFragment")
+        Log.e("AppDebug", "FirstRootFragment onStopPrimaryNavFragment")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
