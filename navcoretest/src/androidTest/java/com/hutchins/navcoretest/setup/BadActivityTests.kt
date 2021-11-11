@@ -20,15 +20,9 @@
 
 package com.hutchins.navcoretest.setup
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.hutchins.navcoretest.R
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import java.lang.ClassCastException
 
 /**
  * Created by joeyhutchins on 7/3/20.

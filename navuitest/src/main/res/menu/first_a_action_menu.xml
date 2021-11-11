@@ -6,7 +6,7 @@
         android:title="ClickMe"
         android:id="@+id/clickme"
         android:visible="true"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:title="Option 1"

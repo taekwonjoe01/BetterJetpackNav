@@ -29,7 +29,7 @@ class FirstRootFragment : JetpackScreenFragment() {
         Log.e("AppDebug", "FirstRootFragment onStopPrimaryNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentFirstRootBinding.inflate(inflater, container, false).apply {
             button.setOnClickListener {
                 findNavController().navigate(R.id.action_firstRootFragment_to_firstAFragment)

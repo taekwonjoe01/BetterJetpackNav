@@ -29,7 +29,7 @@ class ThirdRootFragment : JetpackScreenFragment() {
         Log.e("AppDebug", "ThirdRootFragment onNotCurrentNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentThirdRootBinding.inflate(inflater, container, false).apply {
             button.setOnClickListener {
                 findNavController().navigate(R.id.action_thirdRootFragment_to_thirdAFragment)

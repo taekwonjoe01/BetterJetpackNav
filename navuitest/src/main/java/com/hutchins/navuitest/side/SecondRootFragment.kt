@@ -29,7 +29,7 @@ class SecondRootFragment: JetpackScreenFragment() {
         Log.e("AppDebug", "SecondRootFragment onNotCurrentNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentSecondRootBinding.inflate(inflater, container, false).apply {
             button.setOnClickListener {
                 findNavController().navigate(R.id.action_secondRootFragment_to_secondAFragment)

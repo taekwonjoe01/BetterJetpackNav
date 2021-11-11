@@ -15,7 +15,7 @@ class FirstBFragment : JetpackScreenFragment() {
         super.onAttachFragment(childFragment)
         (childFragment as TweakSettingsFragment).setToolbarController(jetpackNavUIController)
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentFirstBBinding.inflate(inflater, container, false).apply {
 
         }

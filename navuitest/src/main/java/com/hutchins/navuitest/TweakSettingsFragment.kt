@@ -14,7 +14,7 @@ class TweakSettingsFragment : Fragment() {
     internal fun setToolbarController(jetpackNavUIController: JetpackNavUIController) {
         this.jetpackNavUIController = jetpackNavUIController
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentTweakSettingsBinding.inflate(inflater, container, false).apply {
             buttonChangeTitle.setOnClickListener {
                 jetpackNavUIController.setToolbarTitle("Tweaked Title")

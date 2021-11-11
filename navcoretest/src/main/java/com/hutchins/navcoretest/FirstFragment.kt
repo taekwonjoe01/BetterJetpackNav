@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
-import com.hutchins.navcore.PrimaryNavFragment
 import com.hutchins.navcoretest.databinding.FragmentFirstBinding
 
 class FirstFragment : TestablePrimaryNavFragment() {
@@ -22,7 +21,7 @@ class FirstFragment : TestablePrimaryNavFragment() {
         Log.e("AppDebug", "FirstFragment onNotCurrentNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentFirstBinding.inflate(inflater, container, false).apply {
             firstFragmentButton.setOnClickListener {
                 findNavController().navigate(R.id.action_firstFragment_to_secondFragment)

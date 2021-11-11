@@ -1,9 +1,7 @@
 package com.hutchins.navcoretest.setup
 
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
 import com.hutchins.navcore.NavigationActivity
-import com.hutchins.navcoretest.FirstFragment
 import com.hutchins.navcoretest.R
 import com.hutchins.navcoretest.TestFragment
 
@@ -11,6 +9,7 @@ import com.hutchins.navcoretest.TestFragment
  * This activity is intended to be used with BadActivity2Tests to show what could occur if the
  * [navigationGraphResourceId] is improperly instantiated.
  */
+@Suppress("KDocUnresolvedReference")
 class BadActivity2 : NavigationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

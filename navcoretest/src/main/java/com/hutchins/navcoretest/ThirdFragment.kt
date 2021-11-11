@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import com.hutchins.navcore.NavigationOverrideClickListener
-import com.hutchins.navcore.PrimaryNavFragment
 import com.hutchins.navcoretest.databinding.FragmentThirdBinding
 
 class ThirdFragment : TestablePrimaryNavFragment() {
@@ -35,7 +34,7 @@ class ThirdFragment : TestablePrimaryNavFragment() {
         Log.e("AppDebug", "ThirdFragment onNotCurrentNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentThirdBinding.inflate(inflater, container, false).apply {
             thirdFragmentButton.setOnClickListener {
                 findNavController().navigate(R.id.action_thirdFragment_to_fourthFragment)

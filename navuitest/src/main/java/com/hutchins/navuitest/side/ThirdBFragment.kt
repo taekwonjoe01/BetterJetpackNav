@@ -17,7 +17,7 @@ class ThirdBFragment : JetpackScreenFragment() {
         super.onAttachFragment(childFragment)
         (childFragment as TweakSettingsFragment).setToolbarController(jetpackNavUIController)
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentThirdBBinding.inflate(inflater, container, false).apply {
             button.setOnClickListener {
                 findNavController().navigate(R.id.action_thirdBFragment_to_thirdFourthAFragment)

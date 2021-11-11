@@ -29,7 +29,7 @@ class FourthRootFragment: JetpackScreenFragment() {
         Log.e("AppDebug", "FourthRootFragment onNotCurrentNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentFourthRootBinding.inflate(inflater, container, false).apply {
             button.setOnClickListener {
                 findNavController().navigate(R.id.action_fourthRootFragment_to_thirdFourthAFragment)

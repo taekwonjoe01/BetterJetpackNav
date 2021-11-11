@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDestination
-import com.hutchins.navcore.PrimaryNavFragment
 import com.hutchins.navcoretest.databinding.FragmentFifthBinding
 
 class FifthFragment : TestablePrimaryNavFragment() {
@@ -21,7 +20,7 @@ class FifthFragment : TestablePrimaryNavFragment() {
         Log.e("AppDebug", "FifthFragment onNotCurrentNavFragment")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentFifthBinding.inflate(inflater, container, false).apply {
         }
         return binding.root
