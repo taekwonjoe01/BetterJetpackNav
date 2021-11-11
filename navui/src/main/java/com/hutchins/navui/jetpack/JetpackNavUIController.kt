@@ -21,6 +21,7 @@
 package com.hutchins.navui.jetpack
 
 import android.content.Context
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.hutchins.navui.R

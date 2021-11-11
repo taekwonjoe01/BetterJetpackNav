@@ -85,7 +85,7 @@ open class JetpackNoNavDelegate(override val navViewActivity: NavViewActivity, p
             constraintLayout,
             appBarLayout,
             toolbar,
-            this, this
+            this
         )
     }
 

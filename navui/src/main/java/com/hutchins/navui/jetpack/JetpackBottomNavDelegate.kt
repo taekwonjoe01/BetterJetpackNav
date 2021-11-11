@@ -109,7 +109,7 @@ open class JetpackBottomNavDelegate(
             constraintLayout,
             appBarLayout,
             toolbar,
-            this, this
+            this
         )
     }
 

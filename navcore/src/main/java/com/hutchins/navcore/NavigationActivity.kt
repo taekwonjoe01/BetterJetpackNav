@@ -22,6 +22,7 @@
 
 package com.hutchins.navcore
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -118,7 +119,9 @@ abstract class NavigationActivity : AppCompatActivity() {
             }
             currentPrimaryNavFragmentReference = primaryNavFragment
 
+            Log.e("Joey", "registerPrimaryNavFragment")
             val navConfig = primaryNavFragment.onSetAsCurrentNavFragment(primaryNavController.currentDestination!!)
+            Log.e("Joey", "after register")
             currentPrimaryNavigationConfig = navConfig
 
             afterPrimaryNavigation(primaryNavFragment)

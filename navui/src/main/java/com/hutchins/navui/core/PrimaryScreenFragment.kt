@@ -21,6 +21,8 @@
 package com.hutchins.navui.core
 
 import android.content.Context
+import android.util.Log
+import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.navigation.NavDestination
 import com.hutchins.navcore.PrimaryNavFragment
@@ -41,20 +43,25 @@ abstract class PrimaryScreenFragment : PrimaryNavFragment {
      */
     protected lateinit var navUiController: BaseNavUIController
 
+    @CallSuper
     override fun onStartPrimaryNavFragment(destination: NavDestination) {
         this.navUiController.onActive(destination, navViewActivity.navViewDelegate)
     }
 
+    @CallSuper
     override fun onStopPrimaryNavFragment() {
         this.navUiController.onInactive()
     }
 
+    @CallSuper
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        Log.e("Joey", "onAttach")
         if (context is NavViewActivity) {
             navViewActivity = context
             navUiController = navViewActivity.navViewDelegate.newInstanceNavUiController(this)
+
         } else {
             throw RuntimeException("$context must be child class of NavViewActivity!")
         }

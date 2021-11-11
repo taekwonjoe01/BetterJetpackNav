@@ -26,11 +26,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Go to ThirdFourthC2 Fragment"/>
-            <fragment
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/fragmentTweakSettings"
-                android:name="com.hutchins.navuitest.TweakSettingsFragment"/>
+            <include layout="@layout/layout_tweak_settings"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

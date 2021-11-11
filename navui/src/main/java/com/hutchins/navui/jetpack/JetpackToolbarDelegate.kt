@@ -17,14 +17,10 @@
  * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
-
-@file:Suppress("MemberVisibilityCanBePrivate", "unused")
-
 package com.hutchins.navui.jetpack
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -32,8 +28,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
-import com.hutchins.navui.R
-import com.hutchins.navui.core.NavViewDelegate
 
 /**
  * This object is used by the [JetpackBottomNavDelegate], [JetpackNoNavDelegate], and [JetpackSideNavDelegate] to
@@ -43,7 +37,6 @@ class JetpackToolbarDelegate(
     private val constraintLayout: ConstraintLayout,
     private val toolbarContainer: View,
     private val toolbar: Toolbar,
-    private val navViewDelegate: NavViewDelegate,
     private val upVisibilityHandler: UpVisibilityHandler
 ) {
     companion object {
@@ -82,30 +75,30 @@ class JetpackToolbarDelegate(
         setToolbarVisibilityState(toolbarState)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     var toolbarState: ToolbarVisibilityState =
         ToolbarVisibilityState.VISIBLE
         private set
 
-    private val handler = Handler(Looper.getMainLooper())
-
     private val constraintSetToolbarVisible: ConstraintSet
-            get() =
+        get() =
             ConstraintSet().apply {
                 clone(constraintLayout)
-                setVisibility(R.id.toolbarLayout, View.VISIBLE)
+                setVisibility(toolbarContainer.id, View.VISIBLE)
             }
+
     private val constraintSetToolbarGone: ConstraintSet
         get() =
             ConstraintSet().apply {
                 clone(constraintLayout)
-                setVisibility(R.id.toolbarLayout, View.GONE)
+                setVisibility(toolbarContainer.id, View.GONE)
             }
 
     private val constraintSetToolbarInvisible: ConstraintSet
         get() =
             ConstraintSet().apply {
                 clone(constraintLayout)
-                setVisibility(R.id.toolbarLayout, View.INVISIBLE)
+                setVisibility(toolbarContainer.id, View.INVISIBLE)
             }
 
     /**
@@ -121,6 +114,7 @@ class JetpackToolbarDelegate(
      * Immediately cancel any animations and set the toolbar state.
      */
     internal fun setToolbarVisibilityState(desiredState: ToolbarVisibilityState) {
+        Log.e("Joey", "setToolbarVisibilityState from $toolbarState to $desiredState")
         when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
@@ -132,6 +126,7 @@ class JetpackToolbarDelegate(
             }
             ToolbarVisibilityState.GONE -> {
                 if (desiredState == ToolbarVisibilityState.VISIBLE) {
+                    Log.e("Joey", "from gone to visible")
                     animateConstraintSet(0L, constraintSetToolbarVisible)
                 } else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
                     animateConstraintSet(0L, constraintSetToolbarInvisible)
@@ -141,11 +136,13 @@ class JetpackToolbarDelegate(
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     animateConstraintSet(0L, constraintSetToolbarGone)
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
+                    Log.e("Joey", "from invisible to visible")
                     animateConstraintSet(0L, constraintSetToolbarVisible)
                 }
             }
         }
         toolbarState = desiredState
+        Log.e("Joey", "end setToolbarVisibilityState")
     }
 
     /**
@@ -206,6 +203,7 @@ class JetpackToolbarDelegate(
     }
 
     private fun animateConstraintSet(durationMs: Long, constraintSet: ConstraintSet) {
+        Log.e("Joey", "animateConstraintSet")
         val transition = AutoTransition()
         transition.duration = durationMs
         TransitionManager.beginDelayedTransition(constraintLayout, transition)

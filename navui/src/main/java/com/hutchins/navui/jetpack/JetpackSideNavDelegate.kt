@@ -68,7 +68,7 @@ open class JetpackSideNavDelegate(
      *
      * There must also be a reference to the [NavigationView]
      */
-    open val activityLayoutRedId: Int = R.layout.activity_drawer_nav
+    open val activityLayoutResId: Int = R.layout.activity_drawer_nav
 
     /**
      * The reference to the [ConstraintLayout] required by this [NavViewDelegate].
@@ -118,7 +118,7 @@ open class JetpackSideNavDelegate(
             constraintLayout,
             appBarLayout,
             toolbar,
-            this, this
+            this
         )
     }
 
@@ -136,7 +136,7 @@ open class JetpackSideNavDelegate(
     }
 
     override fun setContentView() {
-        navViewActivity.setContentView(activityLayoutRedId)
+        navViewActivity.setContentView(activityLayoutResId)
         constraintLayout = navViewActivity.findViewById(constraintLayoutResId)
         toolbar = navViewActivity.findViewById(toolbarResId)
         appBarLayout = navViewActivity.findViewById(appBarLayoutResId)
