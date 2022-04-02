@@ -1,10 +1,12 @@
 package com.hutchins.navuitest.side
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import com.hutchins.navui.jetpack.JetpackScreenFragment
 import com.hutchins.navuitest.R

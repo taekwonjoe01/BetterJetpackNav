@@ -119,9 +119,7 @@ abstract class NavigationActivity : AppCompatActivity() {
             }
             currentPrimaryNavFragmentReference = primaryNavFragment
 
-            Log.e("Joey", "registerPrimaryNavFragment")
             val navConfig = primaryNavFragment.onSetAsCurrentNavFragment(primaryNavController.currentDestination!!)
-            Log.e("Joey", "after register")
             currentPrimaryNavigationConfig = navConfig
 
             afterPrimaryNavigation(primaryNavFragment)
