@@ -109,7 +109,6 @@ abstract class PrimaryNavFragment : Fragment {
         // When a BaseNavFragment is built, it needs to register to the NavigationActivity.
         try {
             navigationActivity.registerPrimaryNavFragment(this)
-            Log.e("Joey", "end of onViewCreated")
         } catch(uninitializedPropertyAccessException: UninitializedPropertyAccessException) {
             throw IllegalStateException("navigation activity not initialized. Call initPrimaryNavigation prior to any fragment transactions.")
         }

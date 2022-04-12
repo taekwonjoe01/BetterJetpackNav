@@ -114,7 +114,6 @@ class JetpackToolbarDelegate(
      * Immediately cancel any animations and set the toolbar state.
      */
     internal fun setToolbarVisibilityState(desiredState: ToolbarVisibilityState) {
-        Log.e("Joey", "setToolbarVisibilityState from $toolbarState to $desiredState")
         when (toolbarState) {
             ToolbarVisibilityState.VISIBLE -> {
                 if (desiredState == ToolbarVisibilityState.GONE) {
@@ -126,7 +125,6 @@ class JetpackToolbarDelegate(
             }
             ToolbarVisibilityState.GONE -> {
                 if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    Log.e("Joey", "from gone to visible")
                     animateConstraintSet(0L, constraintSetToolbarVisible)
                 } else if (desiredState == ToolbarVisibilityState.INVISIBLE) {
                     animateConstraintSet(0L, constraintSetToolbarInvisible)
@@ -136,13 +134,11 @@ class JetpackToolbarDelegate(
                 if (desiredState == ToolbarVisibilityState.GONE) {
                     animateConstraintSet(0L, constraintSetToolbarGone)
                 } else if (desiredState == ToolbarVisibilityState.VISIBLE) {
-                    Log.e("Joey", "from invisible to visible")
                     animateConstraintSet(0L, constraintSetToolbarVisible)
                 }
             }
         }
         toolbarState = desiredState
-        Log.e("Joey", "end setToolbarVisibilityState")
     }
 
     /**
@@ -203,7 +199,6 @@ class JetpackToolbarDelegate(
     }
 
     private fun animateConstraintSet(durationMs: Long, constraintSet: ConstraintSet) {
-        Log.e("Joey", "animateConstraintSet")
         val transition = AutoTransition()
         transition.duration = durationMs
         TransitionManager.beginDelayedTransition(constraintLayout, transition)

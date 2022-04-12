@@ -57,7 +57,6 @@ abstract class PrimaryScreenFragment : PrimaryNavFragment {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        Log.e("Joey", "onAttach")
         if (context is NavViewActivity) {
             navViewActivity = context
             navUiController = navViewActivity.navViewDelegate.newInstanceNavUiController(this)

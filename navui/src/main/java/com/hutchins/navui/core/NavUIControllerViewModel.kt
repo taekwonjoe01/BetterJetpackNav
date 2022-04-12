@@ -39,7 +39,6 @@ class NavUIControllerViewModel(val navUISettings: List<NavUISetting<*>>) : ViewM
         this.navViewDelegate = navViewDelegate
 
         for (navUIPersistentSetting in navUISettings) {
-            Log.e("Joey", "calling onActive")
             navUIPersistentSetting.onActive(destination, navViewDelegate)
         }
     }
@@ -82,7 +81,6 @@ abstract class NavUISetting<T : Any?> {
     }
 
     internal fun onSettingSetWhileActive(destination: NavDestination, navViewDelegate: NavViewDelegate) {
-        Log.e("Joey", "onSettingSetWhileActive")
         applySetting(destination, navViewDelegate, false, setting)
     }
 
